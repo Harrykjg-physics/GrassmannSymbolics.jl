@@ -221,16 +221,27 @@ function Base.:+(a::GrassmannExpr, b)
 end
 
 Base.:+(a, b::GrassmannExpr) = b + a
+# Explicit overloads to resolve GrassmannGenerator vs GrassmannExpr ambiguity
+Base.:+(g::GrassmannGenerator, b::GrassmannExpr) = GrassmannExpr(g) + b
+Base.:+(a::GrassmannExpr, g::GrassmannGenerator) = a + GrassmannExpr(g)
 Base.:+(g::GrassmannGenerator, b) = GrassmannExpr(g) + b
 Base.:+(a, g::GrassmannGenerator) = a + GrassmannExpr(g)
 Base.:+(g::GrassmannGenerator, h::GrassmannGenerator) =
     GrassmannExpr(g) + GrassmannExpr(h)
 
-Base.:-(e::GrassmannExpr) = GrassmannExpr(
-    Dict{Monomial,Any}(k => -v for (k, v) in e.terms))
+function Base.:-(e::GrassmannExpr)
+    d = empty(e.terms)          # same Dict type, avoids spelling out Monomial
+    for (k, v) in e.terms
+        d[k] = -v
+    end
+    GrassmannExpr(d)
+end
 Base.:-(a::GrassmannExpr, b::GrassmannExpr) = a + (-b)
 Base.:-(a::GrassmannExpr, b) = a + (-b)
 Base.:-(a, b::GrassmannExpr) = a + (-b)
+# Explicit overloads to resolve GrassmannGenerator vs GrassmannExpr ambiguity
+Base.:-(g::GrassmannGenerator, b::GrassmannExpr) = GrassmannExpr(g) - b
+Base.:-(a::GrassmannExpr, g::GrassmannGenerator) = a - GrassmannExpr(g)
 Base.:-(a::GrassmannGenerator, b) = GrassmannExpr(a) - b
 Base.:-(a, b::GrassmannGenerator) = a - GrassmannExpr(b)
 Base.:-(a::GrassmannGenerator, b::GrassmannGenerator) =
