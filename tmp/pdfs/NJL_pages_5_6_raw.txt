@@ -1,0 +1,300 @@
+JHEP01(2021)121
+in the following manners to decompose the nearest-neighbor interactions:
+exp
+"
+−
+eµδν,4
+2
+ην(n)χ̄(n)χ(n + ν̂)
+#
+=
+1
+X
+iν,1(n)=0
+Z
+e
+µ
+2
+δν,4
+√
+2
+ην(n)χ̄(n)dΦν(n)
+·
+e
+µ
+2
+δν,4
+√
+2
+χ(n + ν̂)dΦ̄ν(n + ν̂) · Φ̄ν(n + ν̂)Φν(n)
+!iν,1(n)
+, (2.5)
+exp
+"
+e−µδν,4
+2
+ην(n)χ̄(n + ν̂)χ(n)
+#
+=
+1
+X
+iν,2(n)=0
+Z
+e− µ
+2
+δν,4
+√
+2
+ην(n)χ(n)dΨν(n)
+·
+e− µ
+2
+δν,4
+√
+2
+χ̄(n + ν̂)dΨ̄ν(n + ν̂) · Ψ̄ν(n + ν̂)Ψν(n)
+!iν,2(n)
+, (2.6)
+eg0χ̄(n)χ(n)χ̄(n+ν̂)χ(n+ν̂)
+=
+1
+X
+iν,3(n)=0
+(
+√
+g0χ̄(n)χ(n) ·
+√
+g0χ̄(n + ν̂)χ(n + ν̂))iν,3(n)
+. (2.7)
+Secondly, integrating out χ and χ̄ at each lattice site n, we define
+Tn;i4(n)i1(n)i2(n)i3(n)i4(n−4̂)i1(n−1̂)i2(n−2̂)i3(n−3̂)
+=
+Z
+dχdχ̄ e−mχ̄χ
+4
+Y
+ν=1
+e
+µ
+2
+δν,4
+√
+2
+ην(n)χ̄dΦν(n)
+!iν,1(n)
+e
+µ
+2
+δν,4
+√
+2
+χdΦ̄ν(n)
+!iν,1(n−ν̂)
+×
+e− µ
+2
+δν,4
+√
+2
+ην(n)χdΨν(n)
+!iν,2(n)
+e− µ
+2
+δν,4
+√
+2
+χ̄dΨ̄ν(n)
+!iν,2(n−ν̂)
+(
+√
+g0χ̄χ)iν,3(n)
+× (
+√
+g0χ̄χ)iν,3(n−ν̂)
+
+Φ̄ν(n + ν̂)Φν(n)
+iν,1(n) 
+Ψ̄ν(n + ν̂)Ψν(n)
+iν,2(n)
+. (2.8)
+This serves as a change of variables from χ, χ̄ to the integer-valued fields iν = (iν,p)p=1,2,3
+and alternative Grassmann variables Φν, Ψν. Renaming x = i1, y = i2, z = i3, t = i4,
+eq. (2.2) is expressed in the form,
+Z =
+X
+{t,x,y,z}
+Z Y
+n∈Λ
+Tn;txyzt0x0y0z0 , (2.9)
+which is the tensor network representation of this model.4 In current construction,
+Tn;txyzt0x0y0z0 is factorized as
+Tn;txyzt0x0y0z0 = In;txyzt0x0y0z0 Sn;txyzt0x0y0z0 Gn;txyzt0x0y0z0 . (2.10)
+4
+In eq. (2.9), we omit arguments in tensor indices and introduce shorthand notations such as x0
+=
+x(n − 1̂), y0
+= y(n − 2̂), z0
+= z(n − 3̂), t0
+= t(n − 4̂)
+– 4 –
+JHEP01(2021)121
+In;txyzt0x0y0z0 denotes the contributions from the integration over χ(n) and χ̄(n). A straight-
+forward calculation shows
+In;txyzt0x0y0z0 = (−1)n1(y1+y2+z1+z2+t1+t2)+n2(z1+z2+t1+t2)+n3(t1+t2)
+×
+
+1
+√
+2
+t1+t2+x1+x2+y1+y2+z1+z2+t0
+1+t0
+2+x0
+1+x0
+2+y0
+1+y0
+2+z0
+1+z0
+2
+×
+√
+g0
+t3+x3+y3+z3+t0
+3+x0
+3+y0
+3+z0
+3 e
+µ
+2
+(t1−t2+t0
+1−t0
+2)
+×
+h
+−m ¯
+∆txyzt0x0y0z0,0∆txyzt0x0y0z0,0 + ¯
+∆txyzt0x0y0z0,1∆txyzt0x0y0z0,1
+i
+, (2.11)
+where
+¯
+∆txyzt0x0y0z0,q = δt1+t3+x1+x3+y1+y3+z1+z3+t0
+2+t0
+3+x0
+2+x0
+3+y0
+2+y0
+3+z0
+2+z0
+3,q, (2.12)
+∆txyzt0x0y0z0,q = δt2+t3+x2+x3+y2+y3+z2+z3+t0
+1+t0
+3+x0
+1+x0
+3+y0
+1+y0
+3+z0
+1+z0
+3,q, (2.13)
+with q = 0, 1. ¯
+∆, ∆ are derived from χ̄-, χ-integration, respectively. The second line in
+eq. (2.11) comes from the staggered sign factor ην(n). Consequently, In;txyzt0x0y0z0 does
+depend on n ∈ Λ. Eq. (2.11) tells us that this tensor network is uniform in t-direction, but
+has some periodic structure in x-,y-,z-directions. This periodicity corresponds to the parity
+of the spatial lattice site n = (n1, n2, n3). A graphical representation of eq. (2.9) is shown
+in figure 2(A). As a result of eqs. (2.5) and (2.6), some Grassmann variables are allowed
+to exist in Tn;txyzt0x0y0z0 . These Grassmann variables have been denoted by Gn;txyzt0x0y0z0
+in eq. (2.10). Some sign can arise reflecting on how we have arranged these Grassmann
+variables in Gn;txyzt0x0y0z0 and we have set this sign Sn;txyzt0x0y0z0 in eq. (2.10). We now
+assume that
+Gn;txyzt0x0y0z0 =
+dΦt1
+4 dΨt2
+4 dΦx1
+1 dΨx2
+1 dΦy1
+2 dΨy2
+2 dΦz1
+3 dΨz2
+3 dΨ̄
+t0
+2
+4 dΦ̄
+t0
+1
+4 dΨ̄
+x0
+2
+1 dΦ̄
+x0
+1
+1 dΨ̄
+y0
+2
+2 dΦ̄
+y0
+1
+2 dΨ̄
+z0
+2
+3 dΦ̄
+z0
+1
+3
+×
+
+Φ̄4(n + 4̂)Φ4(n)
+t1
+
+Ψ̄4(n + 4̂)Ψ4(n)
+t2
+
+Φ̄1(n + 1̂)Φ1(n)
+x1
+
+Ψ̄1(n + 1̂)Ψ1(n)
+x2
+×
+
+Φ̄2(n + 2̂)Φ2(n)
+y1
+
+Ψ̄2(n + 2̂)Ψ2(n)
+y2
+
+Φ̄3(n + 3̂)Φ3(n)
+z1
+
+Ψ̄3(n + 3̂)Ψ3(n)
+z2
+,
+(2.14)
+where all the Grassmann measures depend on n and their arguments are omitted. Accord-
+ing to this arrangement, Sn;txyzt0x0y0z0 is given by
+Sn;txyzt0x0y0z0 = (−1)t1(t2+x2+y2+z2)+x1(x2+y2+z2)+y1(y2+z2)+z1z2
+× (−1)t0
+2(t0
+1+x0
+1+y0
+1+z0
+1)+x0
+2(x0
+1+y0
+1+z0
+1)+y0
+2(y0
+1+z0
+1)+z0
+2z0
+1
+× (−1)(t1+t2+x1+x2+y1+y2+z1+z2)(t0
+1+x0
+1+y0
+1+z0
+1)
+. (2.15)
+2.3 Grassmann ATRG
+2.3.1 Procedure of the algorithm
+We now formulate Grassmann ATRG (GATRG) algorithm to coarse grain the tensor net-
+work defined by eq. (2.9). The basic idea is that we combine the ATRG procedure to
+– 5 –
+

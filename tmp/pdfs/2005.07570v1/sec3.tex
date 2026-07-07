@@ -1,0 +1,140 @@
+\section{Grassmann tensor network formulation for lattice fermions}
+\label{sec:TN}
+
+We prove that the partition function of lattice fermion theory 
+with nearest neighbor interactions is expressed 
+as a Grassmann tensor network.  We assume that the theory 
+has the translational invariance on the lattice.
+%
+The $d$-dimensional hypercubic lattice is defined by a set of integer lattice sites 
+$\Lambda  =\{(x_1,x_2,\cdots, x_d) \, | \ x_i \in \mathbf{Z} \ {\rm for} \, i=1,2,\cdots,d \}$ 
+where the lattice spacing $a$ is set to $a=1$. Although the proof is given for the infinite volume lattice,
+one can easily extend it to the case of a finite volume lattice.
+
+Consider lattice  fermion fields $\psi^a_n$ and $\bar\psi^a_n$ for $n \in \Lambda$ 
+where  $a$ runs from $1$ to $N$, which is the degree of freedom of the internal space 
+such as the spinor or the flavor space. Then the lattice fermion action is formally given by
+\begin{align}
+S= \sum_{n\in \Lambda} \bar\psi_n (D \psi)_n 
+\end{align}
+where $D$ is the Dirac operator acting on the femrion field as 
+$ (D \psi)_n^a = \sum_{m \in \Lambda} \sum_{b=1}^N D^{ab}_{nm} \psi_m^b$. 
+We may consider that $D$ takes a form of 
+\begin{align}
+D^{ab}_{nm} = W^{ab} \delta_{nm} + \sum_{\mu=1}^d 
+(X_\mu)^{ab} \delta_{n+\hat \mu ,m} + \sum_{\mu=1}^d  (Y_\mu)^{ab} \delta_{n-\hat \mu ,m} 
+\end{align}
+without loss of generality. $X_\mu,Y_\mu,W$ are matrices with respect to the internal space. 
+The $W$ term is an on-site interaction and the $X_\mu$ and $Y_\mu$ terms are nearest neighbor interactions. 
+The partition function is defined as
+\begin{align}
+Z= \int \left[\diff\psi \diff\bar\psi\right] \, \e^{-S} 
+\end{align}
+where $[\diff\psi \diff\bar\psi] = \prod_{n \in \Lambda}  \prod_{a=1}^N \diff\psi_n^a \diff \bar\psi_n^a$ 
+with single component Grassmann measures  $\diff \psi_n^a$ and $\diff \bar\psi_n^a$. 
+
+ 
+Let us firstly condier the term $\bar \psi_n X_\mu \psi_{n+\hat\mu}$ in the action,
+dropping the spacetime index $n, \mu$ in the following for simplicity.  
+The SVD of $X^{ab}$ is given by
+$X^{ab}=\sum_{c=1}^N U^{ac} \sigma^c (V^\dag)^{cb}$ 
+where $\sigma^c \ge0$ are singular values and $U,V$ are unitary matrices. 
+Then we have
+\begin{align}
+\label{eq:step1}
+\bar{\psi} X \psi= \sum_{c=1}^N \sigma^{c}\bar{\chi}^c \chi^c
+\end{align}
+where $\bar\chi = \bar\psi U$ and  $\chi = V^\dag\psi$. 
+See Refs.~\cite{Shimizu:2014uva,Shimizu:2014fsa,Shimizu:2017onf,Takeda:2014vwa,Kadoh:2018hqq} 
+and the discussion in Ref.~\cite{Meurice:2012wp} for the similar deformation. 
+%
+Using an identity,  
+\begin{align}
+\label{eq:identity}
+	\e^{- \sigma^{c} \bar{\chi}^c  \chi^c}
+=\int\diff\bar{\eta}^c \diff\eta^c
+\exp\left[-\bar{\eta}^c \eta^c +\bar{\chi}^c  \bar{\eta}^c +  \sigma^{c}  \eta^c \chi^c \right],
+\end{align}
+we can easily show that
+\begin{align}
+\label{eq:basic_id1}
+&\e^{-\bar{\psi}_{n} X_\mu \psi_{n+\hat\mu} } \nonumber\\
+&=  \prod_{c=1}^{K_\mu}  
+\int\diff\bar{\eta}^{c}_{n,\mu} \diff\eta^{c}_{n,\mu}
+\exp\left[-\bar{\eta}^{c}_{n,\mu} \eta^{c}_{n,\mu} -(\bar{\psi}_{n}U_{X_\mu})^{c}  \eta^{c}_{n,\mu} +  
+(\sigma_{X_\mu})^{c}  \bar{\eta}^{c}_{n,\mu} (V^{\dag}_{X_\mu}\psi_{n+\hat\mu})^{c} \right],
+\end{align}
+where $\sigma_{X_\mu}$  and $U_{X_\mu}, V_{X_\mu}$ are singular values and singular vectors of $X_\mu$. 
+Here $n,\mu$ dependences are explicitly shown. 
+Similary, 
+\begin{align}
+\label{eq:basic_id2}
+&\e^{-\bar{\psi}_{n+\mu} Y_\mu \psi_{n} } \nonumber\\
+&=  \prod_{c=1}^{L_\mu}  
+\int\diff\bar{\zeta}^{c}_{n,\mu} \diff\zeta^{c}_{n,\mu}
+\exp\left[-\bar{\zeta}^{c}_{n,\mu} \zeta^{c}_{n,\mu} +(\bar{\psi}_{n+\mu}U_{Y_\mu})^{c}  \bar{\zeta}^{c}_{n,\mu} + 
+ (\sigma_{Y_\mu})^{c}  \zeta^{c}_{n,\mu} (V^{\dag}_{Y_\mu}\psi_{n})^{c} \right],
+\end{align}
+where $\sigma_{Y_\mu}$  and $U_{Y_\mu}, V_{Y_\mu}$  are singular values and singular vectors of $Y_\mu$. 
+
+
+
+
+
+Thus, we have
+\begin{eqnarray}
+\label{eq:Gtensor_rep}
+Z= \int \left[\diff \bar \Psi \diff \Psi \right]\e^{-\sum_{n \in \Lambda} \sum_{\mu=1}^d \bar\Psi_\mu(n) \Psi_\mu(n)}
+%
+\prod_{n \in \Lambda} 
+\mathcal{T}_{\Psi_1(n) \cdots \Psi_d(n)  \bar \Psi_d(n-\hat d) \cdots \bar\Psi_1 (n-\hat 1)}
+\end{eqnarray}
+where 
+\begin{align}
+\label{eq:Gtensor}
+\mathcal{T}_{\Psi_1 \cdots \Psi_d   \bar \Psi_d \cdots \bar\Psi_1}&=
+\int \left(\prod_{a=1}^{N}\diff\psi^{a}\diff\bar{\psi}^{a} \right)
+\exp\left[-\bar{\psi} W \psi \right]\nonumber\\
+&\quad\times\exp\left[\sum_{\mu=1}^{d}
+\sum_{c=1}^{K_{\mu}}\left\{-(\bar{\psi} U_{X_\mu})^{c}  \eta^{c}_{\mu} 
++ (\sigma_{X_\mu})^{c}  \bar{\eta}^{c}_{\mu} (V_{X_{\mu}}^{\dag}\psi)^{c}\right\}\right]\nonumber\\
+&\quad\quad\times\exp\left[
+\sum_{\mu=1}^{d}\sum_{c=1}^{L_{\mu}}\left\{(\bar{\psi}_{n}U_{Y_\mu})^{c}  \bar{\zeta}^{c}_{\mu} 
++ (\sigma_{Y_\mu})^{c}  \zeta^{c}_{\mu} (V_{Y_{\mu}}^{\dag}\psi_{n})^{c}\right\}\right],
+\end{align}
+where $\Psi_\mu=(\eta^{1}_{\mu},\cdots,\eta^{K_{\mu}}_{\mu},\zeta^{1}_{\mu},\cdots,\zeta^{L_{\mu}}_{\mu})$ and $\bar\Psi_\mu=(\bar\zeta^{L_\mu}_{\mu},\cdots,\bar\zeta^{1}_{\mu},\bar\eta^{K_\mu}_{\mu},\cdots,\bar\eta^{1}_{\mu})$. 
+Note that $\mathcal{T}$ is uniformly defined for the spacetime. 
+It is easy to show Eq.~(\ref{eq:Gtensor_rep}) by inserting Eq.~(\ref{eq:Gtensor}) into it with 
+identities Eq.~(\ref{eq:basic_id1}) and Eq.~(\ref{eq:basic_id2}).
+Fig.~\ref{fig:tensor} shows Eq.~\eqref{eq:Gtensor} in three dimensions. 
+Eq.~(\ref{eq:Gtensor_rep}) is a Grassmann tensor network since 
+a pair of $\Psi(n)$ and $\bar \Psi(n)$ appears once in 
+Eq.~(\ref{eq:Gtensor_rep}) under $\prod_{n \in \Lambda}$ and they are contracted with the weight $\e^{-\bar\Psi(n)\Psi(n)}$. We denote Eq.~(\ref{eq:Gtensor_rep}) as 
+\begin{align}
+\label{eq:tn}
+	Z=\gTr\left[\prod_{n\in\Lambda}\mathcal{T}_{\Psi_1(n) \cdots \Psi_d(n)  \bar \Psi_d(n-\hat d) \cdots \bar\Psi_1 (n-\hat 1)}\right]
+\end{align}
+where $\gTr$ is defined as contractions of all possible pairs with the weight  $\e^{-\bar\Psi\Psi}$.  
+\footnote{We have assumed the periodic boundary condition.}
+The situation is quite similar with the tensor network representation for spin models, which is denoted 
+by $\tTr$ over tensor contractions on lattice. This tensor network formulation is immediately applicable 
+to any lattice model of relativistic fermions.  
+
+\begin{figure}[htbp]
+\centering\includegraphics*[width=0.7\hsize]{tensor.pdf}
+\caption{Graphical representations of Eq.~\eqref{eq:Gtensor} in three dimensions.
+}
+\label{fig:tensor}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+

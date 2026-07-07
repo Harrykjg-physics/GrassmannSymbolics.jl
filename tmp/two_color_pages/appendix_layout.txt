@@ -1,0 +1,172 @@
+                                                                                                          0.8
+  2.00           V    = 26                                                                                             V   = 26
+                 V    = 28                                                                                0.7          V   = 28
+  1.75                                                                                                                 V   = 210
+                 V    = 210
+                 V    = 212                                                                               0.6          V   = 212
+  1.50
+                 V    = 214                                                                                            V   = 214
+                                                                                                          0.5          V   = 216
+  1.25           V    = 216
+                 V    = 218                                                                                            V   = 218
+
+
+
+
+                                                                                                     hχχi
+                                                                                                          0.4
+hni
+
+
+
+
+  1.00           V    = 220                                                                                            V   = 220
+
+  0.75                                                                                                    0.3
+
+  0.50                                                                                                    0.2
+
+  0.25                                                                                                    0.1
+
+  0.00                                                                                                    0.0
+
+         0.1           0.2           0.3       0.4                0.5             0.6                            0.0        0.1      0.2      0.3          0.4          0.5          0.6      0.7
+                                               µ                                                                                                     µ
+
+
+
+
+                                                                                                                                                                                                      JHEP03(2025)027
+         (a) ⟨n⟩ as a function of µ at m = 0.1.                                                                 (b) ⟨χχ⟩ as a function of µ at m = 0.1.
+
+  2.00           V   = 26                                                                                              V   = 26
+                                                                                                          0.6          V   = 28
+                 V   = 28
+  1.75           V   = 210                                                                                             V   = 210
+                 V   = 212                                                                                             V   = 212
+                                                                                                          0.5
+                 V   = 214                                                                                             V   = 214
+  1.50
+                 V   = 216                                                                                             V   = 216                             0.6
+
+                 V   = 218                                                                                0.4          V   = 218
+  1.25
+                 V   = 220                           2.0                                                               V   = 220
+                                                                                                                                                             0.4
+                                                                                                     hχχi
+hni
+
+
+
+
+  1.00
+                                                     1.5                                                  0.3
+                                                                                                                                                             0.2
+  0.75
+                                                     1.0
+                                                                                                          0.2
+  0.50                                                                                                                                                       0.0
+                                                     0.5
+                                                                                                                                                                   0.97 0.98 0.99 1.00 1.01 1.02
+                                                                                                          0.1
+  0.25
+                                                     0.0
+
+                                                           0.97   0.98   0.99   1.00   1.01
+  0.00                                                                                                    0.0
+
+          0.80       0.85     0.90     0.95   1.00     1.05         1.10        1.15          1.20              0.80       0.85    0.90    0.95     1.00         1.05         1.10     1.15    1.20
+                                               µ                                                                                                     µ
+
+
+           (c) ⟨n⟩ as a function of µ at m = 1.                                                                 (d) ⟨χχ⟩ as a function of µ at m = 1.
+
+Figure 14. Volume dependence of physical quantities at β = 0.8. The bond dimension in the
+calculations is D = 150. The sample size for the discretization of gauge group integrations is K = 14.
+To evaluate the numerical differences in eqs. (4.3) and (4.7), we set ∆µ = 0.04 for m = 0.1, ∆µ = 0.02
+for m = 1, and λ = ∆λ = 10−4 . At m = 1, the insets show the volume dependence of ⟨n⟩ and ⟨χχ⟩ in
+the intermediate phase, where ⟨n⟩ is evaluated by ∆µ = 0.004.
+
+
+
+
+     Our results encourage a future application of the TRG approach to the higher-dimensional
+two-color QCD. It is possible to improve our construction of initial tensors such that more
+SU(2) matrices are used to discretize the gauge group integration, i.e., a larger K is allowed,
+without increasing the memory requirement significantly. In higher-dimensional cases where
+spontaneous breaking of continuous symmetry can exist, it is instructive to apply the TRG
+approach to evaluate the order parameters and perform extrapolations toward the chiral limit
+(m = 0) and the vanishing λ limit. We also emphasize that our Grassmann tensor network
+representation for the partition function can be extended to the three-color theory, which
+suffers from the sign problem at finite density, without conceptual difficulties.
+
+    Finally, we note that inhomogeneous phases in two-color QCD and related models [47, 66–
+68] have attracted attention recently. As another future direction, we will explore the
+applicability of the TRG approach in studying the spatial dependence of physical quantities.
+
+
+
+
+                                                                                                 – 19 –
+                                     number density, m = 0.1, V = 220 , K = 14
+                   2.0         β   = 0, D = 84
+                               β   = 0.4, D = 150
+                               β   = 0.8, D = 150
+                   1.5         β   = 1.2, D = 150
+                               β   = 1.6, D = 150
+                 hni
+
+
+
+
+                   1.0
+
+
+
+
+                                                                                                                JHEP03(2025)027
+                   0.5
+
+
+
+                   0.0
+
+                         0.1        0.2         0.3      0.4       0.5           0.6
+                                                         µ
+
+
+Figure 15. Quark number density ⟨n⟩ as a function of chemical potential µ at m = 0.1, β =
+0, 0.4, 0.8, 1.2, 1.6 in the thermodynamic limit. The bond dimension in the infinite coupling calculation
+is D = 84, and the bond dimension in the finite β calculations is D = 150. At a finite β, the sample
+size for the discretization of gauge group integrations is K = 14. To evaluate the numerical differences
+in eq. (4.3), we set ∆µ = 0.04.
+
+
+Acknowledgments
+A part of the numerical calculation for the present work was carried out with ohtaka provided
+by the Institute for Solid State Physics, the University of Tokyo. This work is supported by the
+Endowed Project for Quantum Software Research and Education, the University of Tokyo [69],
+and the Center of Innovations for Sustainable Quantum AI (JST Grant Number JPMJPF2221).
+SA acknowledges the support from JSPS KAKENHI (JP23K13096, JP24H00214) and the Top
+Runners in Strategy of Transborder Advanced Researches (TRiSTAR) program conducted as
+the Strategic Professional Development Program for Young Researchers by the MEXT.
+
+A     Coefficients of the Grassmann tensor F
+Here, we discuss one method to derive the tensor elements of F in eq. (2.10). For simplicity, we
+consider the two-color case where N = 2. We also label the spacetime direction ν by ν = x, t
+not by ν = 1, 2. In this case, the integration over the original staggered fermions is written as
+             Z
+       F=        dχ1 dχ̄1 dχ2 dχ̄2 e−m(χ̄1 χ1 +χ̄2 χ2 ) (1 + χ̄1 A) (1 + χ1 B) (1 + χ̄2 C) (1 + χ2 D)
+
+          = ABCD + mCD + mAB + m2 ,                                                                     (A.1)
+where A, B, C, and D are sums of terms with one auxiliary Grassmann variable, and their
+expressions are given by
+    A = −ηx,1 − ηt,1 + (Ux† )11 ζ̄x,1 + (Ux† )12 ζ̄x,2 + (Ut† )11 ζ̄t,1 + (Ut† )12 ζ̄t,2 ,              (A.2)
+        1h                                                                                       i
+    B=     − (Ux )11 η̄x,1 − (Ux )21 η̄x,2 − a+ (Ut )11 η̄t,1 − a+ (Ut )21 η̄t,2 + ζx,1 + a− ζt,1 ,     (A.3)
+        2
+
+
+
+                                                      – 20 –
+

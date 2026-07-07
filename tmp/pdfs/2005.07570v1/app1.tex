@@ -1,0 +1,151 @@
+
+\section{Tensor network formulation for two-dimensional Wilson fermions}
+\label{sec:wilson}
+
+The Dirac matrix with the Wilson parameter $r=1$ is given by
+\begin{align}
+	D_{n,m}=(M+2)
+\begin{bmatrix}
+	\delta_{n,m} & 0 \\
+	0 & \delta_{n,m}
+\end{bmatrix}
+-\frac{1}{2}
+\begin{bmatrix}
+	\delta_{n,m+\hat{1}}+\delta_{n,m-\hat{1}} & ~\delta_{n,m+\hat{1}}-\delta_{n,m-\hat{1}} \\
+	\delta_{n,m+\hat{1}}-\delta_{n,m-\hat{1}} & ~\delta_{n,m+\hat{1}}+\delta_{n,m-\hat{1}}
+\end{bmatrix}
+-
+\begin{bmatrix}
+	\delta_{n,m+\hat{2}} & 0 \\
+	0 & \delta_{n,m-\hat{2}}
+\end{bmatrix}
+.
+\end{align}
+Applying the singular value decomposition, we have
+\begin{align}
+	D_{n,m}=(M+2)
+\begin{bmatrix}
+	\delta_{n,m} & 0 \\
+	0 & \delta_{n,m}
+\end{bmatrix}
++U_{1}
+\begin{bmatrix}
+	\delta_{n,m+\hat{1}} & 0 \\
+	0 & \delta_{n,m-\hat{1}}
+\end{bmatrix}
+V_{1}^{\dagger}+
+U_{2}
+\begin{bmatrix}
+	\delta_{n,m+\hat{2}} & 0 \\
+	0 & \delta_{n,m-\hat{2}}
+\end{bmatrix}
+V_{2}^{\dagger}
+,
+\end{align}
+where
+\begin{align}
+	U_{1}=\frac{1}{\sqrt{2}}
+\begin{bmatrix}
+	-1 & -1 \\
+	-1 & 1
+\end{bmatrix}
+,~~
+	U_{2}=
+\begin{bmatrix}
+	-1 & 0 \\
+	0 & -1
+\end{bmatrix}
+,
+\end{align}
+and $V_{\mu}^{\dagger}=-U_{\mu}$ for $\mu=1,2$. Following Eq.~\eqref{eq:Gtensor}, the Grassmann tensor $\mathcal{T}_{\Psi_1\Psi_2\bar{\Psi}_2\bar{\Psi}_1}$ with the ordering $\Psi_\mu=(\eta^{1}_{\mu},\eta^{2}_{\mu})$ and $\bar{\Psi}_{\mu}=(\bar{\eta}^{2}_{\mu},\bar{\eta}^{1}_{\mu})$ for $\mu=1,2$ is obtained immediately. One finds
+\begin{align}
+\label{eq:explicit}
+	&\mathcal{T}_{\Psi_1\Psi_2\bar{\Psi}_2\bar{\Psi}_1}\nonumber\\
+	&=\det D_{n,n} \nonumber \\
+	%%% diagonal
+	&+\left[
+	D^{11}_{n,n}U^{21}_{1}(V^{\dag}_{1})^{12}
+	+D^{22}_{n,n}U^{11}_{1}(V^{\dag}_{1})^{11}
+	\right]\eta^{1}_{1}\bar{\eta}^{1}_{1}
+	+\left[
+	D^{11}_{n,n}U^{22}_{1}(V^{\dag}_{1})^{22}
+	+D^{22}_{n,n}U^{12}_{1}(V^{\dag}_{1})^{21}
+	\right]\eta^{2}_{1}\bar{\eta}^{2}_{1}\nonumber\\
+	&+D^{22}_{n,n}U^{11}_{2}(V^{\dag}_{2})^{11}\eta^{1}_{2}\bar{\eta}^{1}_{2}
+	+D^{11}_{n,n}U^{22}_{2}(V^{\dag}_{2})^{22}\eta^{2}_{2}\bar{\eta}^{2}_{2}\nonumber\\
+	%%% vanishing
+	&-\left[
+	D^{11}_{n,n}U_{1}^{22}(V_{1}^{\dag})^{12}
+	+D^{22}_{n,n}U_{1}^{12}(V_{1}^{\dag})^{11}
+	\right]\eta^{1}_{1}\eta^{2}_{1}
+	+\left[
+	D^{11}_{n,n}U_{1}^{21}(V_{1}^{\dag})^{22}
+	+D^{22}_{n,n}U_{1}^{11}(V_{1}^{\dag})^{21}
+	\right]\bar{\eta}^{2}_{1}\bar{\eta}^{1}_{1}\nonumber\\
+	%%% mirror
+	&-D^{11}_{n,n}U_{2}^{22}(V_{1}^{\dag})^{12}\eta^{1}_{1}\eta^{2}_{2}
+	+D^{11}_{n,n}U_{1}^{21}(V_{2}^{\dag})^{22}\bar{\eta}^{2}_{2}\bar{\eta}^{1}_{1}\nonumber\\
+	&+D^{11}_{n,n}U_{1}^{22}(V_{2}^{\dag})^{22}\eta^{2}_{1}\bar{\eta}^{2}_{2}
+	+D^{11}_{n,n}U_{2}^{22}(V_{1}^{\dag})^{22}\eta^{2}_{2}\bar{\eta}^{2}_{1}\nonumber\\
+	&+D^{22}_{n,n}U_{1}^{12}(V_{2}^{\dag})^{11}\eta^{2}_{1}\eta^{1}_{2}
+	-D^{22}_{n,n}U_{2}^{11}(V_{1}^{\dag})^{21}\bar{\eta}^{1}_{2}\bar{\eta}^{2}_{1}\nonumber\\
+	&+D^{22}_{n,n}U_{2}^{11}(V_{1}^{\dag})^{11}\eta^{1}_{1}\bar{\eta}^{1}_{2}
+	+D^{22}_{n,n}U_{1}^{11}(V_{2}^{\dag})^{11}\eta^{1}_{2}\bar{\eta}^{1}_{1}\nonumber\\
+	%%% rest
+	&-\left[
+	\det U_{1}\eta^{2}_{1}\bar{\eta}^{1}_{1}
+	+U_{1}^{11}U_{2}^{22}\eta^{2}_{2}\bar{\eta}^{1}_{1}
+	+U_{2}^{11}U_{1}^{21}\bar{\eta}^{1}_{2}\bar{\eta}^{1}_{1}%\right.\nonumber\\
+	%&\left.\quad\quad\quad\quad\quad\quad\quad
+	+U_{1}^{12}U_{2}^{22}\eta^{2}_{1}\eta^{2}_{2}
+	+U_{2}^{11}U_{1}^{22}\eta^{2}_{1}\bar{\eta}^{1}_{2}
+	+\det U_{2}\eta^{2}_{2}\bar{\eta}^{1}_{2}
+	\right]\nonumber\\
+	&\times\left[
+	\det V_{1}^{\dag}\eta^{1}_{1}\bar{\eta}^{2}_{1}
+	+(V_{2}^{\dag})^{22}(V_{1}^{\dag})^{11}\eta^{1}_{1}\bar{\eta}^{2}_{2}
+	-(V_{1}^{\dag})^{12}(V_{2}^{\dag})^{11}\eta^{1}_{1}\eta^{1}_{2}\right.\nonumber\\
+	&\left.\quad\quad\quad\quad\quad\quad\quad
+	-(V_{2}^{\dag})^{22}(V_{1}^{\dag})^{21}\bar{\eta}^{2}_{2}\bar{\eta}^{2}_{1}
+	+(V_{1}^{\dag})^{22}(V_{2}^{\dag})^{11}\eta^{1}_{2}\bar{\eta}^{2}_{1}
+	+\det V_{2}^{\dag}\eta^{1}_{2}\bar{\eta}^{2}_{2}
+	\right].
+\end{align}
+
+
+%One finds that the coefficient tensor in Eq.~\eqref{eq:explicit} corresponds to the bosonic tensor in  Ref.~\cite{Takeda:2014vwa} up to the extra signs, which originate from the different ordering of Grassmann numbers in the local tensor. The tensor network formulation in Ref.~\cite{Takeda:2014vwa}, and also in Refs.~\cite{Kadoh:2018hqq,Sakai:2017jwp,Yoshimura:2017jpk}, is based on the decomposition, 
+%\begin{align}
+%\label{eq:TY}
+%	\e^{\bar{\chi}_{n+\hat{\nu}}\chi_{n}}=\sum_{i}(\bar{\chi}_{n+\hat{\nu}}\chi_{n})^{i}=\sum_{i,j}\int\left(\bar{\chi}_{n+\hat{\nu}}\diff\theta\right)^{i}\left(\chi_{n}\diff\phi\right)^{j}(\theta\phi)^{j}\delta_{ij}.
+%\end{align}
+%On the other hand, the current formulation is essentially based on 
+%\begin{align}
+%\label{eq:AK}
+%	\e^{\bar{\chi}_{n+\hat{\nu}}\chi_{n}}=\int\diff\bar{\eta}\diff\eta~\e^{-\bar{\eta}\eta+\bar{\chi}_{n+\hat{\nu}}\eta+\bar{\eta}\chi_{n}}=\sum_{i,j}\int\diff\bar{\eta}\diff\eta~\e^{-\bar{\eta}\eta}\left(\bar{\chi}_{n+\hat{\mu}}\eta\right)^{i}\left(\bar{\eta}\chi_{n}\right)^{j}\delta_{ij}.
+%\end{align}
+%In the second equation, we have expanded $\e^{\bar{\chi}_{n+\hat{\nu}}\eta+\bar{\eta}\chi_{n}}$ for the comparison with Eq.~\eqref{eq:TY}. From Eqs.~\eqref{eq:TY} and \eqref{eq:AK}, one finds the identity,
+%\begin{align}
+%\label{eq:convert}
+%	\int\diff\bar{\eta}\diff\eta~\e^{-\bar{\eta}\eta}\eta^{i}\bar{\eta}^{j}=\delta_{ij}=\int\diff\theta^{i}\diff\phi^{j}(-\theta\phi)^{j}.
+%\end{align}
+%Eq.~\eqref{eq:convert} gives us a bijection between two kinds of tensor network formulation and guarantees that the current formulation is also useful to derive the bosonic tensor for conventional Grassmann TRG algorithms.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

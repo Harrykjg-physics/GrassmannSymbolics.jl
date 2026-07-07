@@ -1,0 +1,1815 @@
+                                                     Published for SISSA by         Springer
+                                                                     Received: April   17,   2025
+                                                                  Revised: September   13,   2025
+                                                                   Accepted: October   12,   2025
+                                                                 Published: November   10,   2025
+
+
+
+
+Grassmann tensor renormalization group for the massive
+Schwinger model with a θ term using staggered
+
+
+
+
+                                                                                                    JHEP11(2025)036
+fermions
+
+Hayato Kanno     ,a Shinichiro Akiyama    ,b,c Kotaro Murakami     d,e   and Shinji Takeda     f
+
+ a
+   RIKEN BNL Research Center, Brookhaven National Laboratory,
+  Upton, NY 11973, U.S.A.
+ b
+   Center for Computational Sciences, University of Tsukuba,
+  Tsukuba, Ibaraki 305-8577, Japan
+ c
+   Graduate School of Science, The University of Tokyo,
+   Bunkyo-ku, Tokyo 113-0033, Japan
+ d
+   Department of Physics, Institute of Science Tokyo,
+   2-12-1 Ookayama, Megro, Tokyo 152-8551, Japan
+ e
+   RIKEN Center for Interdisciplinary Theoretical and Mathematical Sciences (iTHEMS), RIKEN,
+  Wako, Saitama 351-0198, Japan
+ f
+   Institute for Theoretical Physics, Kanazawa University,
+   Kanazawa 920-1192, Japan
+  E-mail: hayato.kanno@riken.jp, akiyama@ccs.tsukuba.ac.jp,
+  kotaro.murakami@yukawa.kyoto-u.ac.jp, takeda@hep.s.kanazawa-u.ac.jp
+
+Abstract: We use the Grassmann tensor renormalization group method to investigate the
+Nf = 2 Schwinger model with the staggered fermions in the presence of a 2π periodic θ term
+in a broad range of mass. The method allows us to deal with the massive staggered fermions
+straightforwardly and to study the θ dependence of the free energy and topological charge
+in the thermodynamic limit. Our calculation provides consistent results with not only the
+analytical solution in the large mass limit but also the previous Monte Carlo studies in the
+small mass regime. Our numerical results also suggest that the Nf = 2 Schwinger model on
+a lattice has a different phase structure, than the model in the continuum limit.
+
+Keywords: Algorithms and Theoretical Developments, Other Lattice Field Theories, Phase
+Transitions
+
+ArXiv ePrint: 2412.08959
+
+
+
+
+Open Access, © The Authors.
+                                                     https://doi.org/10.1007/JHEP11(2025)036
+Article funded by SCOAP3 .
+Contents
+
+1 Introduction                                                                             1
+
+2 Review of the Schwinger model                                                            3
+
+3 Tensor network representation of path integral                                           5
+  3.1 Lattice action                                                                       5
+  3.2 Tensor network formulation                                                           5
+
+
+
+
+                                                                                                JHEP11(2025)036
+4 Numerical results                                                                        8
+  4.1 Algorithmic parameters                                                               8
+  4.2 Free energy density                                                                  8
+  4.3 Topological charge density                                                          11
+  4.4 Ground-state degeneracy                                                             13
+  4.5 Correlation length                                                                  14
+
+5 Conclusion                                                                              15
+
+A Analytic calculation of Nf = 2 Schwinger model                                          17
+  A.1 Large mass limit                                                                    17
+  A.2 Small mass regime                                                                   19
+
+B Discrete remnant of the U(1)A symmetry on the lattice                                   22
+
+C Derivation of the local Grassmann tensor                                                23
+
+D Derivation of the correlation length                                                    24
+
+
+
+1   Introduction
+Understanding the topological nature of Quantum ChromoDynamics (QCD) is one of the
+essential subjects in high-energy physics. There is a famous unsolved problem in the standard
+model called the strong CP problem, which is the unnaturalness that the θ term in the QCD
+action almost vanishes according to the neutron EDM experiments [1]. One of the candidates
+to explain such a phenomenon is the Peccei-Quinn mechanism [2], where the θ parameter
+behaves as a dynamical field, which is called the axion field. The studies on the axion have
+attracted much attention so far, as a solution not only to the strong CP problem itself but
+also to other phenomenological puzzles such as dark matter [3–5] and inflation [6]. On the
+other hand, to determine the properties of the axion, non-perturbative studies on QCD with
+the θ term are vital. For studies on QCD without θ term, numerical simulation of lattice
+gauge theories using the Monte Carlo (MC) technique is a powerful tool. The MC technique,
+however, does not work when including the θ term since the Boltzmann weight in the path
+integral is a complex number. Such difficulty is called the sign problem. Although there are
+
+
+
+
+                                           –1–
+some attempts to study the four-dimensional (4D) Yang-Mills theory with the θ term [7–9],
+the MC approach to the lattice QCD studies with the θ term have not been developed so much.
+     Recently, numerical techniques using tensor networks have become prominent candidates
+for avoiding the problem. The most conventional one is the Density Matrix Renormalization
+Group (DMRG) [10] based on the Hamilton formalism [11]. Another numerical approach
+is the tensor renormalization group (TRG) [12], in which we represent the path integral in
+the Lagrangian formalism as a tensor network. However, application to the four-dimensional
+(4D) QCD is still challenging for both approaches since their computational cost is large.
+Under these circumstances, in this paper, we numerically study the Schwinger model [13],
+
+
+
+
+                                                                                                   JHEP11(2025)036
+the 2D Quantum ElectroDynamics (QED), with the θ term. The model is well known as a
+toy model of the 4D QCD and has a similar infrared (IR) phase structure to the 4D QCD
+since they share similar global symmetry and confinement nature. Moreover, the Schwinger
+model has a nontrivial topological nature related to the θ term as well as 4D QCD.
+     In this study, we consider the two-flavor (Nf = 2) Schwinger model. In the previous
+studies, the one-flavor Schwinger model had been mainly studied. In spite of this, it is also
+worth exploring the phenomena in the multi-flavor theory for the understanding of vacuum
+structure in more realistic situations. We emphasize that the vacuum structure of Nf = 1
+and Nf ≥ 2 are quite different at θ = π; there is a transition from unique vacuum to two-fold
+vacuums at a certain mass parameter for Nf = 1 while two-fold vacuum degeneracy appears
+at any positive mass for Nf ≥ 2. In the massless limit, the two-flavor Schwinger model
+is exactly solvable in the IR limit because it becomes a conformal field theory (CFT): the
+SU(Nf )1 Wess-Zumino-Witten (WZW) model. The theory in the heavy mass limit can also
+be solved because it corresponds to the 2D Maxwell theory (U(1) gauge theory), where no
+propagating degrees of freedom appear. In contrast to these two limits, it is difficult to solve
+the model analytically in the general finite mass case. The exception is the small mass case;
+it is understood well through the bosonized theory with the mass perturbation [14, 15]
+     We employ the TRG method to simulate the Schwinger model with the θ term. One
+of the advantages of the TRG approach is that it allows us to handle lattice volumes large
+enough to be identified as the thermodynamic limit. The TRG method is also particularly
+advantageous for the simulation on a torus, which is necessary to realize the 2π periodicity
+with respect to the θ parameter. In addition, TRG can treat fermionic degrees of freedom
+directly as Grassmann variables [16], which makes it easy to formulate the tensor network
+representation even for theories including fermions. Taking these advantages, in this paper,
+we perform the TRG algorithm to calculate the free energy density in the Schwinger model
+with the 2π periodic θ term in a wide range of mass parameters. Furthermore, we use
+single-component staggered fermion action, which corresponds to the two-flavor Schwinger
+model in the continuum limit. This action is suitable for a first trial of the simulation
+using TRG since the calculation cost is lower than those for other lattice actions such as
+the two-flavor Wilson fermion.
+     For the lattice calculation of the Schwinger model with the θ term, several approaches
+in the MC method have already been taken [17–19]. Simulations on the massless Schwinger
+model based on the MC method using a dual formulation have also been performed [20, 21], in
+which the sign problem is avoided. Remarkably, there are MC simulations for the bosonized
+
+
+
+
+                                             –2–
+Schwinger model with the θ term [22, 23], where the sign problem is eliminated by integrating
+out the gauge field in the bosonized action. Recently, there have been many studies on
+the Schwinger model with the θ term using other numerical methods, such as quantum
+computation [24–29] and several Matrix Product State (MPS) methods including the DMRG
+(see refs. [30–35] for Nf = 1 and refs. [36–38] for Nf = 2, and the references therein).
+Furthermore, there have been previous studies by the TRG method using the one-flavor
+Wilson fermion action [39–41] and the massless staggered fermion [42]. Our study is the first
+TRG calculation of the two-flavor massive Schwinger model with the θ term. In particular,
+we perform the thermodynamic calculations on the free energy and topological charge, which
+were considered difficult in the previous tensor network formulation proposed in ref. [42].
+
+
+
+
+                                                                                                   JHEP11(2025)036
+     This paper is organized as follows. In section 2, we briefly review several known facts
+for the two-flavor Schwinger model. We describe the lattice action for the Schwinger model
+and summarize its tensor network representation in section 3. Our numerical results for the
+Nf = 2 Schwinger model are presented in section 4. Section 5 is devoted to the summary.
+
+2   Review of the Schwinger model
+In this section, we review the analytic results of the Schwinger model which is the 2D
+gauge theory including a U(1) gauge field (photon) and Nf Dirac fermions in fundamental
+representation. Here, we exclusively consider the case where all the Nf (≥ 2) fermions share
+the same mass. The Euclidean action in this theory is given by
+
+                                  1              iθ µν
+                  Z                                                                 
+             S=       d2 x          2
+                                      Fµν F µν +    ϵ Fµν + ψ̄iγ µ (∂µ + iAµ )ψ + mψ̄ψ ,   (2.1)
+                                 4g              4π
+
+where m(≥ 0) is the mass parameter of the fermions. The second term in the above equation
+corresponds to the θ term in this model. Since the Schwinger model has the same properties
+as those of the 4D QCD, a bunch of theoretical studies in this model have been done as
+a testbed of QCD.
+     The analytical studies of the Schwinger model have been done well in the large mass
+limit, massless limit, and finite but very small mass region. In the following, we review
+the analytic results for each mass regime.
+     In a large mass limit, the Schwinger model is just reduced to a pure U(1) gauge theory,
+that is, the 2D Maxwell theory. This theory no longer has dynamical particles since the gauge
+field has no degree of freedom to propagate. The free energy, however, has θ-dependence
+since the θ term play a role of the background static electric field.
+     In massless limit, the Schwinger model can be analyzed through its global symmetry. The
+                                                U(Nf )L ×U(Nf )R
+massless Schwinger model with Nf -flavor has U(1)     V ×U(1)A
+                                                                 ≃ SU(Nf )L × SU(Nf )R global
+symmetry. Note that U(1)V is not a global symmetry because it is gauged. On the other
+hand, U(1)A global symmetry is broken because of the ABJ-type anomaly, which is the same
+case as for 4D QCD. Although there is no spontaneous symmetry breaking because of the
+Coleman-Mermin-Wagner theorem [43, 44], the global symmetry of this model is similar to
+that of 4D QCD. As in the case of 4D QCD, the massless theory is independent of θ since the θ
+term is always compensated by the ABJ-type anomaly through a proper U(1)A transformation.
+Furthermore, the massless Schwinger model is similar to 4D QCD in the sense of the infrared
+
+
+
+
+                                                   –3–
+(IR) effective theory, even though it does not have spontaneous symmetry breaking. For
+4D QCD, the IR effective theory is known as a (SU(Nf )L × SU(Nf )R ) /SU(Nf )V non-linear
+sigma model that comes from the chiral symmetry breaking. This is nothing but the pion
+effective theory. On the other hand, the massless Schwinger model in the IR limit is equivalent
+to the SU(Nf )1 WZW model, which is a conformal field theory where the central charge is
+c = Nf − 1. This relation can be derived by the non-abelian bosonization [45, 46]. Since
+the action of the WZW model is very similar to the pion theory, the massless Schwinger
+model has a similar IR structure to that of 4D QCD.
+    For a finite mass parameter, the theory preserves only SU(Nf )V symmetry, the same
+global symmetry as in 4D QCD. This theory then can have a non-trivial topological θ term
+
+
+
+
+                                                                                                               JHEP11(2025)036
+because of the homotopy group for the U(1) gauge symmetry, π1 (U(1)) = Z.1 It is known
+that this theory has a mass gap. There is a gapless point at θ = π and a certain point
+of m ≠ 0 for Nf = 1, while the theory for Nf ≥ 2 has a mass gap in the whole m > 0
+regime even at θ = π [36].2 In contrast to the large and small mass limits, it is difficult to
+calculate the Schwinger model analytically for the finite mass in general. For this reason,
+in this paper, we employ a numerical calculation.
+    In this paper, we mainly focus on the θ dependence of the free energy densities for
+Nf = 2. Here, we summarize the analytic solution for large and small mass limits. The
+detailed calculation is given in appendix A. First, the free energy density in a large mass
+limit, which is just the one in the Maxwell theory, can be calculated as
+
+                                     log Z(θ)       1
+                                 −            = min 2 (θ − 2πn)2 .                                    (2.2)
+                                       g2V       n 8π
+
+
+We normalize it by g 2 to make a dimension-less combination. The derivation is shown
+in appendix A.1. Note that the above equation is evaluated in the large volume limit
+(thermodynamic limit). Next, for a small mass regime, the free energy density is evaluated by
+abelian bosonization together with mass perturbation. Although the detailed calculation is
+presented in appendix A.2, the result of the free energy density from the mass perturbation
+is given by, [15]
+                                                               !2                         
+                   log Z(θ)                                m2    3
+                                                                                   θ − 2πn 
+                                                                                         
+                                        4
+                                             5 1                          4
+                  − 2       = min (eγ ) 3 π − 3 2 3                  cos   3                          (2.3)
+                     g V       n                          g2                         2     
+
+
+with the Euler constant, γ = 0.57721 · · · . Note that this equation is valid as long as the
+mass perturbation works, that is, only for the small m/g parameter range. There are no
+free parameters in the factors in eq. (2.2) and eq. (2.3), so we can compare these values
+with numerical results.
+
+   1
+      For the 4D QCD, the θ term comes from π3 (SU(Nc )) = Z. The 2D QCD and 4D QED cannot have a θ
+term on Rd or S d because π1 (SU(N )) = 0 for the 2D QCD and π3 (U(1)) = 0 for the 4D QED.
+    2
+      This behavior is the same as the IR effective theory of 4D QCD, in which the gapless point exists at a
+m > 0 and θ = π point for Nf = 1 and at m = 0 point for Nf ≥ 2 [47]. This similarity of the phase diagram
+is understood through the non-abelian bosonization.
+
+
+
+
+                                                   –4–
+3    Tensor network representation of path integral
+
+3.1 Lattice action
+
+To simulate the Nf = 2 Schwinger model on a square lattice, we use the standard Wilson gauge
+action for the U(1) gauge symmetry with the 2π-periodic θ term and staggered fermion action:
+
+                                                    S = Sg + SΘ + Sf ,                                               (3.1)
+
+where
+
+
+
+
+                                                                                                                             JHEP11(2025)036
+                        h                                             i
+                     ℜ U1 (n)U2 (n + 1̂)U1∗ (n + 2̂)U2∗ (n) ,
+               X
+    Sg = −β                                                                                                          (3.2)
+              n∈Λ2
+              θ X    h                                    i
+    SΘ = −        log U1 (n)U2 (n + 1̂)U1∗ (n + 2̂)U2∗ (n) ,                                                         (3.3)
+             2π n
+                2
+           1XX
+                   ην (n) [χ̄(n)Uν (n)χ(n + ν̂) − χ̄(n + ν̂)Uν∗ (n)χ(n)] + m0
+                                                                              X
+    Sf =                                                                        χ̄(n)χ(n). (3.4)
+           2 n ν=1                                                            n
+
+
+Here, m0 = am and β = 1/(ag)2 are the mass parameter and inverse gauge coupling with a
+lattice spacing a, respectively. The U(1)-valued link variable is denoted by Uν (n) and χ(n)
+and χ̄(n) are the single-component Grassmann variables. The staggered sign function is
+defined by η1 (n) = 1 and η2 (n) = (−1)n1 . We assume the periodic (anti-periodic) boundary
+condition for the staggered fermions in 1̂ (2̂) direction. This action is defined on a 2D
+Euclidean lattice. Thus one staggered fermion includes 22 = 4 complex valued fermionic
+degrees of freedom, and corresponds to Nf = 2 Dirac fermion in the continuum limit [11].
+     In eq. (3.3), log denotes the principal value. This logarithmic definition of a θ term enables
+us to treat integer-valued instanton numbers because the spacetime sum of this topological
+charge density should result in an integer value [48]. The logarithmic definition has been
+widely applied in studying topological aspects in 2D lattice gauge theories [17, 18, 40, 49–52].
+     Parametrizing the link variable as Uν (n) = eiAν (n) , the partition function is defined
+by the path integral as
+                                                                !                       !
+                                   YZ Z                              Y Z π dAν (n)
+                            Z=                   dχ̄(n)dχ(n)                                e−S .                    (3.5)
+                                    n                                n,ν   −π     2π
+
+
+3.2 Tensor network formulation
+
+We represent the path integral in eq. (3.5) as a tensor network. Following ref. [50], we
+discretize the U(1)-valued link variables by the Gauss-Legendre quadrature rule. Firstly,
+we define a four-leg tensor T (g) as
+
+                                                wa1 (n) wa2 (n+1̂) wa1 (n+2̂) wa2 (n)
+                                            p
+      (g)
+     Ta (n+1̂)a (n+2̂)a (n)a (n)        =
+       2       1       2    1                               4        h                                       i
+                                                                θ
+                 β cos[π (a1 (n)+a2 (n+1̂)−a1 (n+2̂)−a2 (n))]+ 2π log eiπ(a1 (n)+a2 (n+1̂)−a1 (n+2̂)−a2 (n))
+            ×e                                                                                                   .   (3.6)
+
+
+
+
+                                                            –5–
+In eq. (3.6), aν (n) denotes the node of the Gauss-Legendre quadrature rule and waν (n) is
+the corresponding weight:
+                                     Z 1                                             X
+                                               dxν (n)f (xν (n)) ≃                               waν (n) f (aν (n)) ,                                   (3.7)
+                                       −1
+                                                                                 aν (n)∈DK
+
+where xν (n) = Aν (n)/π and f represents the corresponding integrand. DK is a set of K
+sampling points defined by the quadrature rule. Note that the efficacy of this quadrature
+rule has been demonstrated in ref. [50], where the first-order transition at θ = π in the 2D
+U(1) lattice gauge theory is captured even with relatively small K.
+
+
+
+
+                                                                                                                                                                   JHEP11(2025)036
+     To deal with the Grassmann integrals, we employ the Grassmann tensor network formu-
+lation in ref. [53]. Introducing the auxiliary Grassmann fields, we can define the Grassmann
+tensor in the following form,
+    (f )                                                                  (f )                                                     j ′ i′ j ′ i′
+                                                                        Ti1 j1 i2 j2 i′ j ′ i′ j ′ ,a1 (n)a2 (n) ζ1i1 ξ1j1 ζ2i2 ξ2j2 ξ¯11 ζ̄11 ξ¯22 ζ̄22 . (3.8)
+                                                   Y       X
+ Tζ                                            =
+    1 ξ1 ζ2 ξ2 ξ̄1 ζ̄1 ξ̄2 ζ̄2 ,a1 (n)a2 (n)                                          1 1 2 2
+                                                   ν iν ,jν ,i′ν ,jν′
+
+
+In eq. (3.8), ζν , ξν , ζ̄ν , ξ¯ν represent the auxiliary single-component Grassmann fields and
+the bits iν , jν , i′ν , jν′ does the occupation numbers. The coefficient tensor T (f ) depends
+on the discretized gauge fields and the staggered sign function. For simplicity, we have
+omitted the site dependence from the auxiliary Grassmann fields. The explicit form of T (f )
+is derived in appendix C.
+    Combining two types of tensors in eqs. (3.6) and (3.8), we can define a fundamental
+Grassmann tensor associated with each lattice site n as
+                                                                                 (g)                             (f )
+ Tn;ζ1 ξ1 ζ2 ξ2 ξ̄1 ζ̄1 ξ̄2 ζ̄2 ,a2 (n+1̂)a1 (n+2̂)a2 (n)a1 (n) = Ta                                           T                                          ,
+                                                                                  2 (n+1̂)a1 (n+2̂)a2 (n)a1 (n) ζ1 ξ1 ζ2 ξ2 ξ̄1 ζ̄1 ξ̄2 ζ̄2 ,a1 (n)a2 (n)
+
+                                                                                                                                                        (3.9)
+
+which describes the original path integral, eq. (3.5), via
+                                                                                         "          #
+                                                                                             Y
+                                                        Z ≃ Z(K) = gTr                           Tn .                                                 (3.10)
+                                                                                             n
+
+Notice that “gTr” does not only mean the integration over the auxiliary Grassmann fields
+but also the summation over the discretized gauge fields. Figure 1 diagrammatically shows
+the current tensor network formulation.
+     The tensor network representation in eq. (3.10) is ready to be computed by the TRG
+method. The basic idea of the TRG method is to approximately carry out the tensor
+contraction based on the singular value decomposition (SVD). The SVD allows us to
+construct a coarse-grained transformation that best approximates the Frobenius norm of the
+local fundamental tensor under a fixed tensor size. This size is usually referred to as the bond
+dimension. By increasing the bond dimension, we can systematically improve the accuracy of
+the TRG method. Typically, the TRG algorithms allow us to compute a contraction consisting
+of 2n tensors just in n times of coarse-grained transformation. Therefore, we can easily access
+the thermodynamic limit. In this study, we employ the bond-weighted TRG (BTRG)
+algorithm [54] to evaluate eq. (3.10). The BTRG improves the accuracy of the original Levin-
+Nave TRG [12] without increasing the computational cost. This is achieved by introducing
+
+
+
+
+                                                                             –6–
+                           (A)                                                (B)
+
+
+
+
+                                                                                                          JHEP11(2025)036
+Figure 1. (A) Schematic picture of the Grassmann tensor network in eq. (3.10). Since the fundamental
+tensor defined in eq. (3.9) depends on n1 due to the staggered sign function, two kinds of tensors,
+white and gray symbols, are necessary to restore the path integral. (B) Structure of the fundamental
+tensor in eq. (3.9). Red and green symbols show T (g) and T (f ) , respectively. Dotted lines represent
+the square lattice. Each external line represents the auxiliary Grassmann field. Gauge fields are
+denoted by the diamonds.
+
+
+
+some weight on each edge in the tensor network by which the effect of the environment
+neglected in the original TRG is partly taken into account. The efficiency of the BTRG for
+lattice fermions has already been confirmed in ref. [55]. We always set the hyperparameter
+k for the weight on each edge as k = −1/2, which is the optimal choice in the case of square
+lattice models. Our implementation of the BTRG requires the O(D4 ) memory cost and O(D6 )
+computational complexity with the bond dimension D. For more information on the BTRG
+algorithm in the presence of the lattice fermions, see ref. [55], or a recent review paper [56].
+     We finally note that the Schwinger model with the staggered fermions was previously
+investigated by the TRG method in ref. [42], where the tensor network representation of the
+path integral was derived based on the world-line formulation [20, 21] and no Grassmann
+variable appeared. However, this strategy is highly limited to the massless case as pointed out
+in ref. [42]. In contrast, our approach is based on the Grassmann tensor network formulation
+and there is no difficulty in applying the TRG method even in the presence of the finite
+fermion mass. This is a direct benefit because the TRG algorithms can directly deal with
+the Grassmann variables; the tensor network representation can be constructed using only
+local fundamental tensors when the original lattice theory is local.
+
+
+
+
+                                                –7–
+4        Numerical results
+4.1 Algorithmic parameters
+We define the dimensionless free energy density by
+                                                  1           β
+                                         f =−        log Z = − 2 log Z,                                         (4.1)
+                                                 g2V          L
+where L is the linear system size in the lattice unit (V = a2 L2 ). We use the BTRG algorithm
+to compute eq. (4.1) in the thermodynamic limit. The physical quantities, including the
+topological charge and susceptibility, are immediately obtained by taking the numerical
+
+
+
+
+                                                                                                                        JHEP11(2025)036
+difference of eq. (4.1).
+     We first investigate the convergence of free energy in terms of the cutoff K in the
+quadrature rule and the bond dimension D in the BTRG algorithm. As we see below, we
+employ the inverse gauge coupling with β ≤ 1/(0.4)2 = 6.25 in this study. Here, we set m0 = 0,
+β = 6.25, θ = π, that requires the largest K and D to reach sufficient convergence. Figure 2
+shows the thermodynamic free energy density as a function of D and K. In the left-hand
+side of figure 2, we set K = D/4 because the initial bond dimension of the Grassmann
+tensor network in eq. (3.10) is 4K and we are allowed to increase K when the maximal bond
+dimension D is increased. In the right-hand side of figure 2, the cutoff K is varied with the
+fixed bond dimension D = 100. The finite-K effect seems to be well suppressed with K ≥ 14.
+The absolute difference between the resulting free energy with D = 110 and D = 120 is about
+4 × 10−4 , much smaller than the scale we shall see in the following. In this study, D = 120
+and K = 25 are the maximal algorithmic parameters. In the following, when there is no
+specific mention of bond dimension or K, we always use D = 120 and K = 25.
+
+4.2 Free energy density
+Let us investigate the free energy density as a function of θ. In the following, we always
+consider the shifted free energy via
+                                                β
+                                    f (θ) = −      (log Z(θ) − log Z(θ = 0)) ,                                  (4.2)
+                                                L2
+so that it takes zero at the origin. Figure 3 shows that the resulting free energy density
+explicitly
+ q         has the 2π periodicity with respect to θ. In figure 3, we set β = 1 and m20 = 0.25
+( βm20 = 0.5) as a representative.
+    From now on, we investigate the finite-mass effect. Figure 4 shows the free energy
+density for different masses at β = 1/(0.5)2 = 4. Since we have already confirmed that our
+computation
+      q       preserves the 2π periodicity, we just show the result in the range of θ ∈ [0, π].
+With βm20 = 100, the numerical result is consistent with the large mass limit, which is
+described by the pure Maxwell theory.3 This is a validation of our numerical approach.
+    3
+        The analytic result for the lattice pure Maxwell theory is obtained by the numerical integration of
+                                                       Z   π            P                      P
+                                   log Z(θ)                     dAp β                     iθ
+                                                                                cos(Ap )− 2π           Ap
+                              −β            = −β log                e       p                      p        ,
+                                      L2                   −π
+                                                                 2π
+
+which is given in ref. [57]. This function corresponds to the orange line which described as “analytic (lattice)”
+in figure 4. See appendix A.1 for a further explanation of the large mass limit.
+
+
+
+
+                                                            –8–
+                    = 6.25, K = D/4, m0 = 0, =                            = 6.25, D = 100, m0 = 0, =
+                                                               26.834
+     26.790
+     26.795                                                    26.836
+     26.800
+     26.805                                                    26.838
+     26.810
+                                                               26.840
+     26.815
+
+
+
+
+                                                       f
+f
+
+
+
+
+                                                                                                       JHEP11(2025)036
+     26.820                                                    26.842
+     26.825
+     26.830                                                    26.844
+     26.835
+                                                               26.846
+     26.840
+               40         60   80      100       120                    12 14 16 18 20 22 24
+                               D                                                      K
+Figure 2. Free energy density as a function of the bond dimension D (left) and the cutoff K (right)
+in the Gauss-Legendre quadrature rule.
+
+
+
+                                         = 1, D = 100, K = 18, m02 = 0.25
+       0.175
+       0.150
+       0.125
+       0.100
+ f
+
+
+
+
+       0.075
+       0.050
+       0.025
+       0.000
+                    1.0        0.5        0.0           0.5             1.0       1.5          2.0
+                                                           /
+     Figure 3. Free energy density as a function of the θ, in the range of −1.1π ≤ θ ≤ 2.2π.
+
+
+
+
+                                                  –9–
+                             =4                                                     =4
+            analytic(lattice)                                       ( m02)121 = 0.2
+       0.14 ( m02)12 = 100                                    0.035 ( m02)21 = 0.14
+            ( m02)121 = 0.8                                         ( m02)21 = 0.08
+       0.12 ( m02)2 = 0.4                                     0.030 ( m02)21 = 0.05
+            ( m02)121 = 0.2                                         ( m02)21 = 0.01
+       0.10 ( m02)2 = 0.14                                    0.025 ( m02)2 = 0
+                                                                    mass perturbation
+       0.08                                                   0.020
+
+
+
+
+                                                        f
+f
+
+
+
+
+       0.06                                                   0.015
+
+
+
+
+                                                                                                                JHEP11(2025)036
+       0.04                                                   0.010
+       0.02                                                   0.005
+       0.00                                                   0.000
+           0.0     0.2     0.4       0.6   0.8    1.0              0.0    0.2     0.4       0.6   0.8     1.0
+                                 /                                                      /
+                                                       p                        p
+Figure 4. Free energy density as a function of θ/π with βm20 ≥ 0.14 (left) and βm20 ≤ 0.2 (right).
+                                 psolution of the Maxwell theory on a lattice in the left panel while
+A solid curve shows the analytical
+the mass perturbation result for βm20 = 0.01 in the right.
+
+
+Decreasing the mass, we observe a clear deviation from the pure Maxwell theory due to
+the finite-mass effect. This is a direct benefit of the application of the Grassmann tensor
+network; there is no difficulty in dealing with massive fermions in contrast to the world-line
+approach [20, 21] and the previous TRG approach [42]. We can also see that the free energy
+density tends to be smooth with respect to θ at θ = π by further decreasing the mass. This
+situation is similar to the single-flavor Schwinger model with a θ term, where the critical
+endpoint appears. However, we expect that there is no critical endpoint in the two-flavor
+model in the continuum limit, according to ref. [36]. In addition, from the right panel of
+figure 4, the result at m0 = 0 depends on θ. This behavior does not agree with that in
+the continuum limit, where the free energy should be independent of θ at m = 0 because
+the θ parameter can be changed q to arbitrary value through the U(1)A ABJ-type anomaly.
+Furthermore, our results at βm20 = 0.01 have a stark deviation from those in the mass
+perturbation theory with the same mass, which is shown as a curve in the right panel of
+figure 4. These inconsistencies may be explained by the finite-β effect. Indeed, as seen in
+figure 5, the free energy density at m0 = 0 depends significantly on β, which indicates that
+our results with a small mass suffer from the finite-β effect. Also, from figure 5, it is found
+that the θ dependence at m0 = 0 is more enhanced with a smaller β, which could imply that
+the finite β causes the strange behavior of our results with a small mass.4 To control the
+finite-β effect in the small mass regime, it is necessary to simulate with at least β > 6.25 since
+
+  4
+      This finite-β effect is also pointed out by a Monte Carlo study with the staggered fermions [19].
+
+
+
+
+                                                     – 10 –
+                             0.0200                   m0 = 0
+                                         = 1/(0.62)
+                                         = 1/(0.52)
+                             0.0175      = 1/(0.42)
+                             0.0150
+                             0.0125
+
+                        f    0.0100
+                             0.0075
+
+
+
+
+                                                                                                            JHEP11(2025)036
+                             0.0050
+                             0.0025
+                             0.0000
+                                   0.0     0.2     0.4        0.6   0.8    1.0
+                                                          /
+                                                          p
+Figure 5. Free energy density as a function of θ/π at         βm20 = 0 with various β. Note that the plot
+of β = 1/(0.52 ) = 4 is also depicted in figure 4.
+
+
+there remains the θ dependence at m0 = 0 even with β = 6.25. Here, we note that the O(a)
+correction implemented through a mass parameter shift in the Hamiltonian approach [32]
+cannot be applied to our case due to the different pattern of the remnant chiral symmetry.
+The detailed discussion is presented in appendix B. Simulations for larger β might be achieved
+by improving the BTRG algorithm according to refs. [58, 59]. We leave this for future work.
+
+4.3 Topological charge density
+
+Next, we investigate the topological charge density, which is obtained from eq. (4.2) by
+numerical differentiation in terms of θ. Figure 6 shows the resulting topological
+                                                                        q           charge
+                                                                              2
+density at β = 4 for different masses. With an extremely large mass, βm0 = 100, the
+topological charge depends on θ linearly, which
+                                           q    is again consistent with the pure Maxwell
+theory as explained in section 4.2. Around βm20 ∼ 0.4, the linearity is no longer seen and
+                                q
+the curvature appears. From         βm20 ∼ 0.2, a convex begins to appear at θ ≈ 0.8π. With
+q
+   βm20 ≳ 0.14, we observe discontinuities in the topological charge density, which support the
+first-order phase transition line at θ = π. Continuing to decrease m0 , the discontinuity seems
+to disappear. As we argued in section 4.2, this behavior could be due to the finite-β effect.
+      Here, we also show the mass dependence of the topological susceptibility at θ = 0 in
+figure 7. Note that the topological susceptibility is defined by ∂ 2 f /∂θ2 , which can also be
+evaluated by the numerical differentiation. To stabilize the numerical differentiation, we
+first obtain the averaged free energy density f¯(θ) as f¯(θ) = {f (θ − δ) + f (θ) + f (θ + δ)} /3
+with δ = 0.025π. We then perform the numerical differentiation for f¯ to evaluate the
+topological susceptibility at θ = 0 via {f¯(∆) − 2f¯(0) + f¯(−∆)}/∆2 with ∆ = 0.075π. This
+
+
+
+
+                                                 – 11 –
+                             =4                                                      =4
+            analytic(lattice)                             0.030 (    m02)12 = 0.2
+            ( m02)121 = 100                                     (    m02)12 = 0.14
+       0.08 ( m02)21 = 0.8                                0.025 (    m02)12 = 0.08
+                2
+            ( m0 )21 = 0.4                                      (    m02)12 = 0.05
+            ( m02)21 = 0.2                                      (    m02)12 = 0.01
+            ( m02)2 = 0.14                                0.020 (    m02)12 = 0
+       0.06
+                                                          0.015
+
+
+
+
+                                                     f/
+f/
+
+
+
+
+       0.04
+
+
+
+
+                                                                                                               JHEP11(2025)036
+                                                          0.010
+       0.02
+                                                          0.005
+
+       0.00                                               0.000
+           0.0   0.2    0.4       0.6   0.8    1.0             0.0     0.2     0.4       0.6   0.8       1.0
+                              /                                                      /
+                 Figure 6. Topological charge density as a function of θ/π at β = 4.
+
+                                                                                                     q
+prescription reduces the numerical instability and results in a smooth plot against βm20
+as shown in figure 7.
+     Our numerical results (orange points) are consistent with the previous Monte Carlo
+study of the Nf = 2 Schwinger model with staggered fermions at β = 4 [60]; the numerical
+result shown in figure 7 is consistent with figure 6 in ref. [60].5 We can also see that our
+results tend to reach the large mass limit (purple line) as we increase the mass. Although
+the results with the larger masses are not shown in this figure, it is guaranteed that the
+topological susceptibility approaches the limit since the free energy itself does. Therefore, the
+current BTRG computation with D = 120 seems to be sufficiently accurate to investigate the
+lattice model even in the vicinity of the massless limit, where the finite-D effect is usually
+enhanced [53, 61]. The discrepancy between the numerical results and the mass perturbation
+could be solely attributed to the finite-β effect.
+     Furthermore, we also consider the improvement of the topological susceptibility, par-
+ticularly in the small mass regime. In the massless case of the continuum theory, there
+should be no θ dependence in the free energy, thus the residual topological susceptibility at
+m0 = 0 in figure 7 is considered as a lattice artifact. According to the Symanzik’s lattice
+effective theory [62] and assuming the small mass perturbation, we can improve the result
+by subtracting the value of the lattice artifact at m0 = 0. We also show this improved
+                             q The improved ones are consistent with the mass perturbation
+result in figure 7 as blue plots.
+line in small mass regime βm20 ≲ 0.08. This is another support to justify our result in
+the small mass regime. Notice, however, that this improvement is based on the small mass
+perturbation, so it is not valid for the large mass regime.
+   5
+    We can also see the Monte Carlo result of the topological susceptibility for the Nf = 2 Schwinger model
+with domain-wall fermions at β = 1 in ref. [18].
+
+
+
+
+                                                 – 12 –
+                                                                      = 4, = 0
+                         0.030
+
+                         0.025
+Topological susceptibility
+
+
+
+                         0.020
+
+                         0.015
+
+
+
+
+                                                                                                                                JHEP11(2025)036
+                         0.010
+                                                                   mass perturbation
+                         0.005                                     Maxwell (lattice)
+                                                                   without the subtraction; 2f(m0)/   2
+                                                                   with the subtraction; 2f(m0)/ 2        2f(m0 = 0)/   2
+                         0.000
+                                 0.0   0.1          0.2            0.3         0.4         0.5            0.6           0.7
+                                                                            m02
+                                             Figure 7. Topological susceptibility at θ = 0.
+
+
+ 4.4 Ground-state degeneracy
+We investigate the degeneracy of the ground state at θ = 0 and around θ = π. The
+Schwinger model exhibits the spontaneous CP symmetry breaking, which leads to the two-
+fold degenerate ground state at θ = π. We examine whether such a behavior also appears in
+the numerical calculation. To obtain the degeneracy, we employ the fixed-point tensor [63]
+for Grassmann variables. Suppose we have a renormalized local Grassmann tensor TXT X̄ T̄
+using the BTRG algorithm, where X, T , X̄, T̄ are the Grassmann variables introduced by
+the coarse-graining procedure. Using the renormalized Grassmann tensor, we define the
+following Grassmann matrix,
+                                                             Z
+                                                   AT T̄ =       dX̄dXe−X̄X TXT X̄ T̄ .                                 (4.3)
+
+The ground-state degeneracy is then obtained via
+
+                                                                 (gTrA)2
+                                                                          ,                                             (4.4)
+                                                                 gTr (A)2
+because this quantity counts the degeneracy of the local Grassmann tensor, which corresponds
+with the ground-state degeneracy after the sufficient times of coarse-graining [63]. Note that
+(A)2 in the denominator of eq. (4.4) means the Grassmann matrix product.
+    Figure 8 showsq the numerical results of eq. (4.4) as a function of the coarse-graining steps
+ in the BTRG. At βm20 = 100, we observe a clear plateau of 2 at θ = π, which indicates
+ that the symmetry breaking takes place and the ground state is doubly degenerate at a large
+ mass. We also show the degeneracy at θ = 0, which rapidly converges to 1 for all mass
+
+
+
+
+                                                                   – 13 –
+                        = 4,   m02 = 100                                    = 4,    m02 = 0.2
+         2.75                         =0                     2.75                          =0
+                                      =                                                    =
+         2.50                         = 0.9999               2.50                          = 0.9999
+                                      = 1.0001                                             = 1.0001
+                                      = 1.001                                              = 1.001
+         2.25                                                2.25
+degeneracy
+
+
+
+
+                                                    degeneracy
+         2.00                                                2.00
+         1.75                                                1.75
+
+
+
+
+                                                                                                             JHEP11(2025)036
+         1.50                                                1.50
+         1.25                                                1.25
+         1.00                                                1.00
+                0   5   10 15 20 25 30                              0   5   10 15 20 25 30
+                          log2 (L 2)                                          log2 (L 2)
+                                                                                               p
+Figure 8.p Ground state degeneracy, eq. (4.4), as a function of the coarse-graining steps at    βm20 = 100
+(left) and βm20 = 0.2 (right).
+
+
+parameters. This is in contrast to the case around θ = π, where the plateau does not appear
+unless the system size is sufficiently large. Our result shows that the ground-state degeneracy
+is sensitive to θ and the system results in a unique vacuum except at θ = π; only a slight
+displacement from θ = π induces the unique ground state. It should be emphasized that
+these results provide non-trivial evidence of the doubly degenerated ground state even at
+finite large mass; the two-fold degeneracy at θ = π is analytically rigorously proven only
+in the large mass limit. We also remark that the realization of such two-fold degeneracy
+only at θ = π reflects the preserved 2π periodicity
+                                                 q      with respect to θ. However, we observe
+                                                       2
+no ground-state degeneracy in the range of βm0 ≤ 0.14 at β = 4. As we discussed in
+section 4.2, this would be due to the finite-β effect. We will further investigate how the
+finite-β effect modifies the phase diagram in future work.
+
+4.5 Correlation length
+
+Finally, we investigate the correlation length at θ = π in the small mass region. According
+to the recent field theoretical argument [36], the correlation length ξ is expected to scale as
+           2
+ξ ∼ eA/(βm0 ) , where A is a constant factor and analytically obtained as A ≃ 0.111. Also, in the
+paper, this theoretical prediction is confirmed by an MPS simulation, in which the correlation
+length is evaluated (up to a multiplicative factor) using the spatial volume dependence of
+the central charge c derived from the entanglement entropy [64]. In this study, we estimate
+the correlation length within the path integral formalism using the behavior of the central
+charge c derived from the largest eigenvalue of the transfer matrix, λ0 .
+
+
+
+
+                                                 – 14 –
+      8                               D = 120, K = 25, =
+      7
+
+      6
+
+      5
+log
+
+
+
+
+      4
+
+
+
+
+                                                                                                          JHEP11(2025)036
+      3
+                                                                              log = A/( m02) + const.
+                                                                                =1
+      2                                                                         = 1/(0.82) = 1.5. . .
+                                                                                = 1/(0.52) = 4
+                                                                                = 1/(0.42) = 6.25
+                                                                                = 1/(0.32) = 11.1. . .
+      1         5          10         15          20         25          30           35             40
+                                              1/(   m02)
+Figure 9. Correlation length at θ = π as a function of 1/(βm20 ). The gray dashed lines denote lines
+parallel to log ξ = A/(βm20 ) with A ≈ 0.111.
+
+
+     We find that our numerical result of c lies around c = 1 on a small volume and moves
+away from c = 1 on a large volume. Such behavior can be explained by the finite volume effect
+associated with c = 1 CFT that appears when the volume is smaller than the correlation
+length ξ/a. We thus define the correlation length from the volume on which c begins to
+deviate from 1. The detail derivation of the correlation length and the result of the central
+charge is shown in appendix D.
+     Figure 9 shows the logarithm of the resulting correlation length as a function of 1/(βm20 ),
+where we have employed slightly larger values of β than in the previous sections to further
+suppress finite-β effects. In this figure, lines parallel to log ξ = A/(βm20 ) with A ≈ 0.111 are
+shown as gray dashed ones. The results for β ≳ 4 represent linear behavior alongside these
+lines at 1/(βm20 ) ≳ 10, which suggest that the exponentially large correlation length with
+A ≈ 0.111 is restored in the smaller mass region for a sufficiently large β. The obtained
+correlation length is also comparable with the result in ref. [36], as shown in figure 3 of the
+reference. Such an exponentially large correlation length, equivalent to an exponentially small
+mass gap, reflects its nearly conformal behavior corresponding to the c = 1 CFT.
+
+
+5     Conclusion
+
+We investigated the two-flavor Schwinger model with the θ term. In our computation,
+we used the 2D staggered fermion action and the U(1) Wilson gauge action. Also, the
+logarithmic form was adopted for the θ term, where the 2π periodicity with respect to the
+θ parameter was guaranteed. The tensor network representation was derived based on the
+
+
+
+
+                                              – 15 –
+Gauss-Legendre quadrature for the gauge field and the Grassmann tensor network formulation
+for the staggered fermions. We also employed the bond-weighted TRG algorithm to improve
+the accuracy of our numerical results.
+     We confirmed that our numerical results of the free energy density are 2π periodic for
+the θ parameter. Using the large mass limit, we made a validation of our numerical approach.
+Another validation was made by investigating the mass dependence of the topological
+susceptibility, which was in agreement with the previous Monte Carlo study in ref. [60]. The
+free energy density and topological charge density were obtained in a broad range of mass.
+A smooth connection of the θ dependence between the linear behavior for the large mass
+and the convex shape for the small mass was observed in the topological charge density. We
+
+
+
+
+                                                                                                     JHEP11(2025)036
+found that both the free energy density and topological charge density tend to be smooth
+at θ = π by decreasing the mass. Particularly, the results at m0 = 0 show a non-negligible
+θ dependence which should be absent in the continuum limit. We also checked that the
+two-vacua degeneracy is realized at θ = π, as a consequence of the 2π periodicity, in the
+large mass regime. The degeneracy cannot be found in the smaller mass regime. These
+observations strongly suggest that the phase diagram at finite β be different from that in the
+continuum limit. This possibility will be addressed elsewhere. It would also be interesting to
+investigate the same model but with the Nf = 2 Wilson fermions as another future work,
+because the staggered fermion involves the so-called taste-breaking effect, where the flavor
+and chiral symmetries are violated by the discretization effect. Finally, we estimated the
+correlation length from the volume dependence of the central charge, of which the result
+suggests that it tends to be exponentially large in the smaller mass region. We also confirmed
+that the resulting correlation length with β ≳ 4 is consistent with the recent theoretical
+argument and the MPS simulation [36].
+     We expect that our results will get closer to the continuum limit with the larger β. To
+approach the continuum limit, it will be necessary to enlarge both the bond dimension D and
+the cutoff parameter K. We are planning to combine our Grassmann BTRG algorithm with
+the randomized SVD [58, 59], which reduces both the computational memory and time. This
+improved algorithm will bring us one step closer to the more precise study of the finite-β effect,
+the smaller mass region, and the continuum limit. We are also planning to extend our study
+by employing the Lüscher gauge action, which improves the convergence to the continuum
+limit with respect to β compared with the standard Wilson gauge action. Although the
+Lüscher gauge action [65] is known to cause the so-called topology freezing in the Monte Carlo
+simulation, some recent studies have numerically confirmed that such an issue is automatically
+resolved in the TRG computations [66, 67]. It seems intriguing to explore whether the mass
+dependence of the free energy in eq. (2.3) could be altered in the small mass region by the
+exponentially small mass gap we observed. These studies will be reported elsewhere.
+
+Acknowledgments
+The numerical results presented in this paper were completed by the computing system of
+Yukawa Institute for Theoretical Physics, Kyoto University (Sushiki server and Yukawa-21).
+HK would like to thank Shigeki Sugimoto and Yuya Tanizaki for their useful discussions. This
+work started during the workshop held at Yukawa Institute for Theoretical Physics (YITP-
+
+
+
+
+                                             – 16 –
+W-22-13). The work of HK was supported by the establishment of university fellowships
+towards the creation of science technology innovation and RIKEN Special Postdoctoral
+Researcher Program. SA acknowledges the support from JSPS KAKENHI Grant Number
+JP23K13096, the Endowed Project for Quantum Software Research and Education, the
+University of Tokyo [68], the Center of Innovations for Sustainable Quantum AI (JST
+Grant Number JPMJPF2221), and the computational resources of Wisteria/BDEC-01 and
+Cygnus and Pegasus under the Multidisciplinary Cooperative Research Program of Center
+for Computational Sciences, University of Tsukuba. KM is supported in part by Grants-
+in-Aid for JSPS Fellows (Nos. JP22J14889, JP22KJ1870) and by JSPS KAKENHI with
+Grant No. 22H04917. ST is supported in part by JSPS KAKENHI Grants No. 21K03531,
+
+
+
+
+                                                                                                       JHEP11(2025)036
+and No. 22H01222. This work was supported by MEXT KAKENHI Grant-in-Aid for
+Transformative Research Areas A “Extreme Universe” No. 22H05251.
+
+A    Analytic calculation of Nf = 2 Schwinger model
+Physical quantities of the Schwinger model can be exactly calculated in the large mass limit
+and the massless case. The large mass limit just corresponds to the Maxwell theory, which is
+exactly solvable. The massless case can be analyzed by the Abelian bosonized action [15],
+furthermore, we can include a small mass term for it perturbatively. In this appendix, we
+analytically calculate the free energy.
+
+A.1 Large mass limit
+In the m → ∞ limit, all fermions are decoupled in the IR. This theory goes to the 2D pure
+U(1) gauge theory, which is called the 2D Maxwell theory. In two dimensions, the Maxwell
+theory does not have any propagating degrees of freedom, so we can solve it by hand.
+    The effective action in the m → ∞ limit is,
+
+                                            1              iθ µν
+                                   Z                                
+                            SM =        2
+                                       d x    2
+                                                Fµν F µν +    ϵ Fµν .                         (A.1)
+                                           4g              4π
+
+Taking the A1 = 0 gauge, F12 = −F21 = ∂1 A2 , the action only includes F12 as
+
+                                                 1 2    iθ
+                                        Z                       
+                                             2
+                                SM =        d x     F +    F12 .                              (A.2)
+                                                2g 2 12 2π
+
+It is easy to integrate out F12 , and we can calculate the partition function. Let us consider
+the theory on a torus T 2 . Since we need to treat the instanton sector carefully, we describe
+A2 separately as
+                            2πn
+                     A2 =       x1 + w(x1 , x2 ) ,                    (n ∈ Z)                 (A.3)
+                             V
+where w(x1 , x2 ) is a periodic function for both direction x1 and x2 . Therefore, w(x1 +L1 , x2 ) =
+w(x1 , x2 + L2 ) = w(x1 , x2 ), where L1 and L2 are the system length of each directions and
+V = L1 L2 . The first term of eq. (A.3) is not periodic for x1 , but this is well-defined. We
+                                 of d2 x F12 up to 2πZ because the partition function includes
+                                   R
+     the
+require      well-definedness
+                    
+      iθ
+           d2 x F12 and it cannot distinguish the 2πZ difference of d2 x F12 . Therefore,
+         R                                                                  R
+exp 2π
+
+
+
+
+                                                 – 17 –
+R 2
+ d x F12 with eq. (A.3) has the 2πZ ambiguity for its boundary condition, and we write this
+part as a term proportional to x1 . The integer n in this term is nothing but the origin of
+the instanton number. We can evaluate the instanton number for eq. (A.3) as,
+                1                     1                             2πn
+                    Z                        Z                                                 
+                        d2 x F12 =                d2 x ∂ 1              x1 + w(x1 , x2 )
+               2π                    2π                              V
+                                               1
+                                                      Z
+                                 =n+                          dx2 [w(x1 = L1 , x2 ) − w(x1 = 0, x2 )] = n ,        (A.4)
+                                              2π
+and w(x1 , x2 ) does not affect the instanton number.6 To consider the path integral for
+eq. (A.2) with the ansatz (A.3), we should treat the instanton number n carefully. The
+
+
+
+
+                                                                                                                           JHEP11(2025)036
+partition function of eq. (A.2) becomes,
+                                         Z
+                            Z(θ) =               DA e−SM
+                                                                 n R                             2
+                                                                                                               o
+                                         XZ                         −   d2 x    1
+                                                                                    (∂1 w)2 − 2π     n2 −iθn
+                                                                               2g 2           g2 V
+                                     =                Dw e
+                                          n
+                                                 X − 2π2 n2 −iθn
+                                     = C′            g2 V
+                                                      e
+                                                  n
+                                                 X − g2 V (θ−2πn)2
+                                     = C ′′          8π 2 e                      .                                 (A.5)
+                                                  n
+
+The overall factor of the partition function is not important for our purpose and we just write
+it as C ′ and C ′′ . We use the Poisson summation formula to rewrite the infinite summation.
+We can evaluate this partition function (A.5) in the large volume limit, where the Gaussian
+factor in eq. (A.5) is highly suppressed, and the contribution of the smallest (θ − 2πn)2 term
+is dominant in the summation. Although the partition function depends on the volume V , the
+free energy density does not depend on V . Therefore, we evaluate the free energy density as,
+                                log Z(θ)    log C ′′  1    X − g2 V (θ−2πn)2
+                            −            =−          − log   e 8π2
+                                   V          V       V    n
+                                                          log C ′′       g2
+                                                 ≃−                + min 2 (θ − 2πn)2 .                            (A.6)
+                                                            V         n 8π
+
+This evaluation is exact in the V → ∞ limit. The first term of eq. (A.6) is just a constant,
+so it is irrelevant to our study. The second term describes the θ dependence of the free
+energy density.
+     We can also evaluate the free energy on a lattice. The lattice action for the 2D Maxwell
+theory can be written as
+                                                          h                                                    i
+                                                   ℜ U1 (n)U2 (n + 1̂)U1∗ (n + 2̂)U2∗ (n)
+                                          X
+                          Slat = −β
+                                         n∈Λ2
+                                     θ X     h                                     i
+                                  −       log U1 (n)U2 (n + 1̂)U1∗ (n + 2̂)U2∗ (n)
+                                    2π n
+                                      X            iθ X
+                                = −β    cos(Ap ) −        Ap ,                                                     (A.7)
+                                      p            2π p
+  6
+      This w corresponds to the R-valued gauge field in non-compact QED.
+
+
+
+
+                                                                    – 18 –
+                                            lattice, = 4
+                            0.14            continuum
+                            0.12
+                            0.10
+                            0.08
+                       f
+                            0.06
+
+
+
+
+                                                                                                   JHEP11(2025)036
+                            0.04
+                            0.02
+                            0.00
+                                   0.0      0.2     0.4        0.6   0.8    1.0
+                                                           /
+Figure 10. The analytic result of the 2D Maxwell theory. The θ dependence of the free energy
+density for the continuum and lattice actions are plotted.
+
+
+as in section 3. We can evaluate the free energy density for this action analytically, as
+written in refs. [50, 57]:
+
+                                                  (zp (θ + 2πQ, β))V ,
+                                            X
+                                   Zlat =                                                 (A.8)
+                                             Q
+                                            Z π
+                                                  dAp β cos(Ap )+ iθ Ap
+                             zp (θ, β) =              e           2π    .                 (A.9)
+                                             −π    2π
+
+Calculating eq. (A.9) numerically, we can make a comparison with the TRG results. Note
+that the log of eq. (A.9) is slightly different from the continuum result in eq. (A.6). We
+show the plot at β = 4 in figure 10, as an example. In the continuum limit (β → ∞), these
+two should have the same value.
+
+A.2 Small mass regime
+
+This appendix aims to calculate the free energy density of this action (2.1). It is difficult to
+analyze the fermionic action directly, so we change this action to the abelian bosonized action.
+    To consider abelian bosonization, we need the bosonization rules, which are known as,
+
+                                                 i µν
+                                   ψ̄γ µ ψ ←→ −    ϵ ∂ν ϕ
+                                                2π
+                                               1 µ
+                               ψ̄iγ µ ∂µ ψ ←→    ∂ ϕ∂µ ϕ                                 (A.10)
+                                              8π
+                                       ψ̄ψ ←→ Cm′ Nm′ cos(ϕ) ,
+
+
+
+
+                                                  – 19 –
+according to ref. [69]. In the relation. (A.10), Nm′ is the normal ordering for the scale m′ .
+Note that m′ is just a parameter and we can choose an arbitrary value. Using this dictionary,
+the action (2.1) can be written as
+
+                             1                i                              1
+             Z          
+                                        µν                        µν                     µ                 µ 
+       S=        d2 x            F µν F    +    (ϕ 1 + ϕ 2 + θ) ϵ    F µν +    ∂ µ ϕ 1 ∂   ϕ 1 + ∂ µ ϕ 2 ∂  ϕ2
+                            4g 2             4π                             8π
+                                                                       
+                                    ′                             
+                        + Cmm Nm′ cos(ϕ1 ) + cos(ϕ2 )                      ,                                 (A.11)
+
+where
+
+
+
+
+                                                                                                                       JHEP11(2025)036
+                                                   ϕ1 , ϕ2 ∈ [0, 2π) .                                       (A.12)
+
+The numerical constant C is known as C = eγ /2π [70].7 We set our scalar fields to take their
+values on [0, 2π). This is a different convention from Coleman’s paper [15].8
+    Under the change of the normal ordering scale m, the coefficient of the cosine-shape
+mass term changes as
+
+                                                                  R4π2
+                                                            m′
+                                                        
+                                        Nm cos(ϕ) =                        Nm′ cos(ϕ) ,                      (A.13)
+                                                            m
+                                                      √
+where R is a radius of the compact scalar ϕ, and R = 2 π for free fermions [69]. Therefore,
+eq. (A.13) for the action (A.11) can be written as
+
+                                          mNm cos(ϕi ) = m′ Nm′ cos(ϕi ) ,                                   (A.14)
+
+where i denotes the flavor, i = 1, 2.
+    In the small mass regime, we consider the m ≪ g case. In this regime, we can integrate
+out the gauge field Aµ and one heavy scalar field. This heavy scalar corresponds to the η ′
+meson in QCD, whose mass comes from the U(1)A anomaly. This system is analyzed by
+Coleman [15]. In this section, we follow the calculation in ref. [15].
+    To obtain an effective theory with only one scalar field, we redefine the scalar fields as
+
+                                                   1
+                                               ϕ+ =  (ϕ1 + ϕ2 + θ) ,
+                                                   2
+                                                   1
+                                               ϕ− = (ϕ1 − ϕ2 ) .
+                                                   2
+
+This redefinition does not change the 2π periodicity of the scalars. Therefore, ϕ+ , ϕ− ∈ [0, 2π).
+However, it changes the radius of these compact scalars, which appears in eq. (A.13) as R,
+             √           √
+from R = 2 π to R = 2π. It is clear that the coefficient of the kinetic term (= 1/2R2 )
+changes from 1/8π to 1/4π.
+   7
+    The numerical value of the Euler constant, γ = 0.57721 · · · , is important for the analysis in the section 4.
+   8
+    This difference comes from 2π periodicity of scalar field ϕi . This is the reason why the coefficient of kinetic
+terms of scalar fields in eq. (A.11) are not 1/2 but 1/8π for 2π periodic scalar in eq. (A.12). We can read the
+radius of compact scalars R from this coefficient, as 1/8π = 1/2R2 .
+
+
+
+
+                                                         – 20 –
+     Now, the redefined field ϕ+ corresponds to the heavy scalar field which is decoupled in
+IR limit, and ϕ− is a light scalar that appears in the effective action. The action, eq. (A.11),
+can be written by ϕ+ and ϕ− as
+                                      1 2        i            1
+                        Z           
+                             d2 x                                 ∂µ ϕ+ ∂ µ ϕ+ + ∂ µ ϕ− ∂ µ ϕ−
+                                                                                               
+                S=                      2
+                                          F12 +    2ϕ+ F12 +
+                                     2g         2π           4π
+                                                                θ
+                                                                          
+                                              ′
+                                    + 2Cmm Nm′ cos ϕ+ −             cos(ϕ− )    .                         (A.15)
+                                                                2
+We can integrate out the gauge field Aµ , in the same way in eq. (A.5). Here, ϕ+ corresponds
+to the θ parameter in eq. (A.5). After integrate out Aµ , the effective action becomes,
+
+
+
+
+                                                                                                                   JHEP11(2025)036
+                                 1                                    g2
+                              Z         
+                                   ∂µ ϕ+ ∂ µ ϕ+ + ∂µ ϕ− ∂ µ ϕ− + 2 (2ϕ+ − 2πn)2
+                                    2                           
+               S = min            d x
+                      n         4π                                   8π
+                                                             θ
+                                                                        
+                               + 2Cmm′ Nm′ cos ϕ+ −               cos(ϕ− )
+                                                             2
+                                 1                                    1 2
+                        Z     
+                   = min d2 x      ∂µ ϕ+ ∂ µ ϕ+ + ∂ µ ϕ− ∂ µ ϕ− +        µ (ϕ+ − πn)2
+                                                                
+                      n         4π                                   4π
+                                                             θ
+                                                                        
+                               + 2Cmm′ Nm′ cos ϕ+ −               cos(ϕ− )    ,                           (A.16)
+                                                             2
+where µ2 = 2g 2 /π and µ is a mass of ϕ+ , in analogy with the mass of η ′ meson comes
+from the Witten-Veneziano formula. Eq. (A.16) includes only two bosons, ϕ± , and these
+masses are non-degenerate.
+     This system can be analyzed perturbatively for m in the m/g ≪ 1 case. We focus on the
+light scalar ϕ− , by integrating out the heavy scalar ϕ+ , which can appear in the Feynman
+diagram of ϕ− through the loop. To neglect the loop contribution of ϕ+ , we take the normal
+                            p
+ordering at the scale µ = g 2/π. By the relation (A.14), we set the normal ordering at the
+scale of µ and integrate out ϕ+ . Then, the action (A.16) becomes,9
+                             1                         θ − 2πn
+                   Z                                                                            
+                         2
+                               ∂µ ϕ− ∂ µ ϕ− + 2Cmµ cos
+                                                                        
+         S = min        d x                                    Nµ cos(ϕ− ) .                              (A.17)
+               n            4π                            2
+To obtain mass gap m∆ , we take normal order again for this effective action (A.17) at the
+scale m∆ . After taking the normal order (A.17), the action should be the following shape;
+                                                    1
+                                    Z                                                 
+                                        d2 x          ∂µ ϕ− ∂ µ ϕ− + m2∆ Nm∆ cos(ϕ− ) .
+                                                                                   
+                            S=                                                                            (A.18)
+                                                   4π
+To identify eqs. (A.17) and (A.18), we solve the following equation.10
+                                                                                           1
+                       θ − 2πn                        θ − 2πn                         m∆
+                                                                              
+                                                                                          2                 
+       2Cmµ cos                Nµ cos(ϕ− ) = 2Cmµ cos                                           Nm∆ cos(ϕ− )
+                          2                              2                             µ
+                                                         = m2∆ Nm∆ cos(ϕ− ) ,
+                                                                            
+                                                                                                          (A.19)
+   9
+     Before integrating out ϕ+ , we take normal order at the scale m′ = µ. Since this normal ordering is for ϕ+
+                                                                                                            √
+and ϕ− , we use eq. (A.14). It is good to see eq. (A.11) and read the radius of the compact bosons as R = 2 π.
+The vacuum expectation value of ϕ+ should be set as ϕ+ = πn, to minimize the second term of eq. (A.16).
+  10
+     Here, the radius of the compact boson is changed from eq. (A.14), because we already integrating out ϕ+ .
+                           √
+The radius of ϕ− is R = 2π, for the relation (A.13).
+
+
+
+
+                                                            – 21 –
+whose solution is,
+                                                                                 2
+                                                 θ − 2πn
+                                                    √
+                                                                  
+                                                                                       3
+                                  m∆ = 2Cm µ cos                                           .                   (A.20)
+                                                    2
+
+Finally, the θ dependence of the free energy density is obtained as11
+
+                     log Z(θ)
+                 −            = min m2∆
+                        V        n
+                                                                              4
+                                               θ − 2πn
+                                               √
+                                                              
+                                                                                 3
+                               = min 2Cm µ cos
+
+
+
+
+                                                                                                                        JHEP11(2025)036
+                                  n               2
+                                                                       !2                              
+                                                                   m2    3
+                                                                                               θ − 2πn 
+                                                                                                     
+                                               4
+                                       
+                                                    − 53       1                       4
+                               = min (eγ ) π   3           2   3             g 2 cos   3                  .    (A.21)
+                                   n                              g2                             2     
+
+
+
+B      Discrete remnant of the U(1)A symmetry on the lattice
+
+In the Hamiltonian formalism, it is known that O(a) correction for staggered fermions can be
+absorbed into a shift of the mass term owing to the remnant chiral symmetry [32]. Although
+the exact chiral symmetry is broken in this action, a flavor-dependent U(1) symmetry and
+certain discrete chiral symmetries remain [71, 72]. In this appendix, we discuss the chiral
+symmetry in the single-component staggered fermion in the 2D spacetime, both in the
+Lagrangian and Hamiltonian formalisms.
+    In the continuum theory, the θ parameter is shifted under a U(1)A transformation with
+parameter α:
+
+                ψ → eiγ3 α ψ ,                     ψ̄ → ψ̄eiγ3 α ,                              θ → θ + 2α .    (B.1)
+
+For the massless theory, the action possesses classical U(1)A symmetry. Since this U(1)A
+is anomalous, the θ parameter is also transformed as θ → θ + 2α under the transformation
+and it has no physical significance.
+     In the Lagrangian formalism, one considers the staggered fermion on a discrete spacetime.
+Such a lattice fermion reproduces a two-flavor Dirac fermion in the continuum limit, since
+it contains three doublers in addition to the original fermion mode [11]. In this theory, the
+U(1)A symmetry is broken and reduced to the invariance under the transformation
+
+        χ(n) → eiϵ(n)β χ(n) ,              χ̄(n) → χ̄(n)eiϵ(n)β ,                      ϵ(n) = (−1)n1 +n2 ,      (B.2)
+
+which we refer to as the U(1)ϵ symmetry. This symmetry is not identical to the U(1)A
+symmetry in the continuum limit; the U(1)ϵ transformation contains not only the flavor-
+independent component but also the flavor-dependent one as
+
+                          ψ → eiγ3 σϵ β ψ ,                                   ψ̄ → ψ̄eiγ3 σϵ β ,                (B.3)
+  11
+    The free energy is the value of the effective action in the IR limit, where we can neglect the kinetic terms,
+so just the mass term remains.
+
+
+
+
+                                                       – 22 –
+where σϵ is a certain Pauli matrix in the SU(2) flavor space.12 Note that this transformation
+does not shift the θ parameter, since two Dirac fermions with different flavors acquire opposite
+phases and cancel each other.13
+    In the Hamiltonian formalism, only the spatial direction is discretized. Here, a single-
+component staggered fermion corresponds to a one-flavor Dirac fermion in the continuum,
+as there is only one doubler. The remaining classical symmetry in this action is the Z2
+subgroup of the U(1)A symmetry. This Z2 transformation shifts the θ parameter to θ + π
+through its anomaly. This effect indicates that the theory for θ is equivalent to that for
+θ + π only at the massless point, where the O(a) correction can be absorbed into a shift
+of the mass parameter [32].
+
+
+
+
+                                                                                                                                                                      JHEP11(2025)036
+    However, such a modification is not applicable in our setup, because we employ the
+Lagrangian formalism. As discussed above, when both spacetime directions are discretized,
+the single-component staggered fermion does not retain a flavor-independent Z2 symmetry.
+Therefore, no analogous O(a) mass shift exists in our case.
+
+C      Derivation of the local Grassmann tensor
+We demonstrate how to derive the Grassmann tensor in eq. (3.8). Firstly, we decompose the
+hopping terms in eq. (3.5) by introducing the auxiliary Grassmann fields as
+
+                           ην (n)
+                                                                        
+                  exp −             χ̄(n)eiπaν (n) χ(n + ν̂)
+                               2
+                                            "                            #
+                                              ην (n)eiπaν (n)                      1
+                       Z                                                                            
+                    =                   exp         √         χ̄(n)ζν (n) exp √ χ(n + ν̂)ζ̄ν (n) ,                                                    (C.1)
+                         ζ̄ν (n),ζν (n)               2                             2
+                        ην (n)
+                                                           
+                  exp            χ̄(n + ν̂)e−iπaν (n) χ(n)
+                            2
+                                                                         "                             #
+                                               1                           ην (n)e−iπaν (n)
+                       Z                                          
+                    =                                        ¯
+                                        exp √ χ̄(n + ν̂)ξν (n) exp                √         χ(n)ξν (n) ,                                              (C.2)
+                         ξ̄ν (n),ξν (n)         2                                   2
+
+                                       dζ̄dζe−ζ̄ζ . Thanks to these decompositions, we can
+                                                       R       RR
+with the shorthand notation, ζ̄,ζ =
+independently carry out the Grassmann integration over χ and χ̄ at each lattice site as follows,
+                                                   Z
+                                                                                         iπaν (n) χ̄ζ                      −iπaν (n) χξ
+                                                                                                                                                          √
+                                                                             e(ην (n)e                                                               )/
+    (f )
+                                                       dχ̄dχe−mχ̄χ                                      ν +χζ̄ν +ην (n)e                  ν +χ̄ξ̄ν            2
+                                                                        Y
+ Tζ                                            =                                                                                                                  .
+    1 ξ1 ζ2 ξ2 ξ̄1 ζ̄1 ξ̄2 ζ̄2 ,a1 (n)a2 (n)
+                                                                         ν
+                                                                                                                                                      (C.3)
+
+Solving this integral, we obtain
+                                                   h                                                                                             i
+    (f )
+ Tζ                                            = δi1 +i2 +j1′ +j2′ ,1 δi′1 +i′2 +j1 +j2 ,1 + mδi1 +i2 +j1′ +j2′ ,0 δi′1 +i′2 +j1 +j2 ,0
+    1 ξ1 ζ2 ξ2 ξ̄1 ζ̄1 ξ̄2 ζ̄2 ,a1 (n)a2 (n)
+                 P (iν +jν +i′ν +jν′ )
+            1
+       
+                   ν                                                                                       ′   ′       ′      ′    ′ ′
+  ×        √                                    eiπ[(i1 −j1 )a1 (n)+(i2 −j2 )a2 (n)] (−1)j1 (i2 +j1 +j2 )+j2 (j1 +j2 )+i1 j2 +n1 (i2 +j2 ) .
+             2
+                                                                                                                                                      (C.4)
+  12
+     σϵ is defined as the same Pauli matrix as −iγ1 γ2 , of which the explicit form depends on the representation
+of the γ matrices. For the chiral representation, where γ1 = σ1 and γ2 = σ2 , σϵ is equal to σ3 .
+  13
+     In other words, this transformation (B.3) is not anomalous. We cannot see U(1)A anomaly from U(1)ϵ
+transformation.
+
+
+
+
+                                                                        – 23 –
+D    Derivation of the correlation length
+In this appendix, we discuss the derivation of the correlation length employed in section 4.5.
+     First, we review the method of estimating the correlation length based on the entanglement
+entropy, which is adopted in ref. [36]. On an N -site chain with lattice spacing a, when the
+system is at the criticality, the entanglement entropy for a subsystem of the leftmost xN
+sites, Sx (N, a), is given by
+                                           c     2N
+                                                               
+                            Sx (N, a) =      log    sin πx + const.,                         (D.1)
+                                           6      π
+
+
+
+
+                                                                                                      JHEP11(2025)036
+with the central charge c [64]. When the system is not exactly massless, the central charge
+c takes nonzero values for small N but starts to vanish around N ∼ ξ/a. In other words,
+investigating the central charge c(N ) as a function of N , one can estimate the correlation
+length up to a multiplicative constant b by bξ/a ∼ N ′ , where N ′ is the smallest system
+size satisfying c(N ′ ) ≈ 0.
+     In our study, we follow a similar procedure to determine the correlation length, excepting
+that we extract the central charge c from the largest eigenvalue of the transfer matrix λ0 via
+
+                                          λ0 = e−f∞ V +πc/6 ,                                (D.2)
+
+where f∞ is a nonuniversal constant. There is an established way to extract c within the
+TRG algorithm that is proposed in ref. [63]. We follow this way within the framework of the
+Grassmann tensor network formulation. Note that eq. (4.3) gives the transfer matrix. The
+calculation of λ0 on a different volume is computationally reasonable in the TRG approach
+because one can calculate it at each iteration step. However, the volume is limited to the
+power of 2.
+    We calculate the largest eigenvalue of the transfer matrix at each iteration step in TRG.
+Using eq. (D.2), we obtain the central charge at the i-th iteration step as
+                                   6Vi+1       log2 λ0 (i + 1) log2 λ0 (i)
+                                                                            
+                        c(Vi ) = −                            −                  ,           (D.3)
+                                     π              Vi+1           Vi
+
+where Vi = 2i is the volume and λ0 (i) is the largest eigenvalue at the i-th iteration step.
+     Figure 11 shows the results of c(V ) at θ = π and β = 4 as a function of volume V . In
+figure 11, c lies around 1 in the small volume, whereas it starts to deviate from 1 in the large
+volume. The value of c around 1 continues at a larger volume for a smaller mass m0 . This
+behavior may be explained by the finite-volume effect associated with the c = 1 CFT due to
+a smaller system size than the correlation length ξ/a. This value of c = 1 is consistent with
+that of the theoretical prediction of the massless theory, SU(2)1 WZW model. At the large
+volume where the two-fold degeneracy appears, the system is expected to develop a gap, and
+the central charge should vanish. Therefore, the correlation length can be estimated by the
+(square root of) the smallest volume V ′ where c(V ′ ) ≪ 1. In actual calculation, we impose
+the threshold c′ = 0.5 as the boundary between the region for c(V ) ≈ 1 and c(V ′ ) ≪ 1, and
+determine V ′ as the smallest volume that satisfies c(V ′ ) < c′ . In the right figure of figure 8,
+the plateau of two-fold degeneracy can be seen only for log2 (L2 ) ≳ 17 at θ = π. In the
+smaller volume, the degeneracy cannot be integer-valued because of the finite-volume effect.
+
+
+
+
+                                                 – 24 –
+                     2.50              D = 120, K = 25, = 4, =
+                                                                                      c'
+                                                                                      ( m02)1/2 = 0.15
+                     2.25                                                             ( m02)1/2 = 0.2
+                                                                                      ( m02)1/2 = 0.3
+                                                                                      ( m02)1/2 = 0.4
+                     2.00                                                             ( m02)1/2 = 0.5
+                                                                                      ( m02)1/2 = 0.6
+Central charge (c)
+
+
+
+                     1.75                                                             ( m02)1/2 = 1
+
+                     1.50
+                     1.25
+
+
+
+
+                                                                                                          JHEP11(2025)036
+                     1.00
+                     0.75
+                     0.50
+
+                            5               10                  15               20                  25
+                                                   log2 (L 2)
+                            Figure 11. Central charge as a function of volume.
+
+
+We confirmed that the volume range where this finite-volume effect appears is consistent
+with the range where V ≲ V ′ is realized in figure 11.
+    To obtain the precise value of V ′ , we pick up two points in the vicinity of c′ , interpolate
+them by a linear function, and identify the intersection of the linear function with c′ . We
+                                                                                        √
+then estimate the correlation length with a multiplicative constant b by bξ/a ≃ V ′ . The
+values of log2 V ′ ≃ 2 log(bξ/a) obtained in the above procedure are plotted in figure 9. We
+have also confirmed that the slope in figure 9 is stable under the change of the threshold
+c′ around c′ = 0.5.
+
+Data Availability Statement. This article has no associated data or the data will not
+be deposited.
+
+Code Availability Statement. This article has no associated code or the code will not
+be deposited.
+
+Open Access. This article is distributed under the terms of the Creative Commons Attri-
+bution License (CC-BY4.0), which permits any use, distribution and reproduction in any
+medium, provided the original author(s) and source are credited.
+
+References
+     [1] C. Abel et al., Measurement of the Permanent Electric Dipole Moment of the Neutron, Phys.
+         Rev. Lett. 124 (2020) 081803 [arXiv:2001.11966] [INSPIRE].
+     [2] R.D. Peccei and H.R. Quinn, CP Conservation in the Presence of Instantons, Phys. Rev. Lett.
+         38 (1977) 1440 [INSPIRE].
+
+
+
+
+                                                 – 25 –
+ [3] J. Preskill, M.B. Wise and F. Wilczek, Cosmology of the Invisible Axion, Phys. Lett. B 120
+     (1983) 127 [INSPIRE].
+ [4] L.F. Abbott and P. Sikivie, A Cosmological Bound on the Invisible Axion, Phys. Lett. B 120
+     (1983) 133 [INSPIRE].
+ [5] M. Dine and W. Fischler, The Not So Harmless Axion, Phys. Lett. B 120 (1983) 137 [INSPIRE].
+ [6] K. Freese, J.A. Frieman and A.V. Olinto, Natural inflation with pseudo-Nambu-Goldstone bosons,
+     Phys. Rev. Lett. 65 (1990) 3233 [INSPIRE].
+ [7] R. Kitano, R. Matsudo, N. Yamada and M. Yamazaki, Peeking into the θ vacuum, Phys. Lett. B
+     822 (2021) 136657 [arXiv:2102.08784] [INSPIRE].
+
+
+
+
+                                                                                                        JHEP11(2025)036
+ [8] N. Yamada, M. Yamazaki and R. Kitano, Subvolume method for SU(2) Yang-Mills theory at
+     finite temperature: topological charge distributions, JHEP 07 (2024) 198 [arXiv:2403.10767]
+     [INSPIRE].
+ [9] M. Hirasawa et al., Evidence of a CP broken deconfined phase in 4D SU(2) Yang-Mills theory at
+     θ = π from imaginary θ simulations, JHEP 05 (2025) 009 [arXiv:2412.03683] [INSPIRE].
+[10] S.R. White, Density matrix formulation for quantum renormalization groups, Phys. Rev. Lett. 69
+     (1992) 2863 [INSPIRE].
+[11] J.B. Kogut and L. Susskind, Hamiltonian Formulation of Wilson’s Lattice Gauge Theories, Phys.
+     Rev. D 11 (1975) 395 [INSPIRE].
+[12] M. Levin and C.P. Nave, Tensor renormalization group approach to 2D classical lattice models,
+     Phys. Rev. Lett. 99 (2007) 120601 [cond-mat/0611687] [INSPIRE].
+[13] J.S. Schwinger, Gauge Invariance and Mass. 2, Phys. Rev. 128 (1962) 2425 [INSPIRE].
+[14] S.R. Coleman, R. Jackiw and L. Susskind, Charge Shielding and Quark Confinement in the
+     Massive Schwinger Model, Annals Phys. 93 (1975) 267 [INSPIRE].
+[15] S.R. Coleman, More About the Massive Schwinger Model, Annals Phys. 101 (1976) 239
+     [INSPIRE].
+[16] Z.-C. Gu, F. Verstraete and X.-G. Wen, Grassmann tensor network states and its renormalization
+     for strongly correlated fermionic and bosonic states, arXiv:1004.2563 [INSPIRE].
+[17] H. Fukaya and T. Onogi, Lattice study of the massive Schwinger model with theta term under
+     Luscher’s ‘admissibility’ condition, Phys. Rev. D 68 (2003) 074503 [hep-lat/0305004]
+     [INSPIRE].
+[18] H. Fukaya and T. Onogi, θ vacuum effects on the chiral condensation and the η ′ meson
+     correlators in the two flavor massive QED2 on the lattice, Phys. Rev. D 70 (2004) 054508
+     [hep-lat/0403024] [INSPIRE].
+[19] V. Azcoiti et al., Massive Schwinger model at finite θ, Phys. Rev. D 97 (2018) 014507
+     [arXiv:1709.07667] [INSPIRE].
+[20] C. Gattringer, T. Kloiber and V. Sazonov, Solving the sign problems of the massless lattice
+     Schwinger model with a dual formulation, Nucl. Phys. B 897 (2015) 732 [arXiv:1502.05479]
+     [INSPIRE].
+[21] D. Göschl, C. Gattringer, A. Lehmann and C. Weis, Simulation strategies for the massless lattice
+     Schwinger model in the dual formulation, Nucl. Phys. B 924 (2017) 63 [arXiv:1708.00649]
+     [INSPIRE].
+
+
+
+
+                                               – 26 –
+[22] H. Ohata, Monte Carlo study of Schwinger model without the sign problem, JHEP 12 (2023) 007
+     [arXiv:2303.05481] [INSPIRE].
+[23] H. Ohata, Phase diagram near the quantum critical point in Schwinger model at θ = π: analogy
+     with quantum Ising chain, PTEP 2024 (2024) 013B02 [arXiv:2311.04738] [INSPIRE].
+[24] B. Chakraborty et al., Classically emulated digital quantum simulation of the Schwinger model
+     with a topological term via adiabatic state preparation, Phys. Rev. D 105 (2022) 094503
+     [arXiv:2001.00485] [INSPIRE].
+[25] G. Pederiva et al., Quantum State Preparation for the Schwinger Model, PoS LATTICE2021
+     (2022) 047 [arXiv:2109.11859] [INSPIRE].
+
+
+
+
+                                                                                                         JHEP11(2025)036
+[26] M. Honda et al., Classically emulated digital quantum simulation for screening and confinement
+     in the Schwinger model with a topological term, Phys. Rev. D 105 (2022) 014504
+     [arXiv:2105.03276] [INSPIRE].
+[27] T. Angelides et al., First-order phase transition of the Schwinger model with a quantum
+     computer, npj Quantum Inf. 11 (2025) 6 [arXiv:2312.12831] [INSPIRE].
+[28] O. Kaikov, T. Saporiti, V. Sazonov and M. Tamaazousti, Phase diagram of the Schwinger model
+     by adiabatic preparation of states on a quantum simulator, Phys. Rev. A 111 (2025) 062202
+     [arXiv:2407.09224] [INSPIRE].
+[29] X.-W. Li, F. Li, J. Zhuang and M.-H. Yung, Simulating the Schwinger Model with a Regularized
+     Variational Quantum Imaginary Time Evolution, arXiv:2409.13510 [INSPIRE].
+[30] T. Byrnes, P. Sriganesh, R.J. Bursill and C.J. Hamer, Density matrix renormalization group
+     approach to the massive Schwinger model, Nucl. Phys. B Proc. Suppl. 109 (2002) 202
+     [hep-lat/0201007] [INSPIRE].
+[31] L. Funcke, K. Jansen and S. Kühn, Topological vacuum structure of the Schwinger model with
+     matrix product states, Phys. Rev. D 101 (2020) 054507 [arXiv:1908.00551] [INSPIRE].
+[32] R. Dempsey, I.R. Klebanov, S.S. Pufu and B. Zan, Discrete chiral symmetry and mass shift in
+     the lattice Hamiltonian approach to the Schwinger model, Phys. Rev. Res. 4 (2022) 043133
+     [arXiv:2206.05308] [INSPIRE].
+[33] T. Angelides, L. Funcke, K. Jansen and S. Kühn, Computing the mass shift of Wilson and
+     staggered fermions in the lattice Schwinger model with matrix product states, Phys. Rev. D 108
+     (2023) 014516 [arXiv:2303.11016] [INSPIRE].
+[34] E. Arguello Cruz, G. Tarnopolsky and Y. Xin, Precision study of the massive Schwinger model
+     near quantum criticality, Phys. Rev. D 112 (2025) 034023 [arXiv:2412.01902] [INSPIRE].
+[35] H. Fujii et al., Critical behavior of the Schwinger model via gauge-invariant variational uniform
+     matrix product states, Phys. Rev. D 111 (2025) 094505 [arXiv:2412.03569] [INSPIRE].
+[36] R. Dempsey et al., Phase Diagram of the Two-Flavor Schwinger Model at Zero Temperature,
+     Phys. Rev. Lett. 132 (2024) 031603 [arXiv:2305.04437] [INSPIRE].
+[37] E. Itou, A. Matsumoto and Y. Tanizaki, Calculating composite-particle spectra in Hamiltonian
+     formalism and demonstration in 2-flavor QED1+1d , JHEP 11 (2023) 231 [arXiv:2307.16655]
+     [INSPIRE].
+[38] E. Itou, A. Matsumoto and Y. Tanizaki, DMRG study of the theta-dependent mass spectrum in
+     the 2-flavor Schwinger model, JHEP 09 (2024) 155 [arXiv:2407.11391] [INSPIRE].
+[39] Y. Shimizu and Y. Kuramashi, Grassmann tensor renormalization group approach to one-flavor
+     lattice Schwinger model, Phys. Rev. D 90 (2014) 014508 [arXiv:1403.0642] [INSPIRE].
+
+
+
+
+                                               – 27 –
+[40] Y. Shimizu and Y. Kuramashi, Critical behavior of the lattice Schwinger model with a topological
+     term at θ = π using the Grassmann tensor renormalization group, Phys. Rev. D 90 (2014)
+     074503 [arXiv:1408.0897] [INSPIRE].
+[41] Y. Shimizu and Y. Kuramashi, Berezinskii-Kosterlitz-Thouless transition in lattice Schwinger
+     model with one flavor of Wilson fermion, Phys. Rev. D 97 (2018) 034502 [arXiv:1712.07808]
+     [INSPIRE].
+[42] N. Butt et al., Tensor network formulation of the massless Schwinger model with staggered
+     fermions, Phys. Rev. D 101 (2020) 094509 [arXiv:1911.01285] [INSPIRE].
+[43] N.D. Mermin and H. Wagner, Absence of ferromagnetism or antiferromagnetism in
+
+
+
+
+                                                                                                        JHEP11(2025)036
+     one-dimensional or two-dimensional isotropic Heisenberg models, Phys. Rev. Lett. 17 (1966) 1133
+     [INSPIRE].
+[44] S.R. Coleman, There are no Goldstone bosons in two-dimensions, Commun. Math. Phys. 31
+     (1973) 259 [INSPIRE].
+[45] E. Witten, Nonabelian Bosonization in Two-Dimensions, Commun. Math. Phys. 92 (1984) 455
+     [INSPIRE].
+[46] D. Gepner, Nonabelian Bosonization and Multiflavor QED and QCD in Two-dimensions, Nucl.
+     Phys. B 252 (1985) 481 [INSPIRE].
+[47] D. Gaiotto, Z. Komargodski and N. Seiberg, Time-reversal breaking in QCD4 , walls, and
+     dualities in 2 + 1 dimensions, JHEP 01 (2018) 110 [arXiv:1708.06806] [INSPIRE].
+[48] N. Seiberg, Physics at strong coupling, Phys. Rev. Lett. 53 (1984) 637 [INSPIRE].
+[49] H. Kawauchi and S. Takeda, Tensor renormalization group analysis of CP (N − 1) model, Phys.
+     Rev. D 93 (2016) 114503 [arXiv:1603.09455] [INSPIRE].
+[50] Y. Kuramashi and Y. Yoshimura, Tensor renormalization group study of two-dimensional U(1)
+     lattice gauge theory with a θ term, JHEP 04 (2020) 089 [arXiv:1911.06480] [INSPIRE].
+[51] M. Hirasawa, A. Matsumoto, J. Nishimura and A. Yosprakob, Tensor renormalization group and
+     the volume independence in 2D U(N) and SU(N) gauge theories, JHEP 12 (2021) 011
+     [arXiv:2110.05800] [INSPIRE].
+[52] K. Nakayama et al., Phase structure of the CP(1) model in the presence of a topological θ-term,
+     Phys. Rev. D 105 (2022) 054507 [arXiv:2107.14220] [INSPIRE].
+[53] S. Akiyama and D. Kadoh, More about the Grassmann tensor renormalization group, JHEP 10
+     (2021) 188 [arXiv:2005.07570] [INSPIRE].
+[54] D. Adachi, T. Okubo and S. Todo, Bond-weighted Tensor Renormalization Group,
+     arXiv:2011.01679 [DOI:10.1103/PhysRevB.105.L060402] [INSPIRE].
+[55] S. Akiyama, Bond-weighting method for the Grassmann tensor renormalization group, JHEP 11
+     (2022) 030 [arXiv:2208.03227] [INSPIRE].
+[56] S. Akiyama, Y. Meurice and R. Sakai, Tensor renormalization group for fermions, J. Phys.
+     Condens. Matter 36 (2024) 343002 [arXiv:2401.08542] [INSPIRE].
+[57] U.J. Wiese, Numerical Simulation of Lattice θ Vacua: The 2-d U(1) Gauge Theory as a Test
+     Case, Nucl. Phys. B 318 (1989) 153 [INSPIRE].
+[58] S. Morita, R. Igarashi, H.-H. Zhao and N. Kawashima, Tensor renormalization group with
+     randomized singular value decomposition, Phys. Rev. E 97 (2018) 033310.
+
+
+
+
+                                               – 28 –
+[59] S. Morita and N. Kawashima, Multi-impurity method for the bond-weighted tensor
+     renormalization group, Phys. Rev. B 111 (2025) 054433 [arXiv:2411.13998] [INSPIRE].
+[60] S. Durr and C. Hoelbling, Staggered versus overlap fermions: A Study in the Schwinger model
+     with Nf = 0, 1, 2, Phys. Rev. D 69 (2004) 034503 [hep-lat/0311002] [INSPIRE].
+[61] Y. Yoshimura et al., Calculation of fermionic Green functions with Grassmann higher-order
+     tensor renormalization group, Phys. Rev. D 97 (2018) 054511 [arXiv:1711.08121] [INSPIRE].
+[62] K. Symanzik, Cutoff dependence in lattice ϕ44 theory, NATO Sci. Ser. B 59 (1980) 313 [INSPIRE].
+[63] Z.-C. Gu and X.-G. Wen, Tensor-Entanglement-Filtering Renormalization Approach and
+     Symmetry Protected Topological Order, Phys. Rev. B 80 (2009) 155131 [arXiv:0903.1069]
+
+
+
+
+                                                                                                         JHEP11(2025)036
+     [INSPIRE].
+[64] P. Calabrese and J. Cardy, Entanglement entropy and conformal field theory, J. Phys. A 42
+     (2009) 504005 [arXiv:0905.4013] [INSPIRE].
+[65] M. Lüscher, Abelian chiral gauge theories on the lattice with exact gauge invariance, Nucl. Phys.
+     B 549 (1999) 295 [hep-lat/9811032] [INSPIRE].
+[66] S. Akiyama and Y. Kuramashi, Tensor renormalization group study of (1 + 1)-dimensional U(1)
+     gauge-Higgs model at θ = π with Lüscher’s admissibility condition, JHEP 09 (2024) 086
+     [arXiv:2407.10409] [INSPIRE].
+[67] S. Akiyama and Y. Kuramashi, Tensor renormalization group study of the two-dimensional
+     lattice U(1) gauge-Higgs model with a topological θ term under Lüscher’s admissibility condition,
+     PoS LATTICE2024 (2025) 361 [arXiv:2501.15352] [INSPIRE].
+[68] https://qsw.phys.s.u-tokyo.ac.jp/.
+[69] S.R. Coleman, The Quantum Sine-Gordon Equation as the Massive Thirring Model, Phys. Rev.
+     D 11 (1975) 2088 [INSPIRE].
+[70] A.V. Smilga, On the fermion condensate in Schwinger model, Phys. Lett. B 278 (1992) 371
+     [INSPIRE].
+[71] M.F.L. Golterman and J. Smit, Selfenergy and Flavor Interpretation of Staggered Fermions,
+     Nucl. Phys. B 245 (1984) 61 [INSPIRE].
+[72] G.W. Kilcup and S.R. Sharpe, A Tool Kit for Staggered Fermions, Nucl. Phys. B 283 (1987) 493
+     [INSPIRE].
+
+
+
+
+                                               – 29 –
+

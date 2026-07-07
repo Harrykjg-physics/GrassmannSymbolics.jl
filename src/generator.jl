@@ -47,8 +47,8 @@ Example:
     grassmann(:η, 1:3)  # returns [η₁, η₂, η₃]
 """
 
-function grassmann(name::Symbol, inds_range)
-    [GrassmannGenerator(name, i, false) for i in inds_range]
+function grassmann(name::Symbol, inds_range; bar=false)
+    [GrassmannGenerator(name, i, bar) for i in inds_range]
 end
 
 """

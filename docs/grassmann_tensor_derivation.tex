@@ -1,0 +1,362 @@
+\documentclass[UTF8,11pt]{ctexart}
+\usepackage{amsmath,amssymb,bm,booktabs,geometry,hyperref}
+\geometry{a4paper,margin=2.4cm}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
+
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\gTr}{\operatorname{gTr}}
+\newcommand{\bpsi}{\bar\psi}
+\newcommand{\cT}{\mathcal{T}}
+
+\title{从最近邻费米子作用量到基本 Grassmann 张量：统一符号推导流程}
+\author{GrassmannSymbolics 项目笔记}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+本文整理 \texttt{Ref/} 中各类费米子模型所使用的 Grassmann 张量网络构造，目标是把文献中的手工推导转化为可验证的符号算法。共同核心是：把每个最近邻 hopping 矩阵分解成有限个秩一通道；在每条有向键上引入成对辅助 Grassmann 变量；随后逐格点积掉原始费米子变量。由此得到的局域多项式就是基本 Grassmann 张量，其辅助变量构成张量腿，其多项式系数构成普通系数张量。
+\end{abstract}
+
+\section{问题与适用范围}
+考虑 $d$ 维超立方格点上的 $N$ 分量费米子。二次型最近邻作用量统一写成
+\begin{align}
+ S_2 &= \sum_n \bpsi(n)(D\psi)(n),\\
+ D_{ab}(n,m) &= W_{ab}(n)\delta_{n,m}
+ + \sum_{\mu=1}^d (X_\mu)_{ab}(n)\delta_{n+\hat\mu,m}
+ + \sum_{\mu=1}^d (Y_\mu)_{ab}(n)\delta_{n-\hat\mu,m}.
+\end{align}
+允许再加入任意局域偶 Grassmann 多项式 $S_{\mathrm{int}}(n)$，例如四费米相互作用。规范场可作为 $X_\mu,Y_\mu$ 的玻色系数保留，待费米子积分后再离散化或积分。有限温哈密顿量问题先用相干态和 Trotter 分解化为这一形式。
+
+\section{普适推导}
+\subsection{逐键秩一分解}
+对每个有向 hopping 矩阵作奇异值分解
+\begin{equation}
+ X_\mu=U^X_\mu\Sigma^X_\mu(V^X_\mu)^\dagger,
+ \qquad
+ Y_\mu=U^Y_\mu\Sigma^Y_\mu(V^Y_\mu)^\dagger.
+\end{equation}
+只保留非零奇异值，故一条键所需辅助分量数分别是
+$K_\mu=\operatorname{rank}X_\mu$ 和 $L_\mu=\operatorname{rank}Y_\mu$。符号矩阵不一定适合直接做 SVD；程序接口因此也应允许用户直接给出任意精确秩一分解 $X=\sum_c u_c s_c v_c^\dagger$。
+
+\subsection{辅助 Grassmann 恒等式}
+单通道使用恒等式
+\begin{equation}
+ e^{-s\bar\chi\chi}
+ =\int \dd\bar\eta\,\dd\eta\,
+ e^{-\bar\eta\eta-\bar\chi\eta+s\bar\eta\chi}.
+\end{equation}
+对 $X_\mu$ 与 $Y_\mu$ 分别引入 $\eta_{\mu,c}$ 与 $\zeta_{\mu,c}$。在格点 $n$ 收集所有含原始场 $\psi(n),\bpsi(n)$ 的因子后，局域基本张量为
+\begin{align}
+\cT_n={}&\int\prod_{a=1}^{N}\dd\psi_a(n)\dd\bar\psi_a(n)\,
+ e^{-\bpsi W\psi-S_{\mathrm{int}}(n)} \nonumber\\
+&\times\exp\!\left[\sum_{\mu,c}
+ \left\{-\bigl(\bpsi U^X_\mu\bigr)_c\eta_{\mu,c}(n)
+ +s^X_{\mu,c}\bar\eta_{\mu,c}(n-\hat\mu)
+ \bigl((V^X_\mu)^\dagger\psi\bigr)_c\right\}\right]\\
+&\times\exp\!\left[\sum_{\mu,c}
+ \left\{\bigl(\bpsi U^Y_\mu\bigr)_c\bar\zeta_{\mu,c}(n-\hat\mu)
+ +s^Y_{\mu,c}\zeta_{\mu,c}(n)
+ \bigl((V^Y_\mu)^\dagger\psi\bigr)_c\right\}\right].
+\end{align}
+所有指数都因幂零性而有限截断，所以这一步完全适合精确符号计算。
+
+定义有序多分量腿
+\begin{equation}
+ \Psi_\mu=(\eta_{\mu,1},\ldots,\eta_{\mu,K_\mu},
+                 \zeta_{\mu,1},\ldots,\zeta_{\mu,L_\mu}),
+\end{equation}
+并把共轭腿按逆序排列
+\begin{equation}
+ \bar\Psi_\mu=(\bar\zeta_{\mu,L_\mu},\ldots,\bar\zeta_{\mu,1},
+                 \bar\eta_{\mu,K_\mu},\ldots,\bar\eta_{\mu,1}).
+\end{equation}
+逆序是避免收缩时产生额外符号的约定，不是可忽略的排版选择。最终
+\begin{equation}
+ Z=\gTr\prod_n
+ \cT_{\Psi_1(n)\cdots\Psi_d(n)
+ \bar\Psi_d(n-\hat d)\cdots\bar\Psi_1(n-\hat1)}.
+\end{equation}
+
+\subsection{从 Grassmann 多项式到系数张量}
+将每个辅助变量的占据数记为 $i\in\{0,1\}$。按固定腿序展开
+\begin{equation}
+ \cT=\sum_{\bm i}T_{\bm i}\,G_{\bm i},
+\end{equation}
+其中 $G_{\bm i}$ 是对应的规范序 Grassmann 单项式，$T_{\bm i}$ 是普通复数或符号系数。偶作用量给出严格的总奇偶选择规则
+\begin{equation}
+ T_{\bm i}=0\qquad\text{if}\qquad \sum_k i_k=1\pmod 2.
+\end{equation}
+程序必须同时保存变量顺序、积分测度顺序和腿顺序；只比较打印后的多项式不足以判定两个张量相同。
+
+\section{可执行算法}
+给定模型后按以下顺序执行：
+\begin{enumerate}
+ \item 固定配分函数号约定、格点方向、边界条件、原始场顺序和 Berezin 测度顺序。
+ \item 把作用量规范化为局域项 $W+S_{\mathrm{int}}$ 及有向最近邻项 $X_\mu,Y_\mu$。
+ \item 对每个 hopping 矩阵求数值 SVD，或读取用户给出的精确秩一分解；删除零通道。
+ \item 为每个通道生成唯一辅助 Grassmann 对，并记录其所属方向、朝向和张量腿位置。
+ \item 构造上述局域指数，有限展开，按文献指定测度积掉原始场。
+ \item 规范序所有剩余单项式并化简系数，得到 $\cT$ 和稀疏系数张量 $T_{\bm i}$。
+ \item 做三类验证：总 Grassmann 偶性；逐系数文献对照；小尺寸格点上与直接费米子积分或行列式对照。
+\end{enumerate}
+
+\section{第一基准：自由 Wilson 与 staggered 费米子}
+二维 Wilson 情形采用 $r=1$，$W=(M+2)I$。文献附录 B 将两个方向的 hopping 写成
+\begin{equation}
+ U_x=\frac1{\sqrt2}\begin{pmatrix}-1&-1\\-1&1\end{pmatrix},
+ \qquad
+ U_t=\begin{pmatrix}-1&0\\0&-1\end{pmatrix},
+ \qquad V_\mu^\dagger=-U_\mu.
+\end{equation}
+每个方向的前、后向矩阵各只有一个非零通道，因此
+$\Psi_\mu=(\eta_\mu,\zeta_\mu)$、
+$\bar\Psi_\mu=(\bar\zeta_\mu,\bar\eta_\mu)$。
+实现文件为 \path{examples/Free_Wilson_and_Staggered.jl}。
+它直接从局域指数做符号积分，并把结果逐系数与式 (B.4) 对照。
+
+二维 staggered 情形只有一个原始分量，
+\begin{equation}
+ S=\sum_n\bar\chi(n)\left[
+ \sum_{\mu=x,t}p_\mu(n)\frac{\chi(n+\hat\mu)-\chi(n-\hat\mu)}2
+ +M\chi(n)\right],
+\end{equation}
+其中 $p_x=1$、$p_t=(-1)^{n_x}$。单格点积分最多留下二次辅助场项，代码结果逐系数对照式 (B.6)，并显式保留 $p_t$，因此同时覆盖偶、奇 $n_x$ 两类张量。
+
+\subsection{附录公式的一致性审计}
+为避免把排版公式无条件当成真值，程序同时保存两份对象：由作用量和式 (3.10) 直接积分得到的 \texttt{tensor}，以及逐字转录附录公式的 \texttt{published\_tensor}。两者只有在每个 Grassmann 单项式的系数均相等时才算通过文献复现。
+
+对单分量 staggered 场，任意合法的局域指数都可写为
+\begin{equation}
+ -M\bar\chi\chi+\bar\chi A+B\chi,
+\end{equation}
+其中 $A,B$ 是辅助变量的 Grassmann 奇线性组合。因此
+\begin{equation}
+ \int\dd\chi\dd\bar\chi\,
+ e^{-M\bar\chi\chi+\bar\chi A+B\chi}=-M+AB,
+\end{equation}
+其双线性系数矩阵必为秩一。对 arXiv v2 原始 TeX 中的式 (B.6)，选取行 $(\eta_x,\bar\zeta_t)$ 和列 $(\bar\eta_x,\bar\eta_t)$ 得到子式
+\begin{equation}
+ \det\begin{pmatrix}-1/2&-1/2\\+1/2&-1/2\end{pmatrix}=1/2\ne0.
+\end{equation}
+这与上述秩一必要条件冲突。更强地，记印刷式去掉常数项后的二次型为 $Q$，直接外代数计算在 $p_t=\pm1$ 时均给出 $Q^2\ne0$，且各含 $16$ 个非零四次单项式；而任何 $Q=AB$ 必有 $Q^2=0$。因此式 (B.6) 的逐字版本不可能是在其声明约定下由单分量局域积分产生的基本张量。按式 (3.10) 直接积分，需要翻转六项的符号：
+\begin{equation}
+ \eta_x\zeta_x,\quad p_t\eta_x\zeta_t,\quad
+ \bar\zeta_x\bar\eta_x,\quad p_t\zeta_x\eta_t,\quad
+ \eta_t\zeta_t,\quad \bar\zeta_t\bar\eta_t.
+\end{equation}
+其余十项、常数项和 Grassmann 偶性一致。穷举四对辅助场的全部 $2^4$ 种成对相位重定义后，最大系数误差仍为 $1$，故差异也不是简单 SVD 相位。本项目保留该文献转录为明确的 broken check，同时以作用量直接推导结果作为可收缩张量；这项局域代数结论不依赖小格点数值实验，也不擅自替作者判定勘误来源。
+
+Wilson 的式 (B.4) 已通过双轨审计。前向矩阵 $X_\mu$ 对应组合分解中 $\delta(n+\hat\mu,m)$ 的第二通道，后向矩阵 $Y_\mu$ 对应 $\delta(n-\hat\mu,m)$ 的第一通道；采用文献隐含的时间方向 SVD 相位 $\eta_t,\zeta_t\mapsto-\eta_t,-\zeta_t$ 后，在 256-bit 精度及三个独立 $D$ 值上，最大逐系数误差为 $3.5\times10^{-77}$。
+
+\subsection{简单二次模型}
+第二个基准采用二维单分量作用量
+\begin{equation}
+ S=-t\sum_{n,\nu=1,2}
+ \left[\bar\psi(n+\hat\nu)\psi(n)+
+ \bar\psi(n)\psi(n+\hat\nu)\right]
+ +m\sum_n\bar\psi(n)\psi(n).
+\end{equation}
+记 $q=\sqrt t$。按文献式 (12)--(14)，每个方向引入
+$(\Phi_\nu,\Psi_\nu)$ 及其对偶，局域张量为
+\begin{align}
+ \cT_n=\int\dd\psi\dd\bar\psi\,e^{-m\bar\psi\psi}
+ \prod_{\nu=1}^{2}&e^{q\bar\psi\bar\Phi_\nu(n-\hat\nu)}
+ e^{q\bar\psi\Psi_\nu(n)}e^{q\psi\Phi_\nu(n)}
+ e^{-q\psi\bar\Psi_\nu(n-\hat\nu)}.
+\end{align}
+文献固定的腿序是
+\begin{equation}
+ (\Phi_1,\Psi_1,\Phi_2,\Psi_2,
+ \bar\Psi_1,\bar\Phi_1,\bar\Psi_2,\bar\Phi_2).
+\end{equation}
+实现文件为 \path{examples/Simple_quardratic_model.jl}。独立组合代数和程序均得到 $17$ 个非零局域单项，并对式 (16) 的全部 $2^8$ 个占据配置逐项相等；单格点周期闭合进一步恢复 $Z=4t-m$。
+
+\subsection{单味 Gross--Neveu--Wilson 模型}
+第三个基准在 Wilson 二分量费米子上加入化学势与局域四费米作用。令 $D=m+2r$，则原文作用量的局域部分可化为
+\begin{equation}
+ S_{\mathrm{loc}}=D(\bar\psi_1\psi_1+\bar\psi_2\psi_2)
+ -2g^2\bar\psi_1\psi_1\bar\psi_2\psi_2,
+\end{equation}
+从而
+\begin{equation}
+ e^{-S_{\mathrm{loc}}}=1-D\bar\psi\psi+
+ (D^2+2g^2)\bar\psi_1\psi_1\bar\psi_2\psi_2.
+\end{equation}
+这说明超局域相互作用不改变逐键秩一分解，只改变物理场积分前的有限 onsite 多项式。四个 Wilson hopping 矩阵均只有一个非零奇异通道；记 $z=e^{\mu/2}$、$s=1/\sqrt2$，八条腿按参考式固定为
+\begin{equation}
+ (\eta_1,\xi_1,\eta_2,\xi_2,
+ \bar\xi_1,\bar\eta_1,\bar\xi_2,\bar\eta_2).
+\end{equation}
+实现文件 \path{examples/Single_Flavor_Gross_Neveu_Wilson.jl} 一条路径直接积分作用量，另一条路径独立编码参考式 (24)--(30) 的相位、$\bar A$ 和 $A$。全部 $2^8$ 个系数均一致。审计中还确认式 (26) 的 $(-1)$ 指数末项是未加撇的 $j_2$；把 PDF 文本抽取结果误读成 $j'_2$ 会恰好造成六个质量项错误。
+
+\subsection{带 \texorpdfstring{$\theta$}{theta} 项的 Schwinger 模型}
+该模型首次同时包含 Grassmann 场和连续规范链变量。对 staggered 费米子，令 $u_\nu=e^{i\pi a_\nu}$、$p=(-1)^{n_1}$、$s=1/\sqrt2$，附录 C 的局域费米张量仍由单分量积分得到；腿序为
+\begin{equation}
+ (\zeta_1,\xi_1,\zeta_2,\xi_2,
+ \bar\xi_1,\bar\zeta_1,\bar\xi_2,\bar\zeta_2).
+\end{equation}
+这里必须采用文献的测度 $\dd\bar\chi\dd\chi$，所以质量常数项为 $+m$。链变量只作为可交换系数进入
+\begin{equation}
+ u_1^{i_1-j_1}u_2^{i_2-j_2}.
+\end{equation}
+全部 $2^8$ 个系数与式 (C.4) 一致。
+
+$\theta$ 项并不改变 Grassmann 积分，而是进入普通的规范 plaquette 张量
+\begin{equation}
+ T^{(g)}\propto
+ \exp\left[\beta\cos(\pi f)+\frac{\theta}{2\pi}
+ \log e^{i\pi f}\right],
+\end{equation}
+其中对数取主值，$f$ 是四条离散链变量的有向和。因此自动化接口应把费米张量编译与玻色系数/求积层分开，再通过共享链指标组合。实现见 \path{examples/Schwinger_model_theta_term.jl}。
+
+\section{模型差异与实施顺序}
+\begin{center}
+\begin{tabular}{p{0.28\linewidth}p{0.62\linewidth}}
+\toprule
+模型 & 在统一流程上的新增结构 \\
+\midrule
+Free Wilson and Staggered & 二分量 Wilson hopping 的秩一通道；staggered 相位；作为符号和腿序基准。\\
+Simple quadratic model & 最小单分量示例，用于验证逐键展开、收缩测度及小格点精确配分函数。\\
+Single Flavor Gross-Neveu Wilson & Wilson 二分量场、化学势及局域四费米项；需匹配文献的镜像/测度约定。\\
+Schwinger model with $\theta$ term & hopping 中含 $U(1)$ 链变量，另有 plaquette 玻色张量和拓扑项；先积费米子，再处理规范积分。\\
+two-color QCD & $SU(2)$ 颜色双分量辅助场、Haar 积分及规范 plaquette 张量；需验证颜色和腿压缩前的基本张量。\\
+NJL & staggered 费米子与局域多费米相互作用；局域 Boltzmann 因子需精确有限展开。\\
+1D Hubbard & 自旋上下两分量、空间双 hopping 通道、时间离散与 $U n_\uparrow n_\downarrow$ 局域项；最终与附录的一般 $d+1$ 维式对应。\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{面向最终自动化接口的设计约束}
+最终编译器不应只接收一个已展开多项式，而应接收结构化作用量：场、格点方向、局域项、有向 hopping 项、玻色系数和边界条件。输出至少包含：基本 Grassmann 张量、腿元数据、稀疏系数张量、键收缩测度以及从输入项到辅助通道的可追踪映射。符号 SVD 不稳定时，精确秩一分解必须是一等输入；这对含参数、规范链变量和文献特定规范的模型尤其重要。
+
+\section{符号与一致性检查清单}
+\begin{itemize}
+ \item 明确 $Z=\int e^{-S}$，不要在 hopping 分解时重复改变符号。
+ \item 文献的 $\dd\psi\,\dd\bar\psi$ 顺序和程序实际右作用顺序必须一致。
+ \item 共轭多分量腿必须按指定逆序；改变腿序时需同步计算置换符号。
+ \item 辅助场的重标度具有规范自由度；与文献比较时必须采用同一重标度，而不只比较收缩后的 $Z$。
+ \item 符号比较应逐单项式化简系数，不能依赖字符串相等。
+ \item 每个基本张量在偶作用量下必须为 Grassmann 偶；小格点闭合网络必须恢复直接积分结果。
+\end{itemize}
+
+\section{Two-color QCD 模型记录}
+该模型把规范链变量推广到非阿贝尔 $SU(2)$，同时 staggered 费米子带有两个颜色分量。作用量为
+\begin{equation}
+ S_f=\sum_{n,\nu=x,t}\frac{p_\nu(n)}2
+ \left[e^{\mu\delta_{\nu t}}\bar\chi(n)U_\nu(n)\chi(n+\hat\nu)
+ -e^{-\mu\delta_{\nu t}}\bar\chi(n+\hat\nu)U_\nu^\dagger(n)\chi(n)\right]
+ +m\sum_n\bar\chi(n)\chi(n),
+\end{equation}
+其中 $p_x=1$、$p_t=(-1)^{n_x}$。每条链引入 $N=2$ 分量的两类辅助场 $\eta_\nu,\zeta_\nu$。固定格点 $n$ 后，原始颜色场的局域积分可写为
+\begin{equation}
+ F=\int\dd\chi_1\dd\bar\chi_1\dd\chi_2\dd\bar\chi_2
+ e^{-m(\bar\chi_1\chi_1+\bar\chi_2\chi_2)}
+ (1+\bar\chi_1A)(1+\chi_1B)(1+\bar\chi_2C)(1+\chi_2D),
+\end{equation}
+因此
+\begin{equation}
+ F=ABCD+m(AB+CD)+m^2.
+\end{equation}
+这里 $A,C$ 收集连到本站点的未加杠 $\eta$ 以及来自负方向链的 $U^\dagger\bar\zeta$，而 $B,D$ 收集来自负方向链的 $U\bar\eta$ 以及本站点出发的 $\zeta$；例如
+\begin{align}
+ A&=-\eta_{x,1}-\eta_{t,1}+(U_x^\dagger)_{11}\bar\zeta_{x,1}+(U_x^\dagger)_{12}\bar\zeta_{x,2}
+ +(U_t^\dagger)_{11}\bar\zeta_{t,1}+(U_t^\dagger)_{12}\bar\zeta_{t,2},\\
+ B&=\frac12[-(U_x)_{11}\bar\eta_{x,1}-(U_x)_{21}\bar\eta_{x,2}
+ -a_+(U_t)_{11}\bar\eta_{t,1}-a_+(U_t)_{21}\bar\eta_{t,2}
+ +\zeta_{x,1}+a_-\zeta_{t,1}],
+\end{align}
+其中 $a_\pm=e^{\pm\mu}p_t(n)$，$C,D$ 由颜色 $1\to2$ 得到。四条腿为
+\begin{equation}
+ X=(\eta_{x,1},\eta_{x,2},\zeta_{x,1},\zeta_{x,2}),\quad
+ T=(\eta_{t,1},\eta_{t,2},\zeta_{t,1},\zeta_{t,2}),
+\end{equation}
+加杠腿按文献约定逆序写作
+\begin{equation}
+ \bar X=(\bar\zeta_{x,2},\bar\zeta_{x,1},\bar\eta_{x,2},\bar\eta_{x,1}),\quad
+ \bar T=(\bar\zeta_{t,2},\bar\zeta_{t,1},\bar\eta_{t,2},\bar\eta_{t,1}).
+\end{equation}
+若加入 diquark source，则同一局域积分给出
+\begin{equation}
+ F_\lambda=ABCD+m(AB+CD)+i\lambda(AC+BD)+m^2+\lambda^2.
+\end{equation}
+有限 $\beta$ 的规范部分不改变 Grassmann 积分，而是以随机 Haar 采样近似
+\begin{equation}
+ G_{ijkl}=K^{-2}\exp\left[\frac{\beta}{2}\operatorname{Re}\operatorname{Tr}
+ (U_iU_j^\dagger U_k^\dagger U_l)\right],
+\end{equation}
+再把 $T=F\cdot G$ 作为基本初始张量，每条超腿为 $q=(q_f,q_g)$，维数为 $2^{2N}K=16K$。实现见 \path{examples/two_color_QCD.jl}；程序从局域积分自动生成 $F$，并独立对照附录 A 的 $ABCD$ 公式验证。服务器测试显示无 source 时有 $733$ 个非零项，含 source 时有 $785$ 个非零项，二者均逐 Grassmann 单项相等。
+
+\section{NJL 模型记录}
+该文献采用四维 Kogut--Susskind 费米子。取 $a=1$ 后，作用量为
+\begin{align}
+ S&=\frac12\sum_{n,\nu=1}^{4}\eta_\nu(n)
+ \left[e^{\mu\delta_{\nu4}}\bar\chi(n)\chi(n+\hat\nu)
+ -e^{-\mu\delta_{\nu4}}\bar\chi(n+\hat\nu)\chi(n)\right]\\
+ &\quad +m\sum_n\bar\chi(n)\chi(n)\\
+ &\quad -g_0\sum_{n,\nu}\bar\chi(n)\chi(n)
+ \bar\chi(n+\hat\nu)\chi(n+\hat\nu).
+\end{align}
+每个方向引入三位整数指标 $i_\nu=(i_{\nu,1},i_{\nu,2},i_{\nu,3})$。前两位来自正、反向 hopping 的 Grassmann 分解，第三位来自四费米项
+\begin{equation}
+ e^{g_0\bar\chi\chi\bar\chi'\chi'}=
+ \sum_{i=0}^{1}\left(\sqrt{g_0}\bar\chi\chi\right)^i
+ \left(\sqrt{g_0}\bar\chi'\chi'\right)^i.
+\end{equation}
+重命名 $x=i_1$、$y=i_2$、$z=i_3$、$t=i_4$ 后，初始张量按文献写成
+\begin{equation}
+ T_{n;txyzt'x'y'z'}=I_{n;txyzt'x'y'z'}S_{n;txyzt'x'y'z'}G_{n;txyzt'x'y'z'}.
+\end{equation}
+其中 $I$ 是原始单分量 Grassmann 场的局域积分。令 $r=\sqrt{g_0}$、$u=e^{\mu/2}$，则
+\begin{align}
+ I&=(-1)^{n_1(y_1+y_2+z_1+z_2+t_1+t_2)+n_2(z_1+z_2+t_1+t_2)+n_3(t_1+t_2)}
+ \left(-\frac12\right)^N r^M u^{t_1-t_2+t'_1-t'_2} \\
+ &\quad\times\left[-m\,\bar\Delta_0\Delta_0+\bar\Delta_1\Delta_1\right],
+\end{align}
+这里 $N$ 是全部未加撇和加撇指标中通道 $1,2$ 的占据数，$M$ 是全部通道 $3$ 的占据数。两个 Kronecker 因子分别检查本站点被插入的 $\bar\chi$ 与 $\chi$ 次数是否为 $q$：
+\begin{align}
+ \bar\Delta_q&=\delta_{t_1+t_3+x_1+x_3+y_1+y_3+z_1+z_3+t'_2+t'_3+x'_2+x'_3+y'_2+y'_3+z'_2+z'_3,q},\\
+ \Delta_q&=\delta_{t_2+t_3+x_2+x_3+y_2+y_3+z_2+z_3+t'_1+t'_3+x'_1+x'_3+y'_1+y'_3+z'_1+z'_3,q}.
+\end{align}
+文献的 $G$ 还包含特定顺序的 Grassmann 测度和边双线性，例如未加撇腿按
+\begin{equation}
+ (\bar\Phi_t\Phi_t)^{t_1}(\bar\Psi_t\Psi_t)^{t_2}
+ (\bar\Phi_x\Phi_x)^{x_1}(\bar\Psi_x\Psi_x)^{x_2}
+ (\bar\Phi_y\Phi_y)^{y_1}(\bar\Psi_y\Psi_y)^{y_2}
+ (\bar\Phi_z\Phi_z)^{z_1}(\bar\Psi_z\Psi_z)^{z_2}
+\end{equation}
+排列；由此产生的交换号 $S$ 必须单独保留。实现见 \path{examples/NJL.jl}：代码分别实现 $I$、$S$ 和 $G$，并对全部 $73$ 个可能非零的局域积分候选、八种空间奇偶 $(n_1,n_2,n_3)$ 逐项验证文献式 (2.11) 与正规序 Berezin 积分一致；式 (2.15) 的 $S$ 与式 (2.14) 的测度顺序作为张量元数据保留。该模型说明，当文献把测度也纳入 Grassmann 张量定义时，自动化接口需要同时输出 coefficient、monomial 和 measure order 三类元数据。
+
+\section{1D Hubbard 模型记录}
+该模型从自旋 $1/2$ Hubbard 哈密顿量的路径积分形式出发。取空间晶格间距 $a=1$，离散时间步长为 $\epsilon$，作用量可写为
+\begin{align}
+ S&=\sum_n\epsilon\,\bar\psi(n)
+ \left[\frac{\psi(n+\hat\tau)-\psi(n)}{\epsilon}
+ -t\{\psi(n+\hat\sigma)+\psi(n-\hat\sigma)\}\right]\\
+ &\quad +\sum_n\left[\frac{U\epsilon}{2}\{\bar\psi(n)\psi(n)\}^2
+ -\mu\epsilon\bar\psi(n)\psi(n)\right],
+\end{align}
+其中 $\psi=(\psi_\uparrow,\psi_\downarrow)^T$。Appendix A 对一般 $d+1$ 维情形给出辅助场分解；在 $d=1$ 时，文献腿序为
+\begin{equation}
+ \Psi_\sigma=(\eta_{\sigma,\uparrow},\eta_{\sigma,\downarrow},
+ \zeta_{\sigma,\uparrow},\zeta_{\sigma,\downarrow}),\quad
+ \Psi_\tau=(\eta_{\tau,\uparrow},\eta_{\tau,\downarrow}),
+\end{equation}
+以及反向腿
+\begin{equation}
+ \bar\Psi_\tau=(\bar\eta_{\tau,\downarrow},\bar\eta_{\tau,\uparrow}),\quad
+ \bar\Psi_\sigma=(\bar\zeta_{\sigma,\downarrow},\bar\zeta_{\sigma,\uparrow},
+ \bar\eta_{\sigma,\downarrow},\bar\eta_{\sigma,\uparrow}).
+\end{equation}
+令 $q=\sqrt{t\epsilon}$、$h=1+\mu\epsilon$、$U_e=U\epsilon$，局域因子为
+\begin{equation}
+ \exp[-U_e\bar\psi_\uparrow\psi_\uparrow\bar\psi_\downarrow\psi_\downarrow
+ +h(\bar\psi_\uparrow\psi_\uparrow+
+ \bar\psi_\downarrow\psi_\downarrow)].
+\end{equation}
+空间 hopping 产生 $\eta_\sigma,\zeta_\sigma$ 两类通道，时间方向只产生 $\eta_\tau$ 通道。因此 $d=1$ 的基本张量有 $12$ 个二进制腿指标。实现见 \path{examples/1D_Hubbard.jl}：一条路径直接调用局域 Berezin 积分生成张量；另一条路径按 Appendix A 的 Taylor 标签逐项选择因子，再做局域积分并投影到文献腿序。全部 $2^{12}=4096$ 个占据配置逐项相等，最终张量有 $100$ 个非零项。
+
+这个模型和 NJL 一样提醒我们：文献式 (A8)--(A10) 中有部分符号来自辅助场及测度的重排。如果目标数据结构只保存 Grassmann 单项而不显式保存测度对象，就应把这些重排号作为 metadata，而不能重复乘入投影后的 coefficient。最终自动化接口因此至少应暴露三层信息：局域积分系数、外部腿单项顺序、以及用于网络收缩的测度/排序约定。
+
+\end{document}

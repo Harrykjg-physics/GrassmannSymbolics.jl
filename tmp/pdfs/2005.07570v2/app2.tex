@@ -1,0 +1,201 @@
+
+\section{Tensor networks for 2D lattice fermions}
+\label{sec:2DTN}
+
+\subsection{Wilson fermions}
+\label{sec:wilson}
+
+The Dirac matrix with the Wilson parameter $r=1$ is given by
+\begin{align}
+	D(n,m)&=(M+2)
+\begin{bmatrix}
+	\delta(n,m) & 0 \\
+	0 & \delta(n,m)
+\end{bmatrix}
+\nonumber\\
+&\quad-\frac{1}{2}
+\begin{bmatrix}
+	\ \delta(n-\hat{x},m)+\delta(n+\hat{x},m) \ & \ \delta(n-\hat{x},m)-\delta(n+\hat{x},m) \ \\
+	\ \delta(n-\hat{x},m)-\delta(n+\hat{x},m) \ & \ \delta(n-\hat{x},m)+\delta(n+\hat{x},m) \
+\end{bmatrix}
+\nonumber\\
+&\quad-
+\begin{bmatrix}
+	\delta(n-\hat{t},m) & 0 \\
+	0 & \delta(n+\hat{t},m)
+\end{bmatrix}
+.
+\end{align}
+Applying the SVD, we have
+\begin{align}
+	D(n,m)&=(M+2)
+\begin{bmatrix}
+	\delta(n,m) & 0 \\
+	0 & \delta(n,m)
+\end{bmatrix}
++U_{x}
+\begin{bmatrix}
+	\delta(n-\hat{x},m) & 0 \\
+	0 & \delta(n+\hat{x},m)
+\end{bmatrix}
+V_{x}^{\dagger}\nonumber\\
+&\quad+U_{t}
+\begin{bmatrix}
+	\delta(n-\hat{t},m) & 0 \\
+	0 & \delta(n+\hat{t},m)
+\end{bmatrix}
+V_{t}^{\dagger}
+,
+\end{align}
+where
+\begin{align}
+	U_{x}=\frac{1}{\sqrt{2}}
+\begin{bmatrix}
+	-1 & -1 \\
+	-1 & 1
+\end{bmatrix}
+,~~
+	U_{t}=
+\begin{bmatrix}
+	-1 & 0 \\
+	0 & -1
+\end{bmatrix}
+,
+\end{align}
+and $V_{\mu}^{\dagger}=-U_{\mu}$ for $\mu=x,t$. Following Eq.~\eqref{eq:Gtensor}, the Grassmann tensor $\mathcal{T}_{\Psi_x\Psi_t\bar{\Psi}_t\bar{\Psi}_x}$ with the ordering $\Psi_\mu=(\eta_{\mu},\zeta_{\mu})$ and $\bar{\Psi}_{\mu}=(\bar{\zeta}_{\mu},\bar{\eta}_{\mu})$ for $\mu=x,t$ is obtained immediately. One finds
+\begin{align}
+\label{eq:explicit}
+	&\hspace{-5mm} \mathcal{T}_{\Psi_x\Psi_t\bar{\Psi}_t\bar{\Psi}_x} %\nonumber\\
+	=(M+2)^2 -D_{22} B_{11} B_{11}\eta_{t}\bar{\eta}_{t}
+	-D_{11} B_{22} B_{22}\zeta_{t}\bar{\zeta}_{t} 
+	\nonumber \\
+	%%% diagonal
+	&
+	-\left[
+	D_{11} A_{21} A_{12}
+	+D_{22} A_{11} A_{11}
+	\right]\eta_{x}\bar{\eta}_{x} 
+	-\left[
+	D_{11} A_{22} A_{22}
+	+D_{22}  A_{12} A_{21}
+	\right]\zeta_{x}\bar{\zeta}_{x}\nonumber\\
+	%
+	%
+	%&-D_{22} B_{11} B_{11}\eta_{t}\bar{\eta}_{t}
+	%-D_{11} B_{22} B_{22}\zeta_{t}\bar{\zeta}_{t} \nonumber\\
+	%
+	%
+	%%% vanishing
+	&
+	+\left[
+	D_{11} A_{22} A_{12} + D_{22} A_{12} A_{11}
+	\right]\eta_{x}\zeta_{x} %\nonumber\\
+	%
+	%
+	%&\quad 
+	- \left[
+	D_{11} A_{21} A_{22}+D_{22} A_{11} A_{21}
+	\right]\bar{\zeta}_{x}\bar{\eta}_{x}\nonumber\\
+	%
+	%
+	&+D_{11} B_{22} A_{12}\eta_{x}\zeta_{t}
+	- D_{11} A_{21} B_{22}\bar{\zeta}_{t}\bar{\eta}_{x} %\nonumber\\
+	%
+	%
+	%&\quad 
+	-D_{11} A_{22} B_{22}\zeta_{x}\bar{\zeta}_{t}
+	-D_{11} B_{22} A_{22}\zeta_{t}\bar{\zeta}_{x}\nonumber\\
+	%
+	%
+	& -D_{22} A_{12} B_{11}\zeta_{x}\eta_{t}
+	+D_{22} B_{11} A_{21}\bar{\eta}_{t}\bar{\zeta}_{x} %\nonumber\\
+	%
+	%
+	%&\quad 
+	-D_{22} B_{11} A_{11}\eta_{x}\bar{\eta}_{t}
+	-D_{22} A_{11} B_{11}\eta_{t}\bar{\eta}_{x}\nonumber\\
+	%
+	%
+	&-\left[
+	\zeta_{t}\bar{\eta}_{t}-\zeta_{x}\bar{\eta}_{x}
+	+A_{11} B_{22}\zeta_{t}\bar{\eta}_{x}
+	+B_{11} A_{21}\bar{\eta}_{t}\bar{\eta}_{x} %\right.\nonumber\\
+	%&\quad\left.\quad\quad\quad\quad\quad\quad\quad
+	+A_{12} B_{22}\zeta_{x}\zeta_{t}
+	+B_{11} A_{22}\zeta_{x}\bar{\eta}_{t}
+	\right]\nonumber\\
+	&\quad\times\left[
+	\eta_{t}\bar{\zeta}_{t}-\eta_{x}\bar{\zeta}_{x}
+	+ B_{22} A_{11}\eta_{x}\bar{\zeta}_{t}
+	-A_{12} B_{11}\eta_{x}\eta_{t} %\right.\nonumber\\
+	%&\quad\left.\quad\quad\quad\quad\quad\quad\quad
+	-B_{22} A_{21}\bar{\zeta}_{t}\bar{\zeta}_{x}
+	+A_{22} B_{11}\eta_{t}\bar{\zeta}_{x}
+	\right], 
+\end{align}
+where $D_{ab}\equiv D_{ab}(n,n)$,  $A=U_x,B=U_t$. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Staggered fermions}
+\label{sec:staggered}
+
+The action of the two-dimensional staggered fermions is given by
+\begin{align}
+	S=\sum_{n=(n_{x},n_{t})\in\Lambda}\bar{\chi}(n)\left[\sum_{\mu=x,t}p_{\mu}(n)\frac{\chi(n+\hat{\mu})-\chi(n-\hat{\mu})}{2}+M\chi(n)\right],
+\end{align}
+where $\chi(n)$ and $\bar{\chi}(n)$ are single-component Grassmann fields and $p_{\mu}(n)$ is the staggered sign function defined by $p_{x}(n)=1$ and $p_{t}(n)=(-1)^{n_{x}}$.
+Since there is no Dirac structure in the action of the staggered fermion, we can immediately derive the tensor network representation for the path integral without applying SVD. Employing Eqs.~\eqref{eq:basic_id1} and \eqref{eq:basic_id2}, we can obtain
+\begin{align}
+	\mathcal{T}_{\Psi_x(n)\Psi_t(n)\bar{\Psi}_t(n-\hat{t})\bar{\Psi}_x(n-\hat{x})}
+	= &-M
+	-\frac{1}{2} \eta_{x}\bar{\eta}_{x}
+	+\frac{1}{2} \zeta_{x}\bar{\zeta}_{x}
+	-\frac{p_{t}(n)}{2} \eta_{t}\bar{\eta}_{t}
+	+\frac{p_{t}(n)}{2} \zeta_{t}\bar{\zeta}_{t}
+	\nonumber\\
+	&-\frac{1}{2} \eta_{x}\zeta_{x}
+	-\frac{1}{2} \eta_{t}\zeta_{t}
+	-\frac{1}{2} \bar{\zeta}_{x}\bar{\eta}_{x}
+	-\frac{1}{2} \bar{\zeta}_{t}\bar{\eta}_{t}
+	\nonumber\\
+	&-\frac{p_{t}(n)}{2} \eta_{x}\zeta_{t}
+	+\frac{p_{t}(n)}{2} \zeta_{x}\eta_{t}
+	+\frac{1}{2} \bar{\zeta}_{t}\bar{\eta}_{x}
+	-\frac{1}{2} \bar{\eta}_{t}\bar{\zeta}_{x}
+	\nonumber\\
+	&-\frac{1}{2} \eta_{x}\bar{\eta}_{t}
+	+\frac{1}{2} \zeta_{x}\bar{\zeta}_{t}
+	-\frac{p_{t}(n)}{2} \eta_{t}\bar{\eta}_{x}
+	+\frac{p_{t}(n)}{2} \zeta_{t}\bar{\zeta}_{x},
+\end{align}
+with $\Psi_\mu=(\eta_{\mu},\zeta_{\mu})$ and $\bar{\Psi}_{\mu}=(\bar{\zeta}_{\mu},\bar{\eta}_{\mu})$ for $\mu=x,t$. Note that the resulting Grassmann tensor depends on the parity of $n_{x}$.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

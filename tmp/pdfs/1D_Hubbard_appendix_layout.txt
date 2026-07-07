@@ -1,0 +1,170 @@
+                                                                                                                                                                7
+
+
+
+           TΨ1 ···Ψd Ψτ Ψ̄τ Ψ̄d ···Ψ̄1
+                                                                                              
+              Y  d          X                        X              d
+                                                                    Y             X                       X
+          =                                                                                   
+                σ=1 iσ,↑ ,iσ,↓ ,jσ,↑ ,jσ,↓      iτ,↑ ,iτ,↓                       0
+                                                              σ=1 i0σ,↑ ,i0σ,↓ ,jσ,↑   0
+                                                                                     ,jσ,↓             i0τ,↑ ,i0τ,↓
+                  P             √      P                    0     0
+          × (−1)     σ,s iσ,s
+                         ( t)            σ,s (iσ,s +jσ,s +iσ,s +jσ,s )
+            h
+          × δ1,iτ,↓ + σ (iσ,↓ +jσ,↓
+                     P          0   ) δ1,i0τ,↓ + σ (i0σ,↓ +jσ,↓ ) δ1,iτ,↑ + σ (iσ,↑ +jσ,↑
+                                                P                          P          0   ) δ1,i0τ,↑ + σ (i0σ,↑ +jσ,↑ )
+                                                                                                      P
+
+
+          − (µ + 1)δ0,iτ,↓ +Pσ (iσ,↓ +jσ,↓
+                                        0   ) δ0,i0τ,↓ + σ (i0σ,↓ +jσ,↓ ) δ1,iτ,↑ + σ (iσ,↑ +jσ,↑
+                                                        P                          P          0   ) δ1,i0τ,↑ + σ (i0σ,↑ +jσ,↑ )
+                                                                                                              P
+
+          − (µ + 1)δ1,iτ,↓ +Pσ (iσ,↓ +jσ,↓
+                                          0 ) δ1,i0τ,↓ + σ (i0σ,↓ +jσ,↓ ) δ0,iτ,↑ + σ (iσ,↑ +jσ,↑
+                                                         P                          P             0  ) δ0,i0τ,↑ + σ (i0σ,↑ +jσ,↑ )
+                                                                                                                 P
+                                                                                                                                                  i
+          − U  − (µ + 1)2 δ0,iτ,↓ +Pσ (iσ,↓ +jσ,↓
+             
+                                                         0  ) δ0,i0τ,↓ + σ (i0σ,↓ +jσ,↓ ) δ0,iτ,↑ + σ (iσ,↑ +jσ,↑0  ) δ0,i0τ,↑ + σ (i0σ,↑ +jσ,↑ )
+                                                                         P                          P                           P
+
+                                  !                              !                             !                               !
+                              0
+             iτ,↑
+                  Y i
+                         σ,↑ jσ,↑     i0τ,↑   Y i0 j
+                                                       σ,↑   σ,↑       iτ,↓
+                                                                            Y i
+                                                                                    σ,↓ jσ,↓
+                                                                                            0
+                                                                                                    i0τ,↓    Y i0 j
+                                                                                                                    σ,↓    σ,↓
+          × ητ,↑      ησ,↑ ζ̄σ,↑ η̄τ,↑              η̄σ,↑ ζσ,↑ ητ,↓               ησ,↓ ζ̄σ,↓ η̄τ,↓               η̄σ,↓ ζσ,↓ ,                                (A7)
+                        σ                                 σ                                  σ                                        σ
+
+
+
+
+where we have assigned the indices iσ,s (n), jσ,s (n), and                                  dences both from the auxiliary Grassmann fields and the
+iτ,s (n) as the labels of the Taylor expansion for Eq. (A2),                                indices of the Taylor expansion, introducing the notation
+Eq. (A3), and Eq. (A4), respectively. They take just 0 or                                   i0ν,s (n) = iν,s (n − ν̂). Then we sort the auxiliary Grass-
+1 because of the nilpotency of the Grassmann numbers.                                       mann fields in Eq. (A7) as those in Eq. (A8) and the
+For simplicity, we have omitted the lattice site depen-                                     Grassmann tensor T is finally written as
+
+
+
+
+                     TΨ1 ···Ψd Ψτ Ψ̄τ Ψ̄d ···Ψ̄1
+                                                                                                            
+                        Y  d          X                          X              d
+                                                                                Y                X                       X
+                    =                                                                                       
+                            σ=1 iσ,↑ ,iσ,↓ ,jσ,↑ ,jσ,↓        iτ,↑ ,iτ,↓                           0
+                                                                                σ=1 i0σ,↑ ,i0σ,↓ ,jσ,↑   0
+                                                                                                       ,jσ,↓           i0τ,↑ ,i0τ,↓
+
+                    × T(i1,↑ ,i1,↓ ,j1,↑ ,j1,↓ )···(id,↑ ,id,↓ ,jd,↑ ,jd,↓ )(iτ,↑ ,iτ,↓ )(i01,↑ ,i01,↓ ,j1,↑
+                                                                                                         0 ,j 0 )···(i0
+                                                                                                               1,↓
+                                                                                                                            0     0     0      0     0
+                                                                                                                      d,↑ ,id,↓ ,jd,↑ ,jd,↓ )(iτ,↑ ,iτ,↓ )
+                                                                                                            
+                         i1,↑ i1,↓ j1,↑ j1,↓                     id,↑ id,↓ jd,↑ jd,↓                iτ,↑ iτ,↓
+                    × η1,↑     η1,↓ ζ1,↑ ζ1,↓ · · · ηd,↑              ηd,↓ ζd,↑ ζd,↓              ητ,↑    ητ,↓
+                       i0 i0   j 0 j 0 i0 i0                                 j 0 j 0 i0 i0 
+                          τ,↓     τ,↑         d,↓     d,↑    d,↓    d,↑              1,↓     1,↑     1,↓     1,↑
+                    × η̄τ,↓    η̄τ,↑       ζ̄d,↓   ζ̄d,↑  η̄d,↓  η̄d,↑     · · · ζ̄1,↓   ζ̄1,↑    η̄1,↓   η̄1,↑    .                                         (A8)
+
+
+
+In the above expression, the coefficients of the auxiliary                                  Grassmann fields are identified as a multi-rank tensor T .
+                                                                                            When d = 1 (σ = 1), the coefficient tensor T is given by
+
+
+
+
+                       T(iσ,↑ ,iσ,↓ ,jσ,↑ ,jσ,↓ )(iτ,↑ ,iτ,↓ )(i0σ,↑ ,i0σ,↓ ,jσ,↑
+                                                                              0     0
+                                                                                  ,jσ,↓ )(i0τ,↑ ,i0τ,↓ )
+                               P          √       P                      0      0
+                      = (−1) s iσ,s ( t) s (iσ,s +jσ,s +iσ,s +jσ,s )
+                        h
+                      × δ1,iτ,↓ +iσ,↓ +jσ,↓  0   δ1,i0τ,↓ +i0σ,↓ +jσ,↓ δ1,iτ,↑ +iσ,↑ +jσ,↑     0    δ1,i0τ,↑ +i0σ,↑ +jσ,↑
+                      − (µ + 1)δ0,iτ,↓ +iσ,↓ +jσ,↓
+                                                0   δ0,i0τ,↓ +i0σ,↓ +jσ,↓ δ1,iτ,↑ +iσ,↑ +jσ,↑
+                                                                                          0   δ1,i0τ,↑ +i0σ,↑ +jσ,↑
+                      − (µ + 1)δ1,iτ,↓ +iσ,↓ +jσ,↓
+                                                0   δ1,i0τ,↓ +i0σ,↓ +jσ,↓ δ0,iτ,↑ +iσ,↑ +jσ,↑
+                                                                                            0   δ0,i0τ,↑ +i0σ,↑ +jσ,↑
+                                                                                                                                      i
+                      − U  − (µ + 1)2 δ0,iτ,↓ +iσ,↓ +jσ,↓
+                        
+                                                                0   δ0,i0τ,↓ +i0σ,↓ +jσ,↓ δ0,iτ,↑ +iσ,↑ +jσ,↑
+                                                                                                            0   δ0,i0τ,↑ +i0σ,↑ +jσ,↑
+                                  R(i                                       0     0     0     0      0     0
+                                      σ,↑ ,iσ,↓ ,jσ,↑ ,jσ,↓ )(iτ,↑ ,iτ,↓ )(iσ,↑ ,iσ,↓ ,jσ,↑ ,jσ,↓ )(iτ,↑ ,iτ,↓ )
+                      × (−1)                                                                                       ,                                         (A9)
+                                                                                                                                                       8
+
+                                                                                            with
+
+
+
+
+               R(iσ,↑ ,iσ,↓ ,jσ,↑ ,jσ,↓ )(iτ,↑ ,iτ,↓ )(i0σ,↑ ,i0σ,↓ ,jσ,↑
+                                                                      0     0
+                                                                          ,jσ,↓ )(i0τ,↑ ,i0τ,↓ )
+                                         0
+             = iσ,↑ iτ,↑ + iσ,↓ (iτ,↑ + jσ,↑ + i0τ,↑ + i0σ,↑ + jσ,↑ + iτ,↓ )
+                             0
+             + jσ,↑ (iτ,↑ + jσ,↑                                   0
+                                 + i0τ,↑ + i0σ,↑ ) + jσ,↓ (iτ,↑ + jσ,↑                           0
+                                                                       + i0τ,↑ + i0σ,↑ + iτ,↓ + jσ,↓ + i0τ,↓ + i0σ,↓ )
+                      0
+             + iτ,↓ (jσ,↑                             0
+                          + i0τ,↑ + i0σ,↑ ) + i0τ,↓ (jσ,↑                    0
+                                                          + i0τ,↑ + i0σ,↑ + jσ,↓            0
+                                                                                 ) + i0τ,↑ jσ,↑    0
+                                                                                                + jσ,↓   0
+                                                                                                       (jσ,↑ + i0σ,↑ ) + i0σ,↓ i0σ,↑ .            (A10)
+
+
+
+
+ [1] M. Levin and C. P. Nave, Phys. Rev. Lett. 99, 120601                                   [14] S. Akiyama, D. Kadoh, Y. Kuramashi, T. Ya-
+     (2007), arXiv:cond-mat/0611687 [cond-mat.stat-mech].                                        mashita, and Y. Yoshimura, JHEP 09, 177 (2020),
+ [2] Z. Y. Xie, J. Chen, M. P. Qin, J. W. Zhu, L. P. Yang,                                       arXiv:2005.04645 [hep-lat].
+     and T. Xiang, Phys. Rev. B 86, 045139 (2012).                                          [15] Y. Yoshimura, Y. Kuramashi, Y. Nakamura, S. Takeda,
+ [3] Y. Shimizu and Y. Kuramashi, Phys. Rev. D90, 014508                                         and R. Sakai, Phys. Rev. D97, 054511 (2018),
+     (2014), arXiv:1403.0642 [hep-lat].                                                          arXiv:1711.08121 [hep-lat].
+ [4] R. Sakai, S. Takeda, and Y. Yoshimura, PTEP 2017,                                      [16] E. H. Lieb and F. Y. Wu, Phys. Rev. Lett. 20, 1445
+     063B07 (2017), arXiv:1705.07764 [hep-lat].                                                  (1968).
+ [5] D. Adachi, T. Okubo, and S. Todo, Phys. Rev. B 102,                                    [17] E. H. Lieb and F. Wu, Physica A: Statistical Mechan-
+     054432 (2020), arXiv:1906.02007 [cond-mat.stat-mech].                                       ics and its Applications 321, 1 (2003), statphys-Taiwan-
+ [6] D. Kadoh and K. Nakayama, (2019), arXiv:1912.02414                                          2002: Lattice Models and Complex Systems.
+     [hep-lat].                                                                             [18] M. Creutz, Phys. Rev. D 35, 1460 (1987).
+ [7] S. Akiyama, Y. Kuramashi, T. Yamashita,           and                                  [19] H. F. Trotter, Proceedings of the American Mathematical
+     Y. Yoshimura, JHEP 01, 121 (2021), arXiv:2009.11583                                         Society 10, 545 (1959).
+     [hep-lat].                                                                             [20] M. Suzuki, Commun. Math. Phys. 51, 183 (1976).
+ [8] Y. Shimizu and Y. Kuramashi, Phys. Rev. D90, 074503                                    [21] S. Akiyama and D. Kadoh, (2020), arXiv:2005.07570
+     (2014), arXiv:1408.0897 [hep-lat].                                                          [hep-lat].
+ [9] Y. Shimizu and Y. Kuramashi, Phys. Rev. D97, 034502                                    [22] F. F. Assaad and M. Imada, Phys. Rev. Lett. 76, 3176
+     (2018), arXiv:1712.07808 [hep-lat].                                                         (1996).
+[10] S. Takeda and Y. Yoshimura, PTEP 2015, 043B01                                          [23] S. Wang, Z.-Y. Xie, J. Chen, B. Normand, and T. Xiang,
+     (2015), arXiv:1412.7855 [hep-lat].                                                          Chinese Physics Letters 31, 070503 (2014).
+[11] D. Kadoh, Y. Kuramashi, Y. Nakamura, R. Sakai,                                         [24] Y. Kuramashi and Y. Yoshimura, JHEP 08, 023 (2019),
+     S. Takeda, and Y. Yoshimura, JHEP 03, 141 (2018),                                           arXiv:1808.08025 [hep-lat].
+     arXiv:1801.04183 [hep-lat].                                                            [25] S. Akiyama, Y. Kuramashi, T. Yamashita,              and
+[12] D. Kadoh, Y. Kuramashi, Y. Nakamura, R. Sakai,                                              Y. Yoshimura, Phys. Rev. D100, 054510 (2019),
+     S. Takeda, and Y. Yoshimura, JHEP 02, 161 (2020),                                           arXiv:1906.06060 [hep-lat].
+     arXiv:1912.13092 [hep-lat].                                                            [26] S. Akiyama, Y. Kuramashi, and Y. Yoshimura, (2021),
+[13] Y. Kuramashi and Y. Yoshimura, JHEP 04, 089 (2020),                                         arXiv:2101.06953 [hep-lat].
+     arXiv:1911.06480 [hep-lat].
+

@@ -1,0 +1,145 @@
+\section{Formalism of the Grassmann tensor}
+\label{sec:formulation}
+
+The variables $\eta_i \ (i=1,\cdots,N) $ are single component Grassmann numbers 
+which satisfy the anti-commutation relation 
+$ \{\eta_{i},\eta_{j} \}=0 $.
+We begin with defining a Grassmann tensor and its contraction rule with single component index $\eta_i$. 
+Then those with multi component index $\Psi=(\eta_1,\eta_2,\cdots,\eta_N)$ are defined by extending the single 
+component case straightforwardly. 
+
+
+The {\it Grassmann tensor} $\mathcal{T}$ of rank $N$ is defined as
+\begin{align}
+\label{eq:def1}
+	\mathcal{T}_{\eta_{1}\eta_{2}\cdots\eta_{N}}=\sum_{i_{1}=0}^1 \sum_{i_{2}=0}^1 \cdots \sum_{i_{N}=0}^1 T_{i_{1}i_{2}\cdots i_{N}}\eta_{1}^{i_{1}}\eta_{2}^{i_{2}}\cdots\eta_{N}^{i_{N}},
+\end{align}
+where %a set of Grassmann numbers $\eta_i$, $i=1,\cdots,N$, satisfying $\{\eta_{i},\eta_{j}\}=0$, 
+$\eta_i$ are single component Grassmann numbers
+and $T_{i_{1}i_{2}\cdots i_{N}}$ is referred to as a coefficient tensor, 
+whose rank is also $N$, with complex entries. 
+Fig.~\ref{fig:fig1}~(a) represents a Grassmann tensor, 
+where the external lines correspond to the indices $\eta_i$.  
+
+
+We consider a {\it Grassmann contraction} among Grassmann tensors. 
+Let $\mathcal{A}_{\eta_1\ldots\eta_N}$ and $\mathcal{B}_{\zeta_1\ldots\zeta_M}$ 
+be two Grassmann tensors of rank $N$ and $M$, respectively.
+%
+\footnote{ We assume that either of $\mathcal{A}$ and $\mathcal{B}$ 
+is a commutative tensor whose coefficient tensor $T_{i_1i_2 \cdots i_N}=0$ 
+for $(i_1+i_2 +\cdots i_N) \, {\rm mod} \, 2 =1$. 
+In this case, 
+$\mathcal{A}_{\eta_1\ldots\eta_N} \mathcal{B}_{\zeta_1\ldots\zeta_M}
+=\mathcal{B}_{\zeta_1\ldots\zeta_M} \mathcal{A}_{\eta_1\ldots\eta_N}$ 
+and Eq.~(\ref{eq:oriented}) can also be expressed as
+$
+	\int\diff\bar{\xi}\diff\xi~\e^{-\bar{\xi}\xi}
+\mathcal{B}_{\bar{\xi}\zeta_2 \ldots \zeta_M}  \mathcal{A}_{\xi\eta_2\ldots \eta_N}. 
+$
+%
+%
+%since the order of $\mathcal{A}$  and  $\mathcal{B}$ 
+%does not affect the result.
+}
+%
+The Grassmann contraction has an orientation
+ which comes from the anti-commutation relation of 
+Grassmann variables.  
+We define a Grassmann contraction from $\eta_1$ to $\zeta_1$ as
+\begin{align}
+\label{eq:oriented}
+	\int\diff\bar{\xi}\diff\xi~\e^{-\bar{\xi}\xi}
+%\mathcal{A}_{\psi\eta}\mathcal{B}_{\bar{\eta}\phi}.
+\mathcal{A}_{\xi\eta_2\ldots \eta_N}\mathcal{B}_{\bar{\xi}\zeta_2 \ldots \zeta_M}.
+\end{align}
+Eq.~(\ref{eq:oriented}) itself is a Grassmann tensor, and
+the coefficient tensor of Eq.(\ref{eq:oriented}) is 
+given by a contraction of two coefficient tensors  of $\mathcal{A}$ and $\mathcal{B}$ 
+with some sign factors. 
+One can consider a contraction from $\eta_i$ to $\zeta_j$ 
+as a straightforward extension of Eq.(\ref{eq:oriented}) 
+with keeping the weight factor $\e^{-\bar{\xi}\xi}$.
+In Fig.~\ref{fig:fig1}~(b), the Grassmann contraction is shown 
+as a shared link with the arrow.
+Note that $\int\diff\bar{\xi}\diff\xi \, \e^{-\bar{\xi}\xi}
+\mathcal{A}_{\bar\xi\eta_2\ldots \eta_N}\mathcal{B}_{{\xi}\zeta_2 \ldots \zeta_M}$ 
+should be represented as  Fig.~\ref{fig:fig1}~(b) with the opposite arrow. 
+
+
+
+\begin{figure}[htbp]
+\centering\includegraphics*[width=0.7\hsize]{graph_single.pdf}
+\caption{Graphical representations of 
+(a) Grassmann tensor Eq.(\ref{eq:def1}) and  (b) Grassmann contraction Eq.~(\ref{eq:oriented}). 
+The external lines specify uncontracted indices.  
+The arrow in the internal line represents a contracted direction from $\xi$ to $\bar \xi$. 
+}
+\label{fig:fig1}
+\end{figure}
+
+Let us now move on to the multi component case. For simplicity of explanation, 
+we take $N=mK$ for Eq.~(\ref{eq:def1}). Then $N$ Grassmann numbers $\eta_n$ 
+are divided into $m$ component variables $\Psi_a$ ($a=1,\cdots,K$) 
+as $\Psi_a=(\eta_{(a-1)m+1}, \eta_{(a-1)m+2} ,\cdots,\eta_{am})$. 
+The Grassmann tensor Eq.~(\ref{eq:def1}) is also expressed as 
+\begin{align}
+\label{eq:def_multi}
+	\mathcal{T}_{\Psi_1 \Psi_2 \cdots \Psi_K}  \equiv  \mathcal{T}_{\eta_{1}\eta_{2}\cdots\eta_{N}}
+\end{align}
+The rank of a Grassmann tensor should be carefully read from the dimension of indices 
+since both sides of Eq.~\eqref{eq:def_multi} have the same rank.
+Fig.~\ref{fig:fig1m}~(a) represents an example of Grassmann tensor with multi component indices, 
+where the external links shown as solid lines correspond to the multi component indices $\Psi_a$. 
+Other cases are straightforwardly generalized from 
+Eq.(\ref{eq:def_multi}) which is the case of $N=4m$ and $m$ component indices.
+
+
+\begin{figure}[htbp]
+\centering\includegraphics*[width=0.7\hsize]{graph_multi.pdf}
+\caption{Graphical representations of
+(a) Grassmann tensor Eq.(\ref{eq:def_multi}) and  (b) Grassmann contraction 
+Eq.~(\ref{eq:oriented_multi}). 
+The external lines specify uncontracted multi component indices.  
+The arrow in the internal line represents a contracted direction from $\Xi$ to $\bar \Xi$. 
+}
+\label{fig:fig1m}
+\end{figure}
+
+To define the Grassmann contraction with multi dimensional indices, 
+we consider the case of $N=mK, M=mL$ in Eq.(\ref{eq:oriented}) 
+for simplicity.  
+The $N$ and $M$ rank tensors $\mathcal{A}_{\eta_1\eta_2\cdots\eta_{N}}$ and 
+$\mathcal{B}_{\zeta_1 \zeta_2\cdots \zeta_{M}}$ are expressed as 
+$\mathcal{A}_{\Psi_1 \Psi_2 \cdots \Psi_K}$ and $\mathcal{B}_{\Phi_1 \Phi_2 \cdots \Phi_L}$ 
+where $\Psi_a$
+and $\Phi_a$ are $m$ component indices defined as in Eq.~(\ref{eq:def_multi}). 
+Then the Grassmann contraction is given for the multi component case: 
+\begin{align}
+\label{eq:oriented_multi}
+	\int\diff\bar{\Xi}\diff\Xi~\e^{-\bar{\Xi}\Xi}
+%\mathcal{A}_{\psi\eta}\mathcal{B}_{\bar{\eta}\phi}.
+\mathcal{A}_{\Xi\Psi_2\ldots \Psi_K}\mathcal{B}_{\bar{\Xi}\Phi_2 \ldots \Phi_L}
+\end{align}
+where $\Xi=(\xi_1,\xi_2,\cdots,\xi_m), 
+\bar \Xi=(\bar \xi_m,\cdots,\bar \xi_2, \bar \xi_1)$ and 
+\begin{align}
+	\diff\bar{\Xi}\diff\Xi~\e^{-\bar{\Xi}\Xi} \equiv 
+\prod_{n=1}^{m}\diff\bar{\xi}_{n}\diff\xi_{n}~\e^{-\bar{\xi}_{n}\xi_{n}}.
+\end{align}
+The case of $m=1$ reproduces Eq.~(\ref{eq:oriented}). We should note that 
+$\bar \Xi$ contains $\bar\xi_n$ in a reverse order so that
+the coefficient tensor of Eq.(\ref{eq:oriented_multi}) is simply given by 
+a tensor contraction of coefficient tensors of $\mathcal{A}$ and $\mathcal{B}$
+without extra sign factors. 
+Fig.~\ref{fig:fig1m}~(b) shows the Grassmann contraction with multi component indices.  
+
+
+It is easy to define a {\it Grassmann tensor network} with these notations. 
+Let $\mathcal{T}_n$ be Grassmann tensors. Then 
+the tensor network is defined by a product of 
+$\mathcal{T}_1\mathcal{T}_2\cdots$ where all indices 
+are contracted as  Eq.~(\ref{eq:oriented_multi}).
+
+
+

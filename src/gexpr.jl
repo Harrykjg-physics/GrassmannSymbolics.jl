@@ -97,12 +97,11 @@ _gexpr(d::Dict{Monomial,Any}) = GrassmannExpr(d)
 
 """
     GrassmannExpr(c::Number) -> GrassmannExpr
-    GrassmannExpr(c)         -> GrassmannExpr
 
 Wrap a scalar (including Symbolics.Num) as a GrassmannExpr.
 """
 
-function GrassmannExpr(c)
+function GrassmannExpr(c::Number)
     _iszero_coeff(c) && return GrassmannExpr(Dict{Monomial,Any}())
     GrassmannExpr(Dict{Monomial,Any}(GrassmannGenerator[] => c))
 end
@@ -185,15 +184,17 @@ end
 Return the sorted list of all generators appearing in `e`.
 """
 
+# A single generator is a homogeneous odd Grassmann expression.
+is_even(::GrassmannGenerator) = false
+is_odd(::GrassmannGenerator) = true
+is_grassmann(::GrassmannGenerator) = true
+
 function generators(e::GrassmannExpr)
-    gens = GrassmannGenerator[]
-    for k in keys(e.terms)
-        for g in k
-            g ∈ gens || push!(gens, g)
-        end
+    unique_generators = Set{GrassmannGenerator}()
+    for monomial in keys(e.terms)
+        union!(unique_generators, monomial)
     end
-    sort!(gens)
-    return gens
+    return sort!(collect(unique_generators))
 end
 
 ##############################################################
@@ -229,6 +230,8 @@ Base.:+(a, g::GrassmannGenerator) = a + GrassmannExpr(g)
 Base.:+(g::GrassmannGenerator, h::GrassmannGenerator) =
     GrassmannExpr(g) + GrassmannExpr(h)
 
+Base.:-(g::GrassmannGenerator) = -GrassmannExpr(g)
+
 function Base.:-(e::GrassmannExpr)
     d = empty(e.terms)          # same Dict type, avoids spelling out Monomial
     for (k, v) in e.terms
@@ -260,9 +263,40 @@ A sign of 0 means the result is zero (repeated generator).
 """
 
 function _monomial_product(m1::Monomial, m2::Monomial)
-    isempty(m1) && return (m2, 1)
-    isempty(m2) && return (m1, 1)
-    _sort_and_sign(vcat(m1, m2))
+    isempty(m1) && return (copy(m2), 1)
+    isempty(m2) && return (copy(m1), 1)
+
+    n1, n2 = length(m1), length(m2)
+    merged = GrassmannGenerator[]
+    sizehint!(merged, n1 + n2)
+    i = j = 1
+    odd_permutation = false
+
+    while i <= n1 && j <= n2
+        if m1[i] < m2[j]
+            push!(merged, m1[i])
+            i += 1
+        elseif m2[j] < m1[i]
+            push!(merged, m2[j])
+            # Moving m2[j] before every unconsumed generator of m1 costs
+            # n1-i+1 transpositions. Only its parity is needed.
+            isodd(n1 - i + 1) && (odd_permutation = !odd_permutation)
+            j += 1
+        else
+            return (GrassmannGenerator[], 0)
+        end
+    end
+
+    while i <= n1
+        push!(merged, m1[i])
+        i += 1
+    end
+    while j <= n2
+        push!(merged, m2[j])
+        j += 1
+    end
+
+    return (merged, odd_permutation ? -1 : 1)
 end
 
 function Base.:*(a::GrassmannExpr, b::GrassmannExpr)
@@ -411,6 +445,85 @@ function get_coeff(e::GrassmannExpr, gens::Vector{GrassmannGenerator})
     return sgn * coeff
 end
 
+##############################################################
+##  Coefficient transformations                              ##
+##############################################################
+
+"""
+    map_coefficients(f, e::GrassmannExpr) -> GrassmannExpr
+
+Apply `f` independently to every scalar coefficient of `e`. Grassmann
+monomials and their canonical ordering are left unchanged.
+"""
+function map_coefficients(f, e::GrassmannExpr)
+    result = Dict{Monomial,Any}()
+    for (monomial, coefficient) in e.terms
+        mapped = f(coefficient)
+        _iszero_coeff(mapped) || (result[copy(monomial)] = mapped)
+    end
+    return GrassmannExpr(result)
+end
+
+"""
+    simplify_coefficients(e::GrassmannExpr; expand=true) -> GrassmannExpr
+
+Simplify every scalar coefficient with Symbolics.jl. This is useful after a
+local Grassmann integration, where algebraically identical tensor entries can
+have different unsimplified expression trees.
+"""
+function simplify_coefficients(e::GrassmannExpr; expand::Bool=true)
+    simplify_one(coefficient) = try
+        Symbolics.simplify(coefficient; expand=expand)
+    catch
+        try
+            Symbolics.simplify(coefficient)
+        catch
+            coefficient
+        end
+    end
+    return map_coefficients(simplify_one, e)
+end
+
+"""
+    substitute_coefficients(e::GrassmannExpr, rules) -> GrassmannExpr
+
+Apply `Symbolics.substitute` to every coefficient. Numeric coefficients and
+other coefficient types unsupported by Symbolics are kept unchanged.
+"""
+function substitute_coefficients(e::GrassmannExpr, rules)
+    substitute_one(coefficient) = try
+        Symbolics.substitute(coefficient, rules)
+    catch
+        coefficient
+    end
+    return map_coefficients(substitute_one, e)
+end
+
+# Relabel generators and restore canonical order, including its sign.
+function map_generators(f, e::GrassmannExpr)
+    result = Dict{Monomial,Any}()
+    for (monomial, coefficient) in e.terms
+        mapped = GrassmannGenerator[f(generator) for generator in monomial]
+        canonical, sign = _sort_and_sign(mapped)
+        sign == 0 && continue
+        result[canonical] = get(result, canonical, 0) + sign * coefficient
+    end
+    return _cleanup!(GrassmannExpr(result))
+end
+
+# Rename generators in rules while preserving every absent generator.
+function substitute_generators(e::GrassmannExpr, rules)
+    return map_generators(generator -> get(rules, generator, generator), e)
+end
+"""
+    symbolically_equal(a::GrassmannExpr, b::GrassmannExpr) -> Bool
+
+Return `true` when all coefficients of `a-b` simplify to zero.
+"""
+function symbolically_equal(a::GrassmannExpr, b::GrassmannExpr)
+    difference = simplify_coefficients(a - b)
+    return all(_iszero_coeff, values(difference.terms))
+end
 ##############################################################
 ##  Equality                                                 ##
 ##############################################################

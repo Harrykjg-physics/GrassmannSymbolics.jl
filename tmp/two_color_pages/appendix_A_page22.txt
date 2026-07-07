@@ -1,0 +1,76 @@
+    C = −ηx,2 − ηt,2 + (Ux† )21 ζ̄x,1 + (Ux† )22 ζ̄x,2 + (Ut† )21 ζ̄t,1 + (Ut† )22 ζ̄t,2 ,                           (A.4)
+        1h                                                                                       i
+    D=     − (Ux )12 η̄x,1 − (Ux )22 η̄x,2 − a+ (Ut )12 η̄t,1 − a+ (Ut )22 η̄t,2 + ζx,2 + a− ζt,2 ,                  (A.5)
+        2
+with a± = e±µ pt (n). After expanding out the second line in eq. (A.1), one can compare like
+terms in eqs. (A.1) and (2.10),
+                           h    then obtain the elementsi of coefficient tensor F . When a
+                      P      T                     T
+diquark source term n λ χ (n)σ2 χ(n) + χ̄(n)σ2 χ̄ (n) /2 is added to the action, then the
+Grassmann tensor F in eq. (2.10) is given by ABCD +m(AB +CD)+iλ(AC +BD)+m2 +λ2 .
+
+B    Construction of ρ
+
+
+
+
+                                                                                                                             JHEP03(2025)027
+In section 3.2, we introduced a Hermitian matrix as ρB = MB† MB . It is computationally
+demanding to obtain ρB directly through this formula since it is a multiplication between
+a 16K × 163 K 3 matrix and a 163 K 3 × 16K matrix.
+    In this study, we obtain ρB (and ρA by similar steps) following another equivalent method.
+First, we perform the following SVD on the coefficient tensor Tn as
+                                                                        2K2
+                                                                      16X
+                   (−1)   fx (ft +fx′ )+fx′ ft
+                                                    (Tn )xtx′ t′ =            (UB )x′ ty (sB )y (VB† )yxt′ .         (B.1)
+                                                                        y=1
+
+Since the direct calculation of eq. (B.1) is also demanding, we employ a randomized SVD [5]
+with the oversampling parameter p ∼ 0.07(16K)2 and the iteration number of QR decom-
+position r′ = 7 in this step.
+    Then we substitute eq. (B.1) into the definition of ρB :
+
+                                    (MB∗ )(tx′ t′ )x (MB )(tx′ t′ )x̃
+                          X
+            (ρB )xx̃ =
+                         t,x′ ,t′
+
+                                    (−1)fx (ft +fx′ )+fx′ ft (Tn∗ )xtx′ t′ (−1)fx̃ (ft +fx′ )+fx′ ft (Tn )x̃tx′ t′
+                          X
+                     =
+                         t,x′ ,t′
+
+                                          (UB )∗x′ ty (sB )y (VB† )∗yxt′ (UB )x′ tỹ (sB )ỹ (VB† )ỹx̃t′
+                          X X
+                     =                                                                                               (B.2)
+                         t,x′ ,t′ y,ỹ
+
+                                        δy,ỹ (sB )y (VB† )∗yxt′ (sB )ỹ (VB† )ỹx̃t′
+                         XX
+                     =
+                          t′   y,ỹ
+
+                                        (sB )2y (VB† )∗yxt′ (VB† )yx̃t′ .
+                         XX
+                     =
+                          t′        y
+
+From the third to the fourth line of eq. (B.2), we used the property UB† UB = I of an SVD.
+eq. (B.2) shows that ρB can be made once sB and VB† in eq. (B.1) are obtained.
+
+Data Availability Statement. This article has no associated data or the data will not
+be deposited.
+
+Code Availability Statement. This article has no associated code or the code will not
+be deposited.
+
+Open Access. This article is distributed under the terms of the Creative Commons Attri-
+bution License (CC-BY4.0), which permits any use, distribution and reproduction in any
+medium, provided the original author(s) and source are credited.
+
+
+
+
+                                                               – 21 –
+

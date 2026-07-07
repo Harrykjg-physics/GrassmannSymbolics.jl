@@ -1,0 +1,116 @@
+
+\providecommand{\href}[2]{#2}\begingroup\raggedright\begin{thebibliography}{10}
+
+\bibitem{Levin:2006jai}
+M.~Levin and C.~P. Nave, \emph{{Tensor renormalization group approach to
+  two-dimensional classical lattice models}},
+  \href{https://doi.org/10.1103/PhysRevLett.99.120601}{\emph{Phys. Rev. Lett.}
+  {\bfseries 99} (2007) 120601},
+  [\href{https://arxiv.org/abs/cond-mat/0611687}{{\ttfamily
+  cond-mat/0611687}}].
+
+\bibitem{Gu:2010yh}
+Z.-C. Gu, F.~Verstraete and X.-G. Wen, \emph{{Grassmann tensor network states
+  and its renormalization for strongly correlated fermionic and bosonic
+  states}},  \href{https://arxiv.org/abs/1004.2563}{{\ttfamily 1004.2563}}.
+
+\bibitem{Gu:2013gba}
+Z.-C. Gu, \emph{{Efficient simulation of Grassmann tensor product states}},
+  \href{https://doi.org/10.1103/PhysRevB.88.115139}{\emph{Phys. Rev.}
+  {\bfseries B88} (2013) 115139},
+  [\href{https://arxiv.org/abs/1109.4470}{{\ttfamily 1109.4470}}].
+
+\bibitem{Shimizu:2014uva}
+Y.~Shimizu and Y.~Kuramashi, \emph{{Grassmann tensor renormalization group
+  approach to one-flavor lattice Schwinger model}},
+  \href{https://doi.org/10.1103/PhysRevD.90.014508}{\emph{Phys. Rev.}
+  {\bfseries D90} (2014) 014508},
+  [\href{https://arxiv.org/abs/1403.0642}{{\ttfamily 1403.0642}}].
+
+\bibitem{Shimizu:2014fsa}
+Y.~Shimizu and Y.~Kuramashi, \emph{{Critical behavior of the lattice Schwinger
+  model with a topological term at $\theta=\pi$ using the Grassmann tensor
+  renormalization group}},
+  \href{https://doi.org/10.1103/PhysRevD.90.074503}{\emph{Phys. Rev.}
+  {\bfseries D90} (2014) 074503},
+  [\href{https://arxiv.org/abs/1408.0897}{{\ttfamily 1408.0897}}].
+
+\bibitem{Shimizu:2017onf}
+Y.~Shimizu and Y.~Kuramashi, \emph{{Berezinskii-Kosterlitz-Thouless transition
+  in lattice Schwinger model with one flavor of Wilson fermion}},
+  \href{https://doi.org/10.1103/PhysRevD.97.034502}{\emph{Phys. Rev.}
+  {\bfseries D97} (2018) 034502},
+  [\href{https://arxiv.org/abs/1712.07808}{{\ttfamily 1712.07808}}].
+
+\bibitem{Takeda:2014vwa}
+S.~Takeda and Y.~Yoshimura, \emph{{Grassmann tensor renormalization group for
+  the one-flavor lattice Gross-Neveu model with finite chemical potential}},
+  \href{https://doi.org/10.1093/ptep/ptv022}{\emph{PTEP} {\bfseries 2015}
+  (2015) 043B01}, [\href{https://arxiv.org/abs/1412.7855}{{\ttfamily
+  1412.7855}}].
+
+\bibitem{Kadoh:2018hqq}
+D.~Kadoh, Y.~Kuramashi, Y.~Nakamura, R.~Sakai, S.~Takeda and Y.~Yoshimura,
+  \emph{{Tensor network formulation for two-dimensional lattice $ \mathcal{N} $
+  = 1 Wess-Zumino model}},
+  \href{https://doi.org/10.1007/JHEP03(2018)141}{\emph{JHEP} {\bfseries 03}
+  (2018) 141}, [\href{https://arxiv.org/abs/1801.04183}{{\ttfamily
+  1801.04183}}].
+
+\bibitem{Sakai:2017jwp}
+R.~Sakai, S.~Takeda and Y.~Yoshimura, \emph{{Higher order tensor
+  renormalization group for relativistic fermion systems}},
+  \href{https://doi.org/10.1093/ptep/ptx080}{\emph{PTEP} {\bfseries 2017}
+  (2017) 063B07}, [\href{https://arxiv.org/abs/1705.07764}{{\ttfamily
+  1705.07764}}].
+
+\bibitem{Yoshimura:2017jpk}
+Y.~Yoshimura, Y.~Kuramashi, Y.~Nakamura, S.~Takeda and R.~Sakai,
+  \emph{{Calculation of fermionic Green functions with Grassmann higher-order
+  tensor renormalization group}},
+  \href{https://doi.org/10.1103/PhysRevD.97.054511}{\emph{Phys. Rev.}
+  {\bfseries D97} (2018) 054511},
+  [\href{https://arxiv.org/abs/1711.08121}{{\ttfamily 1711.08121}}].
+
+\bibitem{Meurice:2018fky}
+Y.~Meurice, \emph{{A tensorial toolkit for quantum computing in lattice gauge
+  theory}}, \href{https://doi.org/10.22323/1.334.0231}{\emph{PoS} {\bfseries
+  LATTICE2018} (2018) 231}.
+
+\bibitem{Butt:2019uul}
+N.~Butt, S.~Catterall, Y.~Meurice and J.~Unmuth-Yockey, \emph{{Tensor network
+  formulation of the massless Schwinger model}},
+  \href{https://arxiv.org/abs/1911.01285}{{\ttfamily 1911.01285}}.
+
+\bibitem{Meurice:2012wp}
+Y.~Meurice, \emph{{Accurate exponents from approximate tensor
+  renormalizations}},
+  \href{https://doi.org/10.1103/PhysRevB.87.064422}{\emph{Phys. Rev.}
+  {\bfseries B87} (2013) 064422},
+  [\href{https://arxiv.org/abs/1211.3675}{{\ttfamily 1211.3675}}].
+
+\bibitem{PhysRevB.86.045139}
+Z.~Y. Xie, J.~Chen, M.~P. Qin, J.~W. Zhu, L.~P. Yang and T.~Xiang,
+  \emph{Coarse-graining renormalization by higher-order singular value
+  decomposition}, \href{https://doi.org/10.1103/PhysRevB.86.045139}{\emph{Phys.
+  Rev. B} {\bfseries 86} (Jul, 2012) 045139}.
+
+\bibitem{Adachi:2019paf}
+D.~Adachi, T.~Okubo and S.~Todo, \emph{{Anisotropic Tensor Renormalization
+  Group}},  \href{https://arxiv.org/abs/1906.02007}{{\ttfamily 1906.02007}}.
+
+\bibitem{Lan:2019stu}
+W.~Lan and G.~Evenbly, \emph{{Tensor Renormalization Group Centered About a
+  Core Tensor}}, \href{https://doi.org/10.1103/PhysRevB.100.235118}{\emph{Phys.
+  Rev.} {\bfseries B100} (2019) 235118},
+  [\href{https://arxiv.org/abs/1906.09283}{{\ttfamily 1906.09283}}].
+
+\bibitem{Kadoh:2019kqk}
+D.~Kadoh and K.~Nakayama, \emph{{Renormalization group on a triad network}},
+  \href{https://arxiv.org/abs/1912.02414}{{\ttfamily 1912.02414}}.
+
+\bibitem{Kadoh}
+D.~Kadoh, \emph{{Tensor renormalization group with fermions}}, {\emph{{\rm in
+  preparation}} }.
+
+\end{thebibliography}\endgroup

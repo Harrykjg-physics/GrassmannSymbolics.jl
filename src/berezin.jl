@@ -74,8 +74,8 @@ Apply the Berezin integral to `integrand`.
 d(η) * (η)            # → 1
 d(η) * (θ)            # → 0
 d(η) * (η * θ)        # → θ
-d(θ) * d(η) * (η * θ) # → −1   (dη applied first, then dθ)
-d(η) * d(θ) * (η * θ) # → 1    (dθ applied first, sign from ordering)
+d(θ) * d(η) * (η * θ) # → 1    (dη applied first, then dθ)
+d(η) * d(θ) * (η * θ) # → −1   (dθ applied first, sign from ordering)
 ```
 """
 function Base.:*(measure::BerezinMeasure, integrand::GrassmannExpr)

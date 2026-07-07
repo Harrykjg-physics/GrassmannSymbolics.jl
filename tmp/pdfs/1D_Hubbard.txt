@@ -1,0 +1,700 @@
+                                                                                                                                                        UTHEP-756, UTCCS-P-137
+
+                                                   Tensor renormalization group approach to (1+1)-dimensional Hubbard model
+
+                                                                                Shinichiro Akiyama1, ∗ and Yoshinobu Kuramashi2, †
+                                                      1
+                                                          Graduate School of Pure and Applied Sciences, University of Tsukuba, Tsukuba, Ibaraki 305-8571, Japan
+                                                              2
+                                                                Center for Computational Sciences, University of Tsukuba, Tsukuba, Ibaraki 305-8577, Japan
+                                                                                                 (Dated: June 15, 2021)
+                                                               We investigate the metal-insulator transition of the (1+1)-dimensional Hubbard model in the
+                                                            path-integral formalism with the tensor renormalization group method. The critical chemical po-
+                                                            tential µc and the critical exponent ν are determined from the µ dependence of the electron density
+                                                            in the thermodynamic limit. Our results for µc and ν show consistency with an exact solution based
+                                                            on the Bethe ansatz. Our encouraging results indicate the applicability of the tensor renormalization
+                                                            group method to the analysis of higher-dimensional Hubbard models.
+
+
+                                                                I.   INTRODUCTION                                formalism by calculating the electron density as a func-
+arXiv:2105.00372v2 [hep-lat] 14 Jun 2021
+
+
+
+
+                                                                                                                 tion of the chemical potential µ. After examining the
+                                              The tensor renormalization group (TRG) method 1 ,                  imaginary-time discretization effects and the tempera-
+                                           which was originally proposed to study two-dimensional                ture dependence, we determine the critical value of the
+                                           (2d) classical spin systems in the field of condensed mat-            chemical potential µc and the critical exponent ν in the
+                                           ter physics [1], has been now used to study wide varieties            thermodynamic limit at the zero temperature. Our re-
+                                           of models in particle physics taking several advantages               sults for µc and ν show agreement with the theoretical
+                                           over the Monte Carlo method. (i) The TRG method does                  prediction based on the Bethe ansatz [16, 17].
+                                           not suffer from the sign problem as already confirmed by                 This paper is organized as follows. In Sec. II we define
+                                           studying various quantum field theories [3, 7–14]. (ii)               the Hubbard model in the path-integral formalism and
+                                           Its computational cost depends on the system size only                explain the numerical algorithm. In Sec. III we show our
+                                           logarithmically. (iii) It allows direct manipulation of the           results and compare them with theoretical predictions.
+                                           Grassmann variables [3, 4, 7, 15]. (iv) We can obtain the             Section IV is devoted to summary and outlook.
+                                           partition function or the path-integral itself.
+                                              The sign problem is common both in particle physics
+                                                                                                                        II.    FORMULATION AND NUMERICAL
+                                           and condensed matter physics. A typical example in par-
+                                                                                                                                     ALGORITHM
+                                           ticle physics is the lattice QCD at finite density, where
+                                           an introduction of the chemical potential causes the sign
+                                           problem, and the Hubbard model is notorious in the con-                    A.      (1+1)-dimensional Hubbard model in the
+                                                                                                                                    path-integral formalism
+                                           densed matter physics. Recently the authors have suc-
+                                           cessfully applied the TRG method to analyze the phase
+                                           transition of the 4d Nambu−Jona-Lasinio (NJL) model                      We consider the partition function of the Hubbard
+                                           at high density and very low temperature [7]. The study               model in the path-integral formalism on an anisotropic
+                                           of the NJL model has two important aspects. Firstly, the              rectangular lattice with the physical volume V = L × β,
+                                           NJL model is a prototype of QCD. Their phase structures               whose spatial extension is defined as L = aNσ with a the
+                                           are expected to be similar so that the study of the NJL               spatial lattice spacing. β denotes the inverse tempera-
+                                           model at finite density is a good testbed before investi-             ture, which is divided as β = 1/T = Nτ . The path-
+                                           gating the finite density QCD. Secondly, the NJL model                integral expression of the partition function is given by
+                                                                                                                 2
+                                           has a similar path-integral form to the Hubbard model:                                                                   
+                                           Both consist of a hopping term and a four-fermi interac-                             Z        Y      Y
+                                           tion term. This indicates that the technical details of the                     Z=                         dψ̄s (n)dψs (n) e−S ,     (1)
+                                           TRG method employed in the analysis of the NJL model                                         n∈Λ1+1 s=↑,↓
+                                           could apply to the Hubbard model. It is interesting to
+                                           investigate whether or not the TRG method overcomes                   where n = (nσ , nτ ) ∈ Λ1+1 (⊂ Z2 ) specifies a position
+                                           the sign problem in the Hubbard model.                                in the lattice |Λ1+1 | = Nσ × Nτ . Since the Hubbard
+                                              In this paper, we investigate the metal-insulator tran-            model describes the spin-1/2 fermions, they are labeled
+                                           sition of the (1+1)d Hubbard model in the path-integral               by s =↑, ↓, corresponding to the spin-up and spin-down,
+                                                                                                                 respectively. Introducing the notation,
+                                                                                                                                        
+                                                                                                                                  ψ↑ (n)                             
+                                                                                                                       ψ(n) =              , ψ̄(n) = ψ̄↑ (n), ψ̄↓ (n) , (2)
+                                                                                                                                  ψ↓ (n)
+                                           ∗   akiyama@het.ph.tsukuba.ac.jp
+                                           †   kuramasi@het.ph.tsukuba.ac.jp
+                                           1   In this paper the TRG method or the TRG approach refers to
+                                               not only the original numerical algorithm proposed by Levin and   2   See Ref. [18] or Refs. [19, 20] for the conversion procedure from
+                                               Nave [1] but also its extensions [2–7].                               the operator formalism to the path-integral one.
+                                                                                                                                                                            2
+
+                                                                                                 the action S is defined as
+
+
+
+                                                                                                                         
+        X                       ψ(n + τ̂ ) − ψ(n)                                                   U          2      
+  S=            a ψ̄(n)                                      − t ψ̄(n + σ̂)ψ(n) + ψ̄(n)ψ(n + σ̂) +   ψ̄(n)ψ(n) − µψ̄(n)ψ(n) . (3)
+       nτ ,nσ
+                                                                                                   2
+
+
+
+The kinetic term in the spatial direction contains the                                           the temporal direction, ψ(nσ , Nτ + 1) = −ψ(nσ , 1). In
+hopping parameter t. The four-fermi interaction term                                             the following discussion, we always set a = 1.
+represents the Coulomb repulsion of electrons at the
+same lattice site. The chemical potential is denoted
+by the parameter µ. Note that the half-filling is real-                                                       B.   Tensor network representation
+ized at µ = U/2 in the current definition. We assume
+the periodic boundary condition in the spatial direction,                                          Now, we introduce the tensor network representation
+ψ(Nσ + 1, nτ ) = ψ(1, nτ ), while the anti-periodic one in                                       for Eq. (1), based on Ref. [21]. At each lattice site, we
+                                                                                                 define the Grassmann tensor T by
+
+
+
+                            X                  X                   X                     X
+ TΨσ Ψτ Ψ̄τ Ψ̄σ =
+                    iσ,↑ ,iσ,↓ ,jσ,↑ ,jσ,↓   iτ,↑ ,iτ,↓   i0σ,↑ ,i0σ,↓ ,jσ,↑
+                                                                         0     0
+                                                                             ,jσ,↓   i0τ,↑ ,i0τ,↓
+
+                                                                                     i  σ,↑  i
+                                                                                             σ,↓    j
+                                                                                                  σ,↑  σ,↓j τ,↑    i
+                                                                                                                 τ,↓   τ,↓  iτ,↑    i0
+                                                                                                                                   σ,↓   i0
+                                                                                                                                         σ,↑    j0
+                                                                                                                                               σ,↓    j0
+                                                                                                                                                     σ,↑     i0     i0
+  × T(iσ,↑ ,iσ,↓ ,jσ,↑ ,jσ,↓ )(iτ,↑ ,iτ,↓ )(i0σ,↑ ,i0σ,↓ ,jσ,↑
+                                                           0     0
+                                                               ,jσ,↓ )(i0τ,↑ ,i0τ,↓ ) Ψσ,1 Ψσ,2 Ψσ,3 Ψσ,4 Ψτ,1 Ψτ,2 Ψ̄τ,2 Ψ̄τ,1 Ψ̄σ,4 Ψ̄σ,3 Ψ̄σ,2 Ψ̄σ,1 , (4)
+
+
+
+
+where T is called the coefficient tensor, whose com-                                             have just one type of hopping in the temporal direction.
+ponents are in R and all the subscripts of the coeffi-                                           Since the model describes spin-1/2 particles, the spatial
+cient tensor take 0 or 1. We have introduced the aux-                                            auxiliary Grassmann field Ψσ has 2 (hopping terms) ×
+iliary Grassmann fields Ψσ = (Ψσ,1 , Ψσ,2 , Ψσ,3 , Ψσ,4 ),                                       2 (spin d.o.f.) components and the temporal one Ψτ has
+Ψ̄σ = (Ψ̄σ,4 , Ψ̄σ,3 , Ψ̄σ,2 , Ψ̄σ,1 ), Ψτ = (Ψτ,1 , Ψτ,2 ), and                                 1 × 2 components. Using the Grassmann tensor T in
+Ψ̄τ = Ψ̄τ,2 , Ψ̄τ,1 ). In Eq. (3), we have two types of hop-                                     Eq (4), the path integral Z is expressed by
+ping terms in the spatial direction. On the other hand, we
+
+
+
+                                                                                                                      
+         Z
+                         dΨ̄τ (n)dΨτ (n)dΨ̄σ (n)dΨσ (n) e−(Ψ̄σ (n)Ψσ (n)+Ψ̄τ (n)Ψτ (n)) 
+                 Y                                                                                                          Y
+  Z=                                                                                                                               TΨσ (n)Ψτ (n)Ψ̄τ (n−τ̂ )Ψ̄σ (n−σ̂) .   (5)
+                n∈Λ1+1                                                                                                     n∈Λ1+1
+
+
+
+
+See Appendix A for the detailed explanation to derive                                            ploy the 2d HOTRG procedure, regarding TΞσ Ψτ Ψ̄τ Ξ̄σ as
+the above Grassmann tensor and its tensor network.                                               the initial tensor, to obtain the coarse-grained Grass-
+                                                                                                 mann tensor TΞ0σ Ψ0τ Ψ̄0τ Ξ̄0σ . Note that with sufficiently
+                                                                                                 small (< 1), little truncation error is accumulated with
+                  C.     Numerical algorithm                                                     the first mτ times of renormalization along τ -direction.
+                                                                                                 This is because the contribution from the spatial hopping
+   We employ the higher-order TRG (HOTRG) algorithm                                              terms, which are of O(), is smaller than that from the
+[2] to evaluate the Grassmann tensor network in Eq (5).                                          temporal one, which is of O(1). For the (1 + 1)d Hub-
+Using the HOTRG, we firstly carry out mτ times of                                                bard model, we found that the optimal mτ satisfied the
+renormalization along the temporal direction. This pro-
+cedure converts the initial Grassmann tensor TΨσ Ψτ Ψ̄τ Ψ̄σ
+into the coarse-grained one TΞσ Ψτ Ψ̄τ Ξ̄σ . Secondly, we em-
+                                                                                                                                                                 3
+
+condition 2mτ ∼ O(10−1 ). 3                                                           for the  = 212 ×10−4 case. On the other hand, the results
+   When one applies the TRG approach to evaluate the                                   with  = 24 ×10−4 and 10−4 show good consistency. This
+path integral over the Grassmann fields, it is practically                             means that the discretization effects with  = 10−4 are
+useful to encode the Grassmann parity of the auxiliary                                 negligible.
+Grassmann fields into the subscripts of the coefficient
+tensor. We identify the coefficient tensor in Eq. (4)
+as a four-rank tensor Txtx0 t0 , where x, x0 = 1, · · · , 24                                                 14
+
+and t, t0 = 1, · · · , 22 . These new indices are defined as                                                 12     ε = 0.0001
+                                                                                                                    ε = 0.0016
+in Tables II C and II C. Notice that x(x0 ) = 1, · · · , 8                                                   10
+                                                                                                                    ε = 0.0256
+                                                                                                                    ε = 0.4096
+
+correspond to the Grassmann-even sector and x(x0 ) =                                                          8
+
+9, · · · , 16 the Grassmann-odd one in Ψσ (Ψ̄σ ). Similarly,
+
+
+
+
+                                                                                                     lnZ/V
+                                                                                                              6
+
+t(t0 ) = 1, 2 correspond to the Grassmann-even sector and                                                    4
+
+t(t0 ) = 3, 4 the Grassmann-odd one in Ψτ (Ψ̄τ ). These                                                      2
+
+mappings help us to carry out the singular value decom-                                                      0
+
+positions with some block-diagonal representations as ex-                                                    -2
+                                                                                                               -4      -2        0    2    4    6          8
+                                                                                                                                      µ
+plained in Ref. [7].
+
+
+            TABLE I. Mapping of spatial subscripts.                                    FIG. 1. Thermodynamic potential at U/t = 4 on V = 4096 ×
+                                                                                       1677.7216 lattice as a function of chemical potential µ. β is
+          x     1   2   3   4   5   6   7   8   9   10   11   12   13   14   15   16   divided with  = 212 × 10−4 , 28 × 10−4 , 24 × 10−4 , and 10−4 .
+                                                                                       The bond dimension is chosen to be D = 80.
+         iσ,↑   0   1   1   1   0   0   0   1   1    0    0    1   0     1   1    0
+         iσ,↓   0   1   0   0   1   1   0   1   0    1    0    1   0     1   0    1
+                                                                                        We investigate the convergence behavior of the ther-
+         jσ,↑   0   0   1   0   1   0   1   1   0    0    1    1   0     0   1    1    modynamic potential defining the quantity
+         jσ,↓   0   0   0   1   0   1   1   1   0    0    0    0   1     1   1    1
+                                                                                                                        ln Z(D) − ln Z(D = 80)
+                                                                                                                  δ=                                            (6)
+                                                                                                                             ln Z(D = 80)
+
+                                                                                       on V = 4096 × 1677.7216 lattice with  = 10−4 . In
+          TABLE II. Mapping of temporal subscripts.
+                                                                                       Fig. 2, we plot the D dependence of δ at µ = 2.75 and
+                                                                                       2.00, which are near and far away from the critical point
+                                          t 1 2 3 4
+                                                                                       µc , respectively, as we will see below. We observe that
+                                        iτ,↑ 0 1 1 0                                   δ decreases as a function of D and reaches O(10−4 ) at
+                                        iτ,↓ 0 1 0 1                                   D = 75 for both values of µ. Hereafter we present the
+                                                                                       results with D = 80 except Fig. 3.
+
+
+                                                                                                             -1
+                                                                                                    1×10
+                III.        NUMERICAL RESULTS                                                                                                   µ = 2.00
+                                                                                                                                                µ = 2.75
+                                                                                                             -2
+                                                                                                  1×10
+  The partition function of Eq. (1) is evaluated using the
+numerical algorithm explained above on lattices with the                                                     -3
+                                                                                                δ
+
+
+
+
+                                                                                                    1×10
+physical volume V = L × β = Nσ × (Nτ ) (Nσ , Nτ =
+2m , m ∈ N) with the periodic boundary condition for                                              1×10
+                                                                                                             -4
+
+
+the spacial direction and the anti-periodic one for the
+temporal direction. We employ t = 1 for the hopping                                                 1×10 20
+                                                                                                             -5
+                                                                                                                       30        40   50   60   70         80
+parameter and U = 4 for the four-fermi coupling. In                                                                                   D
+
+Fig. 1 we plot the µ dependence of the thermodynamic
+potential ln Z/V on V = L × β = 4096 × 1677.7216 with
+the bond dimension D = 80 in the HOTRG algorithm                                       FIG. 2. Convergence behavior of thermodynamic potential
+                                                                                       with δ of Eq. (6) at µ = 2.00 and 2.75 as a function of D on
+choosing  = 212 × 10−4 , 28 × 10−4 , 24 × 10−4 , 10−4 . For
+                                                                                       V = 4096 × 1677.7216 lattice.
+each value of , mτ is decided via the condition 2mτ =
+212 ×10−4 = O(10−1 ). We find clear discretization effects
+                                                                                          Before presenting the U/t = 4 results let us consider
+                                                                                       the (U, t) = (4, 0) and (0, 1) cases. Since these cases are
+                                                                                       analytically solvable, it is instructive to compare the nu-
+3   A similar remark is also mentioned in Ref. [2], where the 3d                       merical results for the electron density with the exact
+    HOTRG is applied to 2d quantum transverse Ising model in the                       ones. The electron density hni is obtained by the numer-
+    path-integral formalism.                                                           ical derivative of the thermodynamic potential in terms
+                                                                                                                                                                     4
+
+of µ:                                                            The half-filling state is characterized by the plateau with
+                                                                 hni = 1 in the range of 1.3 . µ . 2.7. We also observe
+         1 ∂ ln Z(µ)   1 ln Z(µ + ∆µ) − ln Z(µ − ∆µ)
+ hni =               ≈                               .           the continuous change from hni = 1 to hni = 2 over the
+         V     ∂µ      V            2∆µ                          range of 2.7 . µ . 6.5. Figure 6 shows µ dependence of
+                                                   (7)           hni near the criticality on V = 4096 × 1677.7216. The
+In Figs. 3 and 4 we compare the numerical and ana-               abrupt change of hni at µ ≈ 2.70 in Fig. 6 indicates a
+lytic results for the µ dependence of hni. In both cases         metal-insulator transition.
+we observe good consistencies over the wide range of µ.
+Note that for the case of (U, t) = (4, 0) in Fig. 3, we set
+mτ = 24 because this case is equivalent to the model                              2.0
+                                                                                                          1       13
+                                                                                            (Nσ, Nτ) = (2 , 2 )
+defined on V = 1 × β lattice. Thanks to the vanishing                                                     4
+                                                                                            (Nσ, Nτ) = (2 , 2 )
+                                                                                                                  16
+
+hopping structure in the spatial direction, we can always                         1.5                     8
+                                                                                            (Nσ, Nτ) = (2 , 2 )
+                                                                                                                  20
+
+                                                                                                          12      24
+perform an exact tensor contraction in Eq. (5). In Fig. 4                                   (Nσ, Nτ) = (2 , 2 )
+
+
+
+
+                                                                            <n>
+we employ finer resolution of µ around 1 . |µ| . 2 in                             1.0
+
+
+order to follow the complicated µ dependence of hni.
+                                                                                  0.5
+
+
+
+                                                                                  0.0
+                                                                                     -4       -2              0           2            4          6           8
+                 2.0                                                                                                      µ
+                         TRG
+                         Exact
+
+                 1.5
+
+                                                                 FIG. 5. Electron density hni at several lattice sizes with  =
+                                                                 10−4 as a function of µ. The bond dimension is chosen to be
+           <n>
+
+
+
+
+                 1.0
+
+                                                                 D = 80.
+                 0.5
+
+
+
+                 0.0
+                    -4    -2          0   2   4       6   8
+                                          µ
+                                                                                 1.12
+                                                                                            TRG
+                                                                                 1.10       Fitting curve
+
+FIG. 3. Electron density hni in the (U, t) = (4, 0) case at                      1.08
+β = 1677.7216 with  = 10−4 as a function of µ. The solid line
+                                                                                 1.06
+                                                                           <n>
+
+
+
+
+shows the exact solution and the blue circles are the results
+obtained by the TRG approach.                                                    1.04
+
+                                                                                 1.02
+
+                                                                                 1.00
+
+                                                                                   2.60    2.65    2.70           2.75   2.80   2.85       2.90       2.95   3.00
+                                                                                                                          µ
+
+                 2.0
+                         TRG
+                         Exact
+
+                 1.5                                             FIG. 6. Electron density hni at β = 1677.7216 with  = 10−4
+                                                                 as a function of µ. The bond dimension is chosen to be D =
+                                                                 80.
+           <n>
+
+
+
+
+                 1.0
+
+
+
+                 0.5
+                                                                   We determine the critical chemical potential µc (D) and
+                 0.0
+                                                                 the critical exponent ν on V = 4096 × 1677.7216 lattice
+                    -4           -2       0
+                                          µ
+                                                  2       4      by fitting hni in the metallic phase around the transition
+                                                                 point with the following form:
+                                                                                                                                                       ν
+FIG. 4. Electron density hni in the (U, t) = (0, 1) case at                               hni = A + B |µ − µc (D)| ,                                                (8)
+Nσ = 4096 and β = 1677.7216 with  = 10−4 as a function of
+µ. The solid line shows the exact solution on Nσ = 4096 and      where A, B, µc (D) and ν are the fit parameters. The
+the blue circles are the results obtained by the TRG approach    solid curve in Fig. 6 shows the fitting result over the
+with D = 80.                                                     range of 2.68 ≤ µ ≤ 3.00. We obtain µc (D) = 2.698(1)
+                                                                 and ν = 0.51(2) at D = 80. Our result for the critical
+   Now let us turn to the (U, t) = (4, 1) case. Fig-             exponent is consistent with the theoretical prediction of
+ure 5 shows the lattice size dependence of hni with              ν = 1/2. A previous Quantum Monte Carlo simulation
+ = 10−4 and mτ = 12. The results indicate that                  with small spatial extension up to L = 24 also yielded
+the size (Nσ , Nτ ) = (212 , 224 ), which corresponds to         the same conclusion [22].
+V = 4096 × 1677.7216, is sufficiently large to be iden-            In order to extrapolate the result of µc (D) to the limit
+tified as the thermodynamic and zero-temperature limit.          D → ∞, we repeat the calculation changing D. The
+                                                                                                                                                  5
+
+
+                                     TABLE III. Critical chemical potential µc (D) and critical exponent ν at each D.
+
+                                            D         60          65           70         75           80     ∞
+                                        fit range [2.72,3.00] [2.70,3.00] [2.70,3.00] [2.69,3.00] [2.68,3.00] −
+                                          µc (D)   2.720(3) 2.710(1) 2.7068(8) 2.701(1) 2.698(1) 2.642(05)(13)
+                                             ν      0.49(3)     0.52(1)     0.50(2)     0.51(2)     0.51(2)   −
+
+
+
+numerical results are summarized in Table III. In Fig. 7,                                        IV.   SUMMARY AND OUTLOOK
+we plot µc (D) as a function of 1/D, providing two types
+of fittings. The solid line shows the fitting result with                                  We have investigated the metal-insulator transition of
+the function µc (D) = µc + aD−1 , which gives us µc =                                   the (1+1)d Hubbard model in the path-integral formal-
+2.642(5) and a = 4.5(4) with χ2 /d.o.f = 0.447093. We                                   ism employing the TRG method. Extrapolating µc (D) to
+have also fitted the data with the function µc (D) = µc +                               the limit D → ∞, we have estimated the critical chemical
+bD−c , shown as the dotted curve in Fig. 7, to estimate                                 potential, which shows good consistency with the theo-
+an uncertainty in the choice of the fitting function. The                               retical prediction based on the Bethe ansatz. We have
+difference between the central values of µc obtained by                                 determined the critical exponent ν, which is also consis-
+these two types of fittings is considered to be a systematic                            tent with the exact solution. These encouraging results
+error. Finally, we obtain µc = 2.642(05)(13) as the value                               show the effectiveness of the TRG approach for the study
+of limD→∞ µc (D), which shows good consistency with                                     of the Hubbard model and the related fermion models be-
+the exact solution of µc = 2.643 · · · based on the Bethe                               ing free from the sign problem. It is worth emphasizing
+ansatz [16, 17].                                                                        that the TRG approach is efficient not only in the lower-
+                                                                                        dimensional systems but also in the higher-dimensional
+                                                                                        ones, as confirmed in the earlier works [2, 4–7, 14, 15, 23–
+                                                                                        26]. As a next step, we are planning to investigate the
+                                                                                        phase diagram of the higher-dimensional Hubbard mod-
+                                                                                        els, improving the TRG method successfully applied in
+                                                                                        this work.
+
+
+                 2.74
+                                                                                                       ACKNOWLEDGMENTS
+                                -1
+                            µc+aD
+                 2.72           -c
+                            µc+bD
+                                                                                           Numerical calculation for the present work was car-
+                 2.70
+                                                                                        ried out with the Oakforest-PACS (OFP) under the In-
+         µc(D)
+
+
+
+
+                 2.68                                                                   terdisciplinary Computational Science Program of Cen-
+                 2.66
+                                                                                        ter for Computational Sciences, University of Tsukuba.
+                                                                                        This work is supported in part by Grants-in-Aid
+                 2.64                                                                   for Scientific Research from the Ministry of Educa-
+                   0.000        0.005        0.010
+                                              1/D
+                                                     0.015       0.020                  tion, Culture, Sports, Science and Technology (MEXT)
+                                                                                        (No. 20H00148) and JSPS KAKENHI Grant Number
+                                                                                        JP21J11226 (S.A.).
+FIG. 7. Critical chemical potential µc (D) as a function of
+1/D. Solid line represents the fitting result with the function
+µc (D) = µc +aD−1 . Dotted curve also shows the fitting result                                   Appendix A: Grassmann tensor for
+with the function µc (D) = µc + bD−c .                                                           (d + 1)-dimensional Hubbard model
+
+                                                                                          In this appendix, we consider the tensor network repre-
+                                                                                        sentation for the path integral of the (d + 1)-dimensional
+                                                                                        Hubbard model, whose action is given by
+
+
+
+                        (                                              d
+                                                                                                                                         )
+        X                                ψ(n + τ̂ ) − ψ(n)               X                                      U          2
+ S=                  ψ̄(n)                                      −t            ψ̄(n + σ̂)ψ(n) + ψ̄(n)ψ(n + σ̂) +   ψ̄(n)ψ(n) − µψ̄(n)ψ(n) ,
+                                                                        σ=1
+                                                                                                                 2
+      n∈Λd+1
+                                                                                                                                               (A1)
+                                                                                                                                                         6
+
+where n = ((nσ )σ=1,··· ,d , nτ ) ∈ Λd+1 , which denotes the                           terms in Eq. (A1) are all diagonal in the internal space,
+(d+1)-dimensional anisotropic lattice. Since the hopping                               we can immediately have the following decompositions,
+
+
+
+
+                                 Y Z                                                        h√                         √                         i
+       e   tψ̄(n)ψ(n+σ̂)
+                            =               dη̄σ,s (n)dητ,s (n) e−η̄σ,s (n)ησ,s (n) exp          tψ̄s (n)ησ,s (n) +       tη̄σ,s (n)ψs (n + σ̂) ,   (A2)
+                                s=↑,↓
+
+
+
+
+                                Y Z                                                    h √                         √                i
+      etψ̄(n+σ̂)ψ(n) =                     dζ̄σ,s (n)dζσ,s (n) e−ζ̄σ,s (n)ζσ,s (n) exp − tψ̄s (n + σ̂)ζ̄σ,s (n) + tζσ,s (n)ψs (n) ,                (A3)
+                                s=↑,↓
+
+
+
+
+                                         Y Z
+                e−ψ̄(n)ψ(n+τ̂ ) =                  dη̄τ,s (n)dητ,s (n) e−η̄τ,s (n)ητ,s (n) exp −ψ̄s (n)ητ,s (n) + η̄τ,s (n)ψs (n + τ̂ ) .
+                                                                                                                                      
+                                                                                                                                                      (A4)
+                                        s=↑,↓
+
+
+
+
+One can now easily integrate out ψ and ψ̄ at the each site                             n ∈ Λd+1 independently and this defines the Grassmann
+                                                                                       tensor,
+
+
+
+                                                                                            
+                                                                    Z       Y
+    TΨ1 (n)···Ψd (n)Ψτ (n)Ψ̄τ (n−τ̂ )Ψ̄d (n−d)···
+                                            ˆ Ψ̄1 (n−1̂) =
+                                                                                   dψ̄s dψs  e−U ψ̄↑ ψ↑ ψ̄↓ ψ↓ +(µ+1)ψ̄↑ ψ↑ +(µ+1)ψ̄↓ ψ↓
+                                                                            s=↑,↓
+                                                                                                       
+            d X n                                              d X n
+            X     √                      √            o        X    √                 √                  o
+    × exp       − tψ̄s ζ̄σ,s (n − σ̂) + tζσ,s (n)ψs  exp         tψ̄s ησ,s (n) + tη̄σ,s (n − σ̂)ψs 
+                  σ=1 s=↑,↓                                                                      σ=1 s=↑,↓
+                                                                  
+                    X 
+    × exp                  −ψ̄s ητ,s (n) + η̄τ,s (n − τ̂ )ψs  ,                                                                                     (A5)
+                  s=↑,↓
+
+
+
+
+with Ψσ                   =       (ησ,↑ , ησ,↓ , ζσ,↑ , ζσ,↓ ),     Ψ̄σ    =           one obtains the tensor network representation for the
+(ζ̄σ,↓ , ζ̄σ,↑ , η̄σ,↓ , η̄σ,↑ ),   Ψτ        =          (ητ,↑ , ητ,↓ ), and           path integral Z of the (d + 1)-dimensional Hubbard
+Ψ̄τ = (η̄τ,↓ , η̄τ,↑ ). Using this Grassmann tensor T ,                                model as
+
+
+
+
+                                                                                                                                     
+                                   Z          Y                                             d
+                                                                                            Y
+                            Z=                      dΨ̄τ (n)dΨτ (n) e−Ψ̄τ (n)Ψτ (n)             dΨ̄σ (n)dΨσ (n) e−Ψ̄σ (n)Ψσ (n) 
+                                            n∈Λd+1                                         σ=1
+                                         Y
+                                  ×              TΨ1 (n)···Ψd (n)Ψτ (n)Ψ̄τ (n−τ̂ )Ψ̄d (n−d)···
+                                                                                         ˆ Ψ̄1 (n−1̂) .                                               (A6)
+                                        n∈Λd+1
+
+
+
+
+Let us now carry out the integration over ψ and ψ̄ in                                  Eq. (A5). One finds the expression,
+                                                                                                                                                                7
+
+
+
+           TΨ1 ···Ψd Ψτ Ψ̄τ Ψ̄d ···Ψ̄1
+                                                                                              
+              Y  d          X                        X              d
+                                                                    Y             X                       X
+          =                                                                                   
+                σ=1 iσ,↑ ,iσ,↓ ,jσ,↑ ,jσ,↓      iτ,↑ ,iτ,↓                       0
+                                                              σ=1 i0σ,↑ ,i0σ,↓ ,jσ,↑   0
+                                                                                     ,jσ,↓             i0τ,↑ ,i0τ,↓
+                  P             √      P                    0     0
+          × (−1)     σ,s iσ,s
+                         ( t)            σ,s (iσ,s +jσ,s +iσ,s +jσ,s )
+            h
+          × δ1,iτ,↓ + σ (iσ,↓ +jσ,↓
+                     P          0   ) δ1,i0τ,↓ + σ (i0σ,↓ +jσ,↓ ) δ1,iτ,↑ + σ (iσ,↑ +jσ,↑
+                                                P                          P          0   ) δ1,i0τ,↑ + σ (i0σ,↑ +jσ,↑ )
+                                                                                                      P
+
+
+          − (µ + 1)δ0,iτ,↓ +Pσ (iσ,↓ +jσ,↓
+                                        0   ) δ0,i0τ,↓ + σ (i0σ,↓ +jσ,↓ ) δ1,iτ,↑ + σ (iσ,↑ +jσ,↑
+                                                        P                          P          0   ) δ1,i0τ,↑ + σ (i0σ,↑ +jσ,↑ )
+                                                                                                              P
+
+          − (µ + 1)δ1,iτ,↓ +Pσ (iσ,↓ +jσ,↓
+                                          0 ) δ1,i0τ,↓ + σ (i0σ,↓ +jσ,↓ ) δ0,iτ,↑ + σ (iσ,↑ +jσ,↑
+                                                         P                          P             0  ) δ0,i0τ,↑ + σ (i0σ,↑ +jσ,↑ )
+                                                                                                                 P
+                                                                                                                                                  i
+          − U  − (µ + 1)2 δ0,iτ,↓ +Pσ (iσ,↓ +jσ,↓
+             
+                                                         0  ) δ0,i0τ,↓ + σ (i0σ,↓ +jσ,↓ ) δ0,iτ,↑ + σ (iσ,↑ +jσ,↑0  ) δ0,i0τ,↑ + σ (i0σ,↑ +jσ,↑ )
+                                                                         P                          P                           P
+
+                                  !                              !                             !                               !
+                              0
+             iτ,↑
+                  Y i
+                         σ,↑ jσ,↑     i0τ,↑   Y i0 j
+                                                       σ,↑   σ,↑       iτ,↓
+                                                                            Y i
+                                                                                    σ,↓ jσ,↓
+                                                                                            0
+                                                                                                    i0τ,↓    Y i0 j
+                                                                                                                    σ,↓    σ,↓
+          × ητ,↑      ησ,↑ ζ̄σ,↑ η̄τ,↑              η̄σ,↑ ζσ,↑ ητ,↓               ησ,↓ ζ̄σ,↓ η̄τ,↓               η̄σ,↓ ζσ,↓ ,                                (A7)
+                        σ                                 σ                                  σ                                        σ
+
+
+
+
+where we have assigned the indices iσ,s (n), jσ,s (n), and                                  dences both from the auxiliary Grassmann fields and the
+iτ,s (n) as the labels of the Taylor expansion for Eq. (A2),                                indices of the Taylor expansion, introducing the notation
+Eq. (A3), and Eq. (A4), respectively. They take just 0 or                                   i0ν,s (n) = iν,s (n − ν̂). Then we sort the auxiliary Grass-
+1 because of the nilpotency of the Grassmann numbers.                                       mann fields in Eq. (A7) as those in Eq. (A8) and the
+For simplicity, we have omitted the lattice site depen-                                     Grassmann tensor T is finally written as
+
+
+
+
+                     TΨ1 ···Ψd Ψτ Ψ̄τ Ψ̄d ···Ψ̄1
+                                                                                                            
+                        Y  d          X                          X              d
+                                                                                Y                X                       X
+                    =                                                                                       
+                            σ=1 iσ,↑ ,iσ,↓ ,jσ,↑ ,jσ,↓        iτ,↑ ,iτ,↓                           0
+                                                                                σ=1 i0σ,↑ ,i0σ,↓ ,jσ,↑   0
+                                                                                                       ,jσ,↓           i0τ,↑ ,i0τ,↓
+
+                    × T(i1,↑ ,i1,↓ ,j1,↑ ,j1,↓ )···(id,↑ ,id,↓ ,jd,↑ ,jd,↓ )(iτ,↑ ,iτ,↓ )(i01,↑ ,i01,↓ ,j1,↑
+                                                                                                         0 ,j 0 )···(i0
+                                                                                                               1,↓
+                                                                                                                            0     0     0      0     0
+                                                                                                                      d,↑ ,id,↓ ,jd,↑ ,jd,↓ )(iτ,↑ ,iτ,↓ )
+                                                                                                            
+                         i1,↑ i1,↓ j1,↑ j1,↓                     id,↑ id,↓ jd,↑ jd,↓                iτ,↑ iτ,↓
+                    × η1,↑     η1,↓ ζ1,↑ ζ1,↓ · · · ηd,↑              ηd,↓ ζd,↑ ζd,↓              ητ,↑    ητ,↓
+                       i0 i0   j 0 j 0 i0 i0                                 j 0 j 0 i0 i0 
+                          τ,↓     τ,↑         d,↓     d,↑    d,↓    d,↑              1,↓     1,↑     1,↓     1,↑
+                    × η̄τ,↓    η̄τ,↑       ζ̄d,↓   ζ̄d,↑  η̄d,↓  η̄d,↑     · · · ζ̄1,↓   ζ̄1,↑    η̄1,↓   η̄1,↑    .                                         (A8)
+
+
+
+In the above expression, the coefficients of the auxiliary                                  Grassmann fields are identified as a multi-rank tensor T .
+                                                                                            When d = 1 (σ = 1), the coefficient tensor T is given by
+
+
+
+
+                       T(iσ,↑ ,iσ,↓ ,jσ,↑ ,jσ,↓ )(iτ,↑ ,iτ,↓ )(i0σ,↑ ,i0σ,↓ ,jσ,↑
+                                                                              0     0
+                                                                                  ,jσ,↓ )(i0τ,↑ ,i0τ,↓ )
+                               P          √       P                      0      0
+                      = (−1) s iσ,s ( t) s (iσ,s +jσ,s +iσ,s +jσ,s )
+                        h
+                      × δ1,iτ,↓ +iσ,↓ +jσ,↓  0   δ1,i0τ,↓ +i0σ,↓ +jσ,↓ δ1,iτ,↑ +iσ,↑ +jσ,↑     0    δ1,i0τ,↑ +i0σ,↑ +jσ,↑
+                      − (µ + 1)δ0,iτ,↓ +iσ,↓ +jσ,↓
+                                                0   δ0,i0τ,↓ +i0σ,↓ +jσ,↓ δ1,iτ,↑ +iσ,↑ +jσ,↑
+                                                                                          0   δ1,i0τ,↑ +i0σ,↑ +jσ,↑
+                      − (µ + 1)δ1,iτ,↓ +iσ,↓ +jσ,↓
+                                                0   δ1,i0τ,↓ +i0σ,↓ +jσ,↓ δ0,iτ,↑ +iσ,↑ +jσ,↑
+                                                                                            0   δ0,i0τ,↑ +i0σ,↑ +jσ,↑
+                                                                                                                                      i
+                      − U  − (µ + 1)2 δ0,iτ,↓ +iσ,↓ +jσ,↓
+                        
+                                                                0   δ0,i0τ,↓ +i0σ,↓ +jσ,↓ δ0,iτ,↑ +iσ,↑ +jσ,↑
+                                                                                                            0   δ0,i0τ,↑ +i0σ,↑ +jσ,↑
+                                  R(i                                       0     0     0     0      0     0
+                                      σ,↑ ,iσ,↓ ,jσ,↑ ,jσ,↓ )(iτ,↑ ,iτ,↓ )(iσ,↑ ,iσ,↓ ,jσ,↑ ,jσ,↓ )(iτ,↑ ,iτ,↓ )
+                      × (−1)                                                                                       ,                                         (A9)
+                                                                                                                                                       8
+
+                                                                                            with
+
+
+
+
+               R(iσ,↑ ,iσ,↓ ,jσ,↑ ,jσ,↓ )(iτ,↑ ,iτ,↓ )(i0σ,↑ ,i0σ,↓ ,jσ,↑
+                                                                      0     0
+                                                                          ,jσ,↓ )(i0τ,↑ ,i0τ,↓ )
+                                         0
+             = iσ,↑ iτ,↑ + iσ,↓ (iτ,↑ + jσ,↑ + i0τ,↑ + i0σ,↑ + jσ,↑ + iτ,↓ )
+                             0
+             + jσ,↑ (iτ,↑ + jσ,↑                                   0
+                                 + i0τ,↑ + i0σ,↑ ) + jσ,↓ (iτ,↑ + jσ,↑                           0
+                                                                       + i0τ,↑ + i0σ,↑ + iτ,↓ + jσ,↓ + i0τ,↓ + i0σ,↓ )
+                      0
+             + iτ,↓ (jσ,↑                             0
+                          + i0τ,↑ + i0σ,↑ ) + i0τ,↓ (jσ,↑                    0
+                                                          + i0τ,↑ + i0σ,↑ + jσ,↓            0
+                                                                                 ) + i0τ,↑ jσ,↑    0
+                                                                                                + jσ,↓   0
+                                                                                                       (jσ,↑ + i0σ,↑ ) + i0σ,↓ i0σ,↑ .            (A10)
+
+
+
+
+ [1] M. Levin and C. P. Nave, Phys. Rev. Lett. 99, 120601                                   [14] S. Akiyama, D. Kadoh, Y. Kuramashi, T. Ya-
+     (2007), arXiv:cond-mat/0611687 [cond-mat.stat-mech].                                        mashita, and Y. Yoshimura, JHEP 09, 177 (2020),
+ [2] Z. Y. Xie, J. Chen, M. P. Qin, J. W. Zhu, L. P. Yang,                                       arXiv:2005.04645 [hep-lat].
+     and T. Xiang, Phys. Rev. B 86, 045139 (2012).                                          [15] Y. Yoshimura, Y. Kuramashi, Y. Nakamura, S. Takeda,
+ [3] Y. Shimizu and Y. Kuramashi, Phys. Rev. D90, 014508                                         and R. Sakai, Phys. Rev. D97, 054511 (2018),
+     (2014), arXiv:1403.0642 [hep-lat].                                                          arXiv:1711.08121 [hep-lat].
+ [4] R. Sakai, S. Takeda, and Y. Yoshimura, PTEP 2017,                                      [16] E. H. Lieb and F. Y. Wu, Phys. Rev. Lett. 20, 1445
+     063B07 (2017), arXiv:1705.07764 [hep-lat].                                                  (1968).
+ [5] D. Adachi, T. Okubo, and S. Todo, Phys. Rev. B 102,                                    [17] E. H. Lieb and F. Wu, Physica A: Statistical Mechan-
+     054432 (2020), arXiv:1906.02007 [cond-mat.stat-mech].                                       ics and its Applications 321, 1 (2003), statphys-Taiwan-
+ [6] D. Kadoh and K. Nakayama, (2019), arXiv:1912.02414                                          2002: Lattice Models and Complex Systems.
+     [hep-lat].                                                                             [18] M. Creutz, Phys. Rev. D 35, 1460 (1987).
+ [7] S. Akiyama, Y. Kuramashi, T. Yamashita,           and                                  [19] H. F. Trotter, Proceedings of the American Mathematical
+     Y. Yoshimura, JHEP 01, 121 (2021), arXiv:2009.11583                                         Society 10, 545 (1959).
+     [hep-lat].                                                                             [20] M. Suzuki, Commun. Math. Phys. 51, 183 (1976).
+ [8] Y. Shimizu and Y. Kuramashi, Phys. Rev. D90, 074503                                    [21] S. Akiyama and D. Kadoh, (2020), arXiv:2005.07570
+     (2014), arXiv:1408.0897 [hep-lat].                                                          [hep-lat].
+ [9] Y. Shimizu and Y. Kuramashi, Phys. Rev. D97, 034502                                    [22] F. F. Assaad and M. Imada, Phys. Rev. Lett. 76, 3176
+     (2018), arXiv:1712.07808 [hep-lat].                                                         (1996).
+[10] S. Takeda and Y. Yoshimura, PTEP 2015, 043B01                                          [23] S. Wang, Z.-Y. Xie, J. Chen, B. Normand, and T. Xiang,
+     (2015), arXiv:1412.7855 [hep-lat].                                                          Chinese Physics Letters 31, 070503 (2014).
+[11] D. Kadoh, Y. Kuramashi, Y. Nakamura, R. Sakai,                                         [24] Y. Kuramashi and Y. Yoshimura, JHEP 08, 023 (2019),
+     S. Takeda, and Y. Yoshimura, JHEP 03, 141 (2018),                                           arXiv:1808.08025 [hep-lat].
+     arXiv:1801.04183 [hep-lat].                                                            [25] S. Akiyama, Y. Kuramashi, T. Yamashita,              and
+[12] D. Kadoh, Y. Kuramashi, Y. Nakamura, R. Sakai,                                              Y. Yoshimura, Phys. Rev. D100, 054510 (2019),
+     S. Takeda, and Y. Yoshimura, JHEP 02, 161 (2020),                                           arXiv:1906.06060 [hep-lat].
+     arXiv:1912.13092 [hep-lat].                                                            [26] S. Akiyama, Y. Kuramashi, and Y. Yoshimura, (2021),
+[13] Y. Kuramashi and Y. Yoshimura, JHEP 04, 089 (2020),                                         arXiv:2101.06953 [hep-lat].
+     arXiv:1911.06480 [hep-lat].
+

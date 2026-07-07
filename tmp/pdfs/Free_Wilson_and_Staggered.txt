@@ -1,0 +1,1013 @@
+                                                       Published for SISSA by         Springer
+                                                                        Received: May 20,      2021
+                                                                     Revised: September 6,     2021
+                                                                   Accepted: September 24,     2021
+                                                                    Published: October 22,     2021
+
+
+
+
+More about the Grassmann tensor renormalization
+
+
+
+
+                                                                                                      JHEP10(2021)188
+group
+
+
+Shinichiro Akiyamaa and Daisuke Kadohb,c
+a
+  Graduate School of Pure and Applied Sciences, University of Tsukuba,
+  Tsukuba, Ibaraki, 305-8571, Japan
+b
+  Physics Division, National Center for Theoretical Sciences, National Tsing-Hua University,
+  Hsinchu, 30013, Taiwan
+c
+  Research and Educational Center for Natural Sciences, Keio University,
+  Yokohama 223-8521, Japan
+
+    E-mail: akiyama@het.ph.tsukuba.ac.jp, kadoh@keio.jp
+
+Abstract: We derive a general formula of the tensor network representation for d-dimen-
+sional lattice fermions with ultra-local interactions, including Wilson fermions, staggered
+fermions, and domain-wall fermions. The Grassmann tensor is concretely defined with
+auxiliary Grassmann variables that play a role in bond degrees of freedom. Compared to
+previous works, our formula does not refer to the details of lattice fermions and is derived
+by using the singular value decomposition for the given Dirac matrix without any ad-hoc
+treatment for each fermion. We numerically test our formula for free Wilson and staggered
+fermions and find that it properly works for them. We also find that Wilson fermions show
+better performance than staggered fermions in the tensor renormalization group approach,
+unlike the Monte Carlo method.
+
+Keywords: Lattice field theory simulation
+
+ArXiv ePrint: 2005.07570
+
+
+
+
+Open Access, c The Authors.
+                                                      https://doi.org/10.1007/JHEP10(2021)188
+Article funded by SCOAP3 .
+Contents
+
+1 Introduction                                                                              1
+
+2 Formalism of the Grassmann tensors                                                        2
+
+3 General formula of tensor network for arbitrary lattice fermions                          4
+
+4 Numerical applications                                                                    6
+
+
+
+
+                                                                                                 JHEP10(2021)188
+5 Summary and outlook                                                                      11
+
+A Truncation technique                                                                     11
+
+B Tensor networks for 2D lattice fermions                                                  12
+  B.1 Wilson fermions                                                                      12
+  B.2 Staggered fermions                                                                   13
+
+
+
+
+1       Introduction
+
+Tensor renormalization group (TRG) is a promising computational approach to study the
+lattice field theory. The dynamics of the theory can be investigated by the TRG mostly
+in the thermodynamic limit without suffering from the sign problem since it does not
+employ any stochastic process. The TRG was originally proposed by Levin and Nave as
+a real space renormalization group for the two-dimensional Ising model [1]. Extensions to
+fermionic systems were firstly discussed by Gu et al. [2, 3], and the Grassmann TRG has
+been applied to many models such as the Schwinger model with and without θ term [4–6],
+the Gross-Neveu model with finite density [7], and N = 1 Wess-Zumino model [8].1 These
+earlier works have verified that the TRG is also useful to evaluate the path integral over
+the Grassmann variables.
+     In this paper, we introduce a different way from these studies to derive a tensor network
+representation and to implement the Grassmann TRG. The initial tensor network and
+renormalized ones are treated in a unified manner. We derive a general tensor network
+formula, characterized by the singular value decomposition (SVD) of a given Dirac matrix,
+for any local lattice fermion such as Wilson fermions, staggered fermions, or domain-wall
+fermions. Our method has several advantages over previous methods. As seen later, it is
+useful in comparing tensor networks for various lattice fermions from common aspects (for
+instance, computational times and errors). In previous works, the subscript structure of
+initial tensors is different from those of renormalized tensors.2 Such an inhomogeneity of
+    1
+        See refs. [9–12] for other related studies.
+    2
+        See, for instance, eqs. (4) and (36) of ref. [9].
+
+
+
+
+                                                            –1–
+tensors requires separate handling of tensors for the initial and the renormalized steps. That
+kind of extra handling is absent in our method. With our method, several proposed TRG
+methods applicable for the Ising model are naturally transcribed to ones with fermions.
+     This paper is organized as follows. In section 2, we define a Grassmann tensor and its
+contraction rule. We explain how to construct the tensor network with auxiliary Grass-
+mann fields in section 3. To test our method, numerical results for the two-dimensional
+free Wilson and staggered fermions are provided in section 4. Section 5 is devoted to sum-
+mary and outlook. Truncation technique is explained in appendix A. Concrete forms of
+Grassmann tensor for 2D Wilson and staggered fermions are shown in appendix B.
+
+
+
+
+                                                                                                                           JHEP10(2021)188
+2       Formalism of the Grassmann tensors
+
+The variables ηi (i = 1, · · · , N ) are single-component Grassmann numbers which satisfy the
+anti-commutation relation {ηi , ηj } = 0. We begin with defining a Grassmann tensor and its
+contraction rule with single-component index ηi .3 Then those with multi-component index
+Ψ = (η1 , η2 , · · · , ηN ) are defined by extending the single component case straightforwardly.
+     The Grassmann tensor T of rank N is defined as
+                                              1
+                                            1 X                 1
+                                                                                                      iN
+                                                                        Ti1 i2 ···iN η1i1 η2i2 · · · ηN
+                                            X                   X
+                           Tη1 η2 ···ηN =                 ···                                            ,       (2.1)
+                                            i1 =0 i2 =0         iN =0
+
+where ηi are single-component Grassmann numbers and Ti1 i2 ···iN is referred to as a co-
+efficient tensor, whose rank is also N , with complex entries. Figure 1(a) represents a
+Grassmann tensor, where the external lines correspond to the indices ηi .
+      We consider a Grassmann contraction among Grassmann tensors. Let Aη1 ...ηN and
+Bζ1 ...ζM be two Grassmann tensors of rank N and M , respectively.4 The Grassmann con-
+traction has an orientation which comes from the anti-commutation relation of Grassmann
+variables. We define a Grassmann contraction from η1 to ζ1 as
+                                        Z
+                                             ¯ e−ξ̄ξ Aξη ...η B
+                                            dξdξ                          .                                      (2.2)
+                                                        2    N ξ̄ζ2 ...ζM
+
+
+
+Eq. (2.2) itself is a Grassmann tensor, and the coefficient tensor of eq. (2.2) is given by a
+contraction of two coefficient tensors of A and B with some sign factors. One can consider
+a contraction from ηi to ζj as a straightforward extension of eq. (2.2) with keeping the
+weight factor e−ξ̄ξ . In figure 1 (b), the Grassmann contraction is shown as a shared link
+                             R
+                                ¯ e−ξ̄ξ A
+with the arrow. Note that dξdξ            ξ̄η2 ...ηN Bξζ2 ...ζM should be represented as figure 1(b)
+with the opposite arrow.
+    Let us now move on to the multi-component case. For simplicity of explanation, we take
+N = mK for eq. (2.1). Then N Grassmann numbers ηn are divided into m component
+    3
+     The Grassmann contraction is also discussed in refs. [2, 3] and the appendix B of ref. [13]. Eqs. (2.1)
+and (2.2) defined below generalize the results of section 3.3 of ref. [11].
+   4
+     We assume that either of A and B is a commutative tensor whose coefficient tensor A(B)i1 i2 ···iN (M ) = 0
+for (i1 + i2 + · · ·RiN (M ) ) mod 2 = 1. In this case, Aη1 ...ηN Bζ1 ...ζM = Bζ1 ...ζM Aη1 ...ηN and eq. (2.2) can also
+                         ¯ e−ξ̄ξ B
+be expressed as dξdξ                ξ̄ζ2 ...ζM Aξη2 ...ηN .
+
+
+
+
+                                                            –2–
+                         (𝑎)                                             (𝑏)
+                   (a)                      (b)             𝜂𝑁                           𝜁2
+                 𝜂𝑁             𝜂1                                                            𝜁3
+
+                         𝒯                                           𝜉          𝜉ҧ
+                                     𝜂2
+                                                                 𝒜                   ℬ
+
+                                𝜂3                  𝜂3
+                                                            𝜂2                           𝜁𝑀
+
+Figure 1. Graphical representations of (a) Grassmann tensor in eq. (2.1) and (b) Grassmann
+
+
+
+
+                                                                                                           JHEP10(2021)188
+contraction in eq. (2.2). The external lines specify uncontracted indices. The arrow in the internal
+                                                  ¯
+line represents a contracted direction from ξ to ξ.
+
+                         (𝑎)                                             (𝑏)
+                   (a)                      (b)             Ψ𝐾                       Φ2
+                 Ψ𝐾             Ψ1                                                            Φ3
+
+                         𝒯                                           Ξ         Ξത
+                                     Ψ2
+                                                              𝒜                      ℬ
+
+                                Ψ3                 Ψ3
+                                                            Ψ2                       Φ𝐿
+
+Figure 2. Graphical representations of (a) Grassmann tensor in eq. (2.3) and (b) Grassmann
+contraction in eq. (2.4). The external lines specify uncontracted multi-component indices. The
+arrow in the internal line represents a contracted direction from Ξ to Ξ̄.
+
+
+variables Ψa (a = 1, · · · , K) as Ψa = (η(a−1)m+1 , η(a−1)m+2 , · · · , ηam ). The Grassmann
+tensor eq. (2.1) is also expressed as
+
+
+                                         TΨ1 Ψ2 ···ΨK ≡ Tη1 η2 ···ηN                               (2.3)
+
+
+The rank of a Grassmann tensor should be carefully read from the dimension of indices
+since both sides of eq. (2.3) have the same rank. Figure 2(a) represents an example of
+Grassmann tensor with multi-component indices, where the external links are shown as
+solid lines correspond to the multi-component indices Ψa . Other cases are straightforwardly
+generalized from eq. (2.3).
+     To define the Grassmann contraction with multi-dimensional indices, we consider the
+case of N = mK, M = mL in eq. (2.2) for simplicity. The N and M rank tensors
+Aη1 η2 ···ηN and Bζ1 ζ2 ···ζM are expressed as AΨ1 Ψ2 ···ΨK and BΦ1 Φ2 ···ΦL where Ψa and Φa are
+m-component indices defined as in eq. (2.3). Then the Grassmann contraction is given for
+the multi-component case:
+                                     Z
+                                         dΞ̄dΞ AΞΨ2 ...ΨK BΞ̄Φ2 ...ΦL                              (2.4)
+
+
+
+
+                                                   –3–
+where Ξ = (ξ1 , ξ2 , · · · , ξm ), Ξ̄ = (ξ¯m , · · · , ξ¯2 , ξ¯1 ) and
+                                                       m
+                                                             dξ¯n dξn e−ξ̄n ξn .
+                                                       Y
+                                           dΞ̄dΞ ≡                                                          (2.5)
+                                                       n=1
+
+The case of m = 1 reproduces eq. (2.2). We should note that Ξ̄ contains ξ¯n in a reverse
+order so that the coefficient tensor of eq. (2.4) is simply given by a tensor contraction of
+coefficient tensors of A and B without extra sign factors. Figure 2(b) shows the Grassmann
+contraction with multi-component indices.
+     It is easy to define a Grassmann tensor network with these notations. Let Tn be
+
+
+
+
+                                                                                                                    JHEP10(2021)188
+Grassmann tensors. Then the tensor network is defined by a product of T1 T2 · · · where all
+indices are contracted as eq. (2.4).
+
+3    General formula of tensor network for arbitrary lattice fermions
+
+We prove that the path integral of lattice fermion theory with nearest-neighbor interactions
+is expressed as a Grassmann tensor network. We assume that the theory has translational
+invariance on the lattice. The d-dimensional hypercubic lattice is defined by a set of integer
+lattice sites Λ = {(n1 , n2 , · · · , nd ) | ni ∈ Z for i = 1, 2, · · · , d} where the lattice spacing a
+is set to a = 1. Although we begin with a lattice action defined by quadratic forms
+of Grassmann variables, it is straightforward to include four-fermion interactions. Next-
+nearest-neighbor and higher interactions are also easily included because these terms are
+expressed as nearest-neighbor ones using auxiliary Grassmann variables.
+     Consider lattice fermion fields ψa (n) and ψ̄a (n) for n ∈ Λ where a runs from 1 to N ,
+which is the degree of freedom of the internal space such as the spinor or the flavor space.
+Then the lattice fermion action is formally given by
+                                                     X
+                                              S=           ψ̄(n)(Dψ)(n)                                     (3.1)
+                                                     n∈Λ
+
+where D is the Dirac operator acting on the fermion field as
+                                                        N
+                                                      X X
+                                    (Dψ)a (n) =                 Dab (n, m)ψb (m).                           (3.2)
+                                                     m∈Λ b=1
+
+We may consider that D takes a form of
+                                              d
+                                              X                                d
+                                                                               X
+        Dab (n, m) = Wab δ(n, m) +                 (Xµ )ab δ(n + µ̂, m) +            (Yµ )ab δ(n − µ̂, m)   (3.3)
+                                             µ=1                               µ=1
+
+without loss of generality. Here, δ(n, m) is the Kronecker delta, Xµ , Yµ , W are matrices
+with respect to the internal space. The W term is an on-site interaction and the Xµ and
+Yµ terms are nearest-neighbor interactions. The path integral is defined as
+                                                      Z h           i
+                                               Z=           DψDψ̄ e−S                                       (3.4)
+
+
+
+
+                                                           –4–
+where [DψDψ̄] = n∈Λ N
+                        Q             Q
+                             a=1 dψa (n)dψ̄a (n) with single-component Grassmann measures
+dψa (n) and dψ̄a (n).
+     Let us firstly consider Xµ term in the action, dropping the spacetime index n, µ in the
+following for simplicity. The SVD of Xab is given by Xab = N                  †
+                                                                 c=1 Uac σc (V )cb where σc ≥ 0
+                                                               P
+
+are singular values and U, V are unitary matrices. Then we have
+                                                                        N
+                                                                        X
+                                                          ψ̄Xψ =              σc χ̄c χc                                         (3.5)
+                                                                        c=1
+
+where χ̄ = ψ̄U and χ = V † ψ. See refs. [4–8] and the discussion in ref. [14] for the similar
+deformation. Using an identity,
+
+
+
+
+                                                                                                                                        JHEP10(2021)188
+                                                   Z
+                                −σc χ̄c χc
+                            e                  =        dη̄c dηc exp [−η̄c ηc − χ̄c ηc + σc η̄c χc ] ,                          (3.6)
+
+we can easily show that
+                            Kµ Z
+   e−ψ̄(n)Xµ ψ(n+µ̂) =                    dη̄µ,c (n)dηµ,c (n) e−η̄µ,c (n)ηµ,c (n)
+                            Y
+
+                            c=1
+                                          h                                                                                i
+                            × exp −{ψ̄(n)UXµ }c ηµ,c (n) + (σXµ )c η̄µ,c (n){VX† µ ψ(n + µ̂)}c ,                                (3.7)
+where σXµ and UXµ , VXµ are singular values and singular vectors of Xµ . Here n, µ depen-
+dences are explicitly shown. Similarly,
+                                Lµ Z
+          −ψ̄(n+µ)Yµ ψ(n)
+                                              dζ̄µ,c (n)dζµ,c (n) e−ζ̄µ,c (n)ζµ,c (n)
+                                Y
+      e                     =
+                                c=1
+                                              h                                                                        i
+                                 × exp {ψ̄(n + µ)UYµ }c ζ̄µ,c (n) + (σYµ )c ζµ,c (n){VY†µ ψ(n)}c ,                              (3.8)
+where σYµ and UYµ , VYµ are singular values and singular vectors of Yµ .
+   Inserting eqs. (3.7) and (3.8) into eq. (3.4) with eq. (3.3), we have
+                                          Z                  Y
+                                 Z=               dΨ̄dΨ            TΨ1 (n)···Ψd (n)Ψ̄d (n−d)···
+                                                                                          ˆ Ψ̄1 (n−1̂)                          (3.9)
+                                                          n∈Λ
+where
+                                                                   N
+                                                         Z                        !
+                                                                   Y                      h       i
+      TΨ1 (n)···Ψd (n)Ψ̄d (n−d)···
+                             ˆ Ψ̄1 (n−1̂) =                             dψa dψ̄a exp −ψ̄W ψ
+                                                                  a=1
+                                                                                                                          
+                                        Kµ n
+                                      d X                                                                              o
+                                                       −{ψ̄UXµ }c ηµ,c (n) + (σXµ )c η̄µ,c (n − µ̂){VX† µ ψ}c 
+                                      X
+                      × exp 
+                                      µ=1 c=1
+                                                                                                                  
+                                        Lµ n
+                                      d X                                                                      o
+                                                       {ψ̄UYµ }c ζ̄µ,c (n − µ̂) + (σYµ )c ζµ,c (n){VY†µ ψ}c  ,
+                                      X
+                      × exp                                                                                                   (3.10)
+                                      µ=1 c=1
+
+and
+                                                                                                        
+                                             d               Kµ
+                                                                   dη̄µ,c (n)dηµ,c (n) e−η̄µ,c (n)ηµ,c (n) 
+                                           Y Y               Y
+                       dΨ̄dΨ ≡                           
+                                          n∈Λ µ=1            c=1
+                                                                                                        
+                                                             Lµ
+                                                                   dζ̄µ,c (n)dζµ,c (n) e−ζ̄µ,c (n)ζµ,c (n) 
+                                                             Y
+                                                    ×                                                                         (3.11)
+                                                             c=1
+
+
+
+
+                                                                       –5–
+                                                                    Ψ3
+
+                                                                             ഥ1
+                                                                             Ψ
+                                                                𝒯
+                                                    ഥ2
+                                                    Ψ                         Ψ2
+
+                                                      Ψ1
+
+                                              3                     ഥ3
+                                                                    Ψ
+
+
+                                                         2
+
+
+
+
+                                                                                                                         JHEP10(2021)188
+                                      1
+
+                 Figure 3. Graphical representation of eq. (3.10) in three dimensions.
+
+
+with Ψµ = (ηµ,1 , · · · , ηµ,Kµ , ζµ,1 , · · · , ζµ,Lµ ) and Ψ̄µ = (ζ̄µ,Lµ , · · · , ζ̄µ,1 , η̄µ,Kµ , · · · , η̄µ,1 ).
+Note that T is uniformly defined for the spacetime. It is easy to show eq. (3.9) by in-
+serting eq. (3.10) into it with identities eq. (3.7) and eq. (3.8). Figure 3 shows eq. (3.10) in
+three dimensions. Eq. (3.9) is a Grassmann tensor network since a pair of Ψ(n) and Ψ̄(n)
+                                     Q
+appears once in eq. (3.9) under n∈Λ and they are contracted with appropriate weights.
+     We denote eq. (3.9) as
+                                                                                      
+                                              Y
+                              Z = gTr              TΨ1 (n)···Ψd (n)Ψ̄d (n−d)···
+                                                                           ˆ Ψ̄1 (n−1̂)
+                                                                                                             (3.12)
+                                              n∈Λ
+
+where gTr means all possible Grassmann contractions defined in eqs. (2.4) and (2.5). The
+situation is quite similar with the tensor network representation for spin models, which is
+denoted by tTr over tensor contractions on lattice.
+     This tensor network formulation is immediately applicable to any model with lattice
+fermions. It is also straightforward to extend the formulation to the models with next-
+nearest-neighbor and higher interactions because eq. (3.6) allows us to express a next-
+nearest-neighbor term as nearest-neighbor ones. Other on-site terms such as four-fermion
+interactions can also be included in eq. (3.10) with no difficulty.
+
+
+4    Numerical applications
+
+The current Grassmann tensor network can be evaluated by coarse-graining algorithms
+with a truncation of degrees of freedom, such as the original Levin-Nave TRG [1] and
+some variations of the TRG [15–18]. In this section, we consider the higher-order TRG
+(HOTRG) [15], which is applicable to any dimensional lattices for a Grassmann
+tensor network.
+    Let us consider a two-dimensional case as an example. The Grassmann tensor network
+is made of a 4K-rank Grassmann tensor, which is identified as the Grassmann tensor
+TXY Ȳ X̄ with four K-component indices X, X̄, Y, Ȳ . Here, K is the number of hopping
+terms. Hereafter we count the rank of a Grassmann tensor in terms of K-component
+
+
+
+
+                                                             –6–
+                    (A)                                 (B)
+
+
+                                        Grassmann
+                                         HOSVD
+
+
+
+
+                           Iteration                                  Grassmann
+                                           (C)
+                                                                      Contraction
+
+
+
+
+                                                                                                              JHEP10(2021)188
+Figure 4. Schematic picture of the Grassmann HOTRG. (A) Grassmann tensor network in two
+dimensions. (B) Grassmann isometries are inserted in the whole network. (C) Tensor network is
+renormalized so that the lattice size is reduced by a factor of 2.
+
+
+index. We assume that X and Y live on the links (n, n + µ̂) for µ = 1, 2, respectively and
+X̄ and Ȳ live on the links (n, n − µ̂) for µ = 1, 2, respectively.
+    Figure 4 schematically illustrates the algorithm of the Grassmann HOTRG, which em-
+ploys the higher-order singular value decomposition (HOSVD) for the coefficient tensor of
+                                                    Z
+                          MX1 X2 Y Ȳ X̄2 X̄1 =         dΞ̄dΞ TX2 ΞȲ X̄2 TX1 Y Ξ̄X̄1 .              (4.1)
+
+M is identified as a Grassmann tensor of rank 6, and the coefficient tensor M which is
+read from eq. (4.1) is given by a contraction of coefficient tensor T with some sign factors.
+We can decompose M in a formal way,
+                                4 Z
+                                                 !
+                                Y
+                                                 A
+       MX1 X2 Y Ȳ X̄2 X̄1 =           dΞ̄k dΞk UX        UB UC UD              S
+                                                   1 X2 Ξ1 Y Ξ2 Ȳ Ξ3 X̄2 X̄1 Ξ4 Ξ̄4 Ξ̄3 Ξ̄2 Ξ̄1
+                                                                                                 .   (4.2)
+                                k=1
+
+This decomposition is referred to as the Grassmann HOSVD, which is equivalent to the
+HOSVD for the coefficient tensor M . The Grassmann HOSVD gives us a Grassmann
+isometry,
+                                       Z
+                                                             ∗
+                                           dΦ̄dΦ UX̄2 X̄1 Φ UΦ̄X 1 X2
+                                                                      ,                              (4.3)
+
+which is inserted into the Grassmann tensor network to truncate the bond degrees of
+freedom (figure 4(B)). U is chosen from U A and U D in eq. (4.2), following the algorithm
+of the HOTRG [15]. Note that the dimension of Φ (Φ̄) is originally the square of that
+of Xm because UX̄2 X̄1 Φ is a square matrix with the column X1 , X2 and the row Φ. For
+a given bond dimension D, we truncate U so that the effective dimension of coefficient
+tensor associated with Φ (Φ̄) runs up to D, setting extra elements of U to zero.5 However,
+   5
+    This can be formally achieved as follows: let k be an integer such that 2k is the least integer greater
+than or equal to D. We set the elements from column D + 1 to column 2k of coefficient tensor in U to zero
+to make the bond dimension of renormalized tensor become D effectively.
+
+
+
+
+                                                        –7–
+a decimal numeral system defined in ref. [19] (or see appendix A) allows us just to pick up
+D2 × D elements in the coefficient tensor in U . This is useful to implement the current
+Grassmann HOTRG in practice.
+    Renormalized Grassmann tensor is finally defined by
+                              2 Z              Z             !
+               (1)
+                                                   dZ̄i0 dZi0 UZ̄2 Z̄1 X MZ1 Z2 Y Ȳ Z̄ 0 Z̄ 0 UX̄Z 0 Z 0 .
+                              Y
+              TXY Ȳ X̄   =         dZ̄i dZi                                                                  (4.4)
+                                                                                           2   1     1   2
+                              i=1
+
+Repeating the above procedure, Z can be approximated by
+                                         Z              Z
+                                                                        (n)
+
+
+
+
+                                                                                                                      JHEP10(2021)188
+                                    Z≈       dX̄dX          dȲ dY TXY Ȳ X̄ .                                (4.5)
+
+Here, we assume that the lattice theory is defined on a finite lattice of V = 2n with the peri-
+odic boundary condition6 and T (n) is the renormalized tensor at nth renormalization step.
+     It is worth emphasizing that in the above procedure, the original Grassmann tensor
+                                                    (1)
+TXY Ȳ X̄ is converted into the coarse-grained one TXY Ȳ X̄ . Since both of them are defined via
+eq. (2.1), the current formulation recursively introduces the Grassmann tensor under the
+TRG procedure. Thanks to this property, we can avoid any ad-hoc treatment in defining
+the initial tensor network and coarse-grained one as in ref. [9].
+     We examine the above Grassmann HOTRG by benchmarking with the one-flavor col-
+orless free Wilson fermion and free staggered fermions on a two-dimensional square lattice.
+Unless otherwise noted, we assume the anti-periodic boundary condition in 2-direction.
+Initial tensors for these fermions are obtained via eq. (3.10). See appendices B.1 and B.2
+for their concrete forms.
+     Figure 5 shows the free energy per site against the mass M on 2×2 lattice with D = 16.
+With the choice of D ≥ 16, the calculation by the current Grassmann HOTRG agrees with
+the exact results up to the machine precision.7 Figure 6 plots the relative error for the free
+energy of free Wilson fermions on 1024 × 1024 lattice, defined by
+
+                                ln Z(L = 1024, D) − ln Zexact (L = 1024)
+                          δ=                                             .                                    (4.6)
+                                          ln Zexact (L = 1024)
+
+It is confirmed that the current Grassmann HOTRG has achieved the same accuracy as
+the conventional one [9] both for massless and massive fermions.
+     Figure 7 shows the computational time as a function of the bond dimension for the
+Wilson or staggered fermions with various conditions. The solid curve represents the theo-
+retical scaling of the computational time of the HOTRG, which is O(D7 ) in 2 dimensions,
+and the current Grassmann HOTRG computation well reproduces it.
+     Finally, we evaluate the relative error defined via eq. (4.6) as a function of the computa-
+tional time for both Wilson and staggered fermions, varying values of mass, and boundary
+conditions. As shown in figure 8, with the vanishing mass, the Grassmann HOTRG achieves
+the higher accuracy for the Wilson fermions compared to staggered fermions with the fixed
+   6
+     If one imposes the anti-periodic boundary condition in 2-direction, all the Grassmann numbers in Y or Ȳ
+should be multiplied by −1 before carrying out the integration in eq. (4.5).
+   7
+     This situation is completely the same with the conventional Grassmann HOTRG [9].
+
+
+
+
+                                                       –8–
+                              5.0
+                                            Exact (Wilson)
+                                            Exact (Staggered)
+                              4.0           TRG (Wilson)
+                                            TRG (Staggered)
+
+                              3.0
+
+                   lnZ(L=2)
+                              2.0
+
+
+                              1.0
+
+
+
+
+                                                                                                        JHEP10(2021)188
+                              0.0
+                                0.0            1.0              2.0       3.0   4.0               5.0
+                                                                      M
+
+Figure 5. Free energy densities for free Wilson and staggered fermions against the mass M on
+2 × 2 lattice with D = 16. They agree with the exact values up to the machine precision.
+
+
+
+                                   -2
+                              10
+                                                                                This work (M=0)
+                                                                                This work (M=1)
+                                                                                Ref. [9] (M=0)
+                                                                                Ref. [9] (M=1)
+                                   -4
+                              10
+                    δ
+
+
+
+
+                                   -6
+                              10
+
+
+
+
+                                   -8
+                              10
+
+
+                                        0       10              20        30     40               50
+                                                                      D
+
+Figure 6. Relative error for the free energy of Wilson fermions on 1024 × 1024 lattice as a function
+of D.
+
+
+
+
+computational time. This may be attributed to the chiral symmetry in staggered fermions,
+which makes the hierarchy of the singular values in the Grassmann tensor milder. When
+these fermions are massive, the Grassmann HOTRG reaches slightly higher accuracy for
+Wilson fermions within the fixed computational time. We should note that the situation is
+quite different from the Monte Carlo simulation, where the computational time of staggered
+fermions is faster than that of the other lattice fermions. Figure 8 suggests that Wilson
+fermions show better performance than staggered fermions in the TRG method with the
+fixed execution time, unlike the Monte Carlo method.
+
+
+
+
+                                                                  –9–
+                                                    5
+                                              10
+
+                                                    4
+                                              10
+
+
+                   Computational Time [sec]   10
+                                                    3
+
+
+
+                                                    2
+                                              10
+                                                                                       Staggered (M=0, APBC)
+                                                    1                                  Staggered (M=1, APBC)
+
+
+
+
+                                                                                                                            JHEP10(2021)188
+                                              10                                       Staggered (M=1, PBC)
+                                                                                       Wilson (M=0, APBC)
+                                                    0                                  Wilson (M=1, APBC)
+                                              10                                       Wilson (M=1, PBC)
+                                                                                                               7
+                                                                                       Theoretical scaling O(D )
+                                                   -1
+                                              10 10          20               30        40                50
+                                                                                   D
+
+Figure 7. Computational time of free energy density on 1024 × 1024 lattice as a function of D.
+For the massive cases, we evaluated the path integrals assuming the periodic boundary condition
+(PBC) and anti-periodic one (APBC) for 2-direction. Solid curve shows the theoretical scaling of
+computational time, which holds whether the fermions are massless or massive regardless of the
+type of lattice fermion.
+
+
+
+
+                                                    0
+                                               10
+
+                                                    -2
+                                              10
+
+                                                    -4
+                                              10
+
+                                                    -6
+                   δ
+
+
+
+
+                                              10
+
+                                                    -8
+                                              10                                        Staggered (M=0, APBC)
+                                                                                        Staggered (M=1, APBC)
+                                                                                        Staggered (M=1, PBC)
+                                                   -10                                  Wilson (M=0, APBC)
+                                              10                                        Wilson (M=1, APBC)
+                                                                                        Wilson (M=1, PBC)
+                                                   -12
+                                              10         1              2                   3                           4
+                                                    10             10                  10                          10
+                                                                  Computational Time [sec]
+
+Figure 8. Relative error of free energy on 1024 × 1024 lattice as a function of the computational
+time. Different symbol corresponds to the Wilson or staggered fermions with M = 0, 1. For the
+massive cases, we evaluated the path integrals assuming the periodic boundary condition (PBC)
+and anti-periodic one (APBC) for 2-direction.
+
+
+
+
+                                                                            – 10 –
+         operator formalism                                                        tensor network
+                                             ?
+
+            𝒁 = 𝐓𝐫 𝐞𝜷𝑯
+                                                                𝒁 = 𝐠𝐓𝐫  𝓣𝚿𝟏         𝒏 ⋯𝚿𝒅 𝒏 𝚿       𝚿
+                                                                                                𝒅 (𝒏𝒅)        )
+                                                                                                          𝟏 (𝒏𝟏
+                                                                             𝒏∈𝚲
+
+
+
+
+                  Inserting a complete set
+                   in temporal direction
+
+
+
+
+           path integral                             Auxiliary Grassmann fields
+
+
+
+
+                                                                                                                     JHEP10(2021)188
+                                                 in spatial and temporal directions
+
+                 𝐞𝑺 𝝍,𝝍
+       𝒁 =  𝐃𝝍𝐃𝝍
+                               
+
+
+
+
+Figure 9. A possible relationship between the path integral, operator formalism, and tensor
+network.
+
+
+5   Summary and outlook
+
+A tensor network formulation for fermion theories was discussed, based on the introduc-
+tion of the auxiliary fermion fields. We derived a general formula of the tensor network
+representation for lattice fermions. This formula is immediately applicable for many types
+of local lattice fermions such as Wilson fermions, staggered fermions and domain-wall
+fermions. Our method is useful in practice because it allows us to recursively introduce
+the coarse-grained Grassmann tensor throughout the TRG calculation and provides a fair
+comparison among various lattice fermions from a common aspect. Implementing the
+Grassmann HOTRG, whose accuracy are the same as in ref. [9], our numerical results sug-
+gest that Wilson fermions show better performance than staggered fermions in the TRG
+method with the fixed execution time. The situation is quite different from the Monte
+Carlo method, and these results would be interesting as a starting point of further studies,
+not only for free field theories but also interacting ones.
+     It is worth noting that the current formulation depends on the introduction of auxil-
+iary Grassmann fields both in spatial and temporal directions for the path integral Z. On
+the other hand, the path integral is derived from Z = Tr(e−β Ĥ ) inserting a complete set
+of coherent fermion states. This implies that a tensor network representation for lattice
+fermions could be derived directly from Z = Tr(e−β Ĥ ). Figure 9 shows a possible relation-
+ship between the path integral, operator formalism, and tensor network. This viewpoint
+may be useful in extending our method to interacting theories with gauge fields.
+
+
+A    Truncation technique
+
+We introduce the SVD of a Grassmann tensor, which is equivalent to the SVD for the
+corresponding coefficient tensor. Let TΨΦ be a Grassmann tensor whose rank is 2N . We
+represent the coefficient tensor of TΨΦ as 2N × 2N matrix TIJ with I = (i1 , · · · , iN ) and
+
+
+
+
+                                                      – 11 –
+J = (iN +1 , · · · , i2N ). Since the Grassmann parity of Tψφ is even, TIJ takes a non-zero
+value if and only if
+                                        2N
+                                        X
+                                              ik       mod 2 = 0                                       (A.1)
+                                        k=1
+
+is satisfied. This condition allows us to obtain a block diagonal matrix representation for
+TIJ . According to ref. [19], we now define the following decimal numeral system,
+                  P
+                   2N 2k−1 i                               (i2 + · · · + i2N   mod 2 = 0)
+                     k=1      k
+               I=                                                                                      (A.2)
+
+
+
+
+                                                                                                               JHEP10(2021)188
+                  1 − i + P2N 2k−1 i                       (i2 + · · · + i2N   mod 2 = 1).
+                        1   k=2       k
+
+
+Thanks to this decimal numeral system, the parity of 2N
+                                                                     P
+                                                        k=1 ik corresponds with that of I.
+Applying this system for I and J in TIJ , one obtains the block diagonal matrix
+                                                   "            #
+                                              TE 0
+                                          T =       .                                                  (A.3)
+                                               0 TO
+
+The SVD for T is obtained from that for T E and T O ,
+                                               X
+                                      E                  E   E E
+                                     TIJ =              UIK σK VJK ,                                   (A.4)
+                                              K:even
+
+                                               X
+                                      O                  O O O
+                                     TIJ =              UIK σK VJK .                                   (A.5)
+                                              K:odd
+
+Picking up the largest D numbers of singular values and corresponding singular vectors, T
+is approximated with a lower-rank matrix.
+     We apply the above technique for M M † , where M is the coefficient tensor in eq. (4.1).
+In eq. (4.3), the Grassmann isometry defines new bond Grassmann numbers Φ and Φ̄. It is
+worth emphasizing that the parity of these Grassmann numbers corresponds to the parity
+of K in eqs. (A.4) and (A.5). This property is significantly useful in developing the current
+Grassmann HOTRG.
+
+B     Tensor networks for 2D lattice fermions
+
+B.1    Wilson fermions
+The Dirac matrix with the Wilson parameter r = 1 is given by
+                                "                       #
+                          δ(n, m)    0
+        D(n, m) = (M + 2)
+                             0    δ(n, m)
+                          "                                                                        #
+                      1       δ(n − x̂, m) + δ(n + x̂, m)            δ(n − x̂, m) − δ(n + x̂, m)
+                    −
+                      2       δ(n − x̂, m) − δ(n + x̂, m)            δ(n − x̂, m) + δ(n + x̂, m)
+                      "                                 #
+                      δ(n − t̂, m)      0
+                    −                           .                                                      (B.1)
+                           0       δ(n + t̂, m)
+
+
+
+
+                                                   – 12 –
+Applying the SVD, we have
+                                     "                          #       "                             #
+                           δ(n, m)    0         δ(n − x̂, m)      0
+         D(n, m) = (M + 2)                 + Ux                           V†
+                              0    δ(n, m)           0       δ(n + x̂, m) x
+                               "                                    #
+                                   δ(n − t̂, m)      0
+                        + Ut                                 Vt† ,                                            (B.2)
+                                        0       δ(n + t̂, m)
+where
+                                                 "          #               "   #
+                                         1 −1 −1        −1 0
+                                   Ux = √        , Ut =      ,                                                (B.3)
+                                          2 −1 1        0 −1
+
+
+
+
+                                                                                                                      JHEP10(2021)188
+and Vµ† = −Uµ for µ = x, t. Following eq. (3.10), the Grassmann tensor TΨx Ψt Ψ̄t Ψ̄x with
+the ordering Ψµ = (ηµ , ζµ ) and Ψ̄µ = (ζ̄µ , η̄µ ) for µ = x, t is obtained immediately. One
+finds
+
+  TΨx Ψt Ψ̄t Ψ̄x = (M +2)2 −D22 B11 B11 ηt η̄t −D11 B22 B22 ζt ζ̄t
+                  −[D11 A21 A12 +D22 A11 A11 ] ηx η̄x −[D11 A22 A22 +D22 A12 A21 ] ζx ζ̄x
+                  +[D11 A22 A12 +D22 A12 A11 ] ηx ζx −[D11 A21 A22 +D22 A11 A21 ] ζ̄x η̄x
+                  +D11 B22 A12 ηx ζt −D11 A21 B22 ζ̄t η̄x −D11 A22 B22 ζx ζ̄t −D11 B22 A22 ζt ζ̄x
+                  −D22 A12 B11 ζx ηt +D22 B11 A21 η̄t ζ̄x −D22 B11 A11 ηx η̄t −D22 A11 B11 ηt η̄x
+                  −[ζt η̄t −ζx η̄x +A11 B22 ζt η̄x +B11 A21 η̄t η̄x +A12 B22 ζx ζt +B11 A22 ζx η̄t ]
+                    h                                                                                     i
+                  × ηt ζ̄t −ηx ζ̄x +B22 A11 ηx ζ̄t −A12 B11 ηx ηt −B22 A21 ζ̄t ζ̄x +A22 B11 ηt ζ̄x , (B.4)
+
+where Dab ≡ Dab (n, n), A = Ux , B = Ut .
+
+B.2     Staggered fermions
+The action of the two-dimensional staggered fermions is given by
+                                                                                                 
+                         X                     X                χ(n + µ̂) − χ(n − µ̂)
+              S=                     χ̄(n)            pµ (n)                         + M χ(n) ,             (B.5)
+                    n=(nx ,nt )∈Λ              µ=x,t
+                                                                          2
+
+where χ(n) and χ̄(n) are single-component Grassmann fields and pµ (n) is the staggered
+sign function defined by px (n) = 1 and pt (n) = (−1)nx . Since there is no Dirac structure
+in the action of the staggered fermion, we can immediately derive the tensor network
+representation for the path integral without applying SVD. Employing eqs. (3.7) and (3.8),
+we can obtain
+                                                      1          1          pt (n)          pt (n)
+         TΨx (n)Ψt (n)Ψ̄t (n−t̂)Ψ̄x (n−x̂) = − M − ηx η̄x + ζx ζ̄x −               ηt η̄t +          ζt ζ̄t
+                                                      2          2             2                2
+                                               1          1        1            1
+                                             − ηx ζx − ηt ζt − ζ̄x η̄x − ζ̄t η̄t
+                                               2          2        2            2
+                                               pt (n)         pt (n)           1          1
+                                             −        ηx ζt +        ζx ηt + ζ̄t η̄x − η̄t ζ̄x
+                                                  2              2             2          2
+                                               1          1        pt (n)           pt (n)
+                                             − ηx η̄t + ζx ζ̄t −           ηt η̄x +         ζt ζ̄x ,          (B.6)
+                                               2          2           2                 2
+
+
+
+
+                                                          – 13 –
+with Ψµ = (ηµ , ζµ ) and Ψ̄µ = (ζ̄µ , η̄µ ) for µ = x, t. Note that the resulting Grassmann
+tensor depends on the parity of nx .
+
+Acknowledgments
+
+We are grateful to Yoshinobu Kuramashi, Ryo Sakai, Shinji Takeda, Yusuke Yoshimura
+for their insightful discussions. This work is supported by the JSPS KAKENHI Grant
+JP19K03853, JP21J11226.
+
+Open Access. This article is distributed under the terms of the Creative Commons
+
+
+
+
+                                                                                                    JHEP10(2021)188
+Attribution License (CC-BY 4.0), which permits any use, distribution and reproduction in
+any medium, provided the original author(s) and source are credited.
+
+References
+ [1] M. Levin and C.P. Nave, Tensor renormalization group approach to 2D classical lattice
+     models, Phys. Rev. Lett. 99 (2007) 120601 [cond-mat/0611687] [INSPIRE].
+ [2] Z.-C. Gu, F. Verstraete and X.-G. Wen, Grassmann tensor network states and its
+     renormalization for strongly correlated fermionic and bosonic states, arXiv:1004.2563
+     [INSPIRE].
+ [3] Z.-C. Gu, Efficient simulation of Grassmann tensor product states, Phys. Rev. B 88 (2013)
+     115139 [arXiv:1109.4470] [INSPIRE].
+ [4] Y. Shimizu and Y. Kuramashi, Grassmann tensor renormalization group approach to
+     one-flavor lattice Schwinger model, Phys. Rev. D 90 (2014) 014508 [arXiv:1403.0642]
+     [INSPIRE].
+ [5] Y. Shimizu and Y. Kuramashi, Critical behavior of the lattice Schwinger model with a
+     topological term at θ = π using the Grassmann tensor renormalization group, Phys. Rev. D
+     90 (2014) 074503 [arXiv:1408.0897] [INSPIRE].
+ [6] Y. Shimizu and Y. Kuramashi, Berezinskii-Kosterlitz-Thouless transition in lattice Schwinger
+     model with one flavor of Wilson fermion, Phys. Rev. D 97 (2018) 034502
+     [arXiv:1712.07808] [INSPIRE].
+ [7] S. Takeda and Y. Yoshimura, Grassmann tensor renormalization group for the one-flavor
+     lattice Gross-Neveu model with finite chemical potential, PTEP 2015 (2015) 043B01
+     [arXiv:1412.7855] [INSPIRE].
+ [8] D. Kadoh, Y. Kuramashi, Y. Nakamura, R. Sakai, S. Takeda and Y. Yoshimura, Tensor
+     network formulation for two-dimensional lattice N = 1 Wess-Zumino model, JHEP 03
+     (2018) 141 [arXiv:1801.04183] [INSPIRE].
+ [9] R. Sakai, S. Takeda and Y. Yoshimura, Higher order tensor renormalization group for
+     relativistic fermion systems, PTEP 2017 (2017) 063B07 [arXiv:1705.07764] [INSPIRE].
+[10] Y. Yoshimura, Y. Kuramashi, Y. Nakamura, S. Takeda and R. Sakai, Calculation of
+     fermionic Green functions with Grassmann higher-order tensor renormalization group, Phys.
+     Rev. D 97 (2018) 054511 [arXiv:1711.08121] [INSPIRE].
+[11] Y. Meurice, A tensorial toolkit for quantum computing in lattice gauge theory, PoS
+     LATTICE2018 (2018) 231 [INSPIRE].
+
+
+
+
+                                             – 14 –
+[12] N. Butt, S. Catterall, Y. Meurice, R. Sakai and J. Unmuth-Yockey, Tensor network
+     formulation of the massless Schwinger model with staggered fermions, Phys. Rev. D 101
+     (2020) 094509 [arXiv:1911.01285] [INSPIRE].
+[13] C. Bao, Loop Optimization of Tensor Network Renormalization: Algorithms and
+     Applications, UWSpace (2019) DOI.
+[14] Y. Meurice, Accurate exponents from approximate tensor renormalizations, Phys. Rev. B 87
+     (2013) 064422 [arXiv:1211.3675] [INSPIRE].
+[15] Z.Y. Xie, J. Chen, M.P. Qin, J.W. Zhu, L.P. Yang and T. Xiang, Coarse-graining
+     renormalization by higher-order singular value decomposition, Phys. Rev. B 86 (2012)
+     045139.
+
+
+
+
+                                                                                                JHEP10(2021)188
+[16] D. Adachi, T. Okubo and S. Todo, Anisotropic Tensor Renormalization Group, Phys. Rev. B
+     102 (2020) 054432 [arXiv:1906.02007] [INSPIRE].
+[17] W. Lan and G. Evenbly, Tensor Renormalization Group Centered About a Core Tensor,
+     Phys. Rev. B 100 (2019) 235118 [arXiv:1906.09283] [INSPIRE].
+[18] D. Kadoh and K. Nakayama, Renormalization group on a triad network, arXiv:1912.02414
+     [INSPIRE].
+[19] D. Kadoh, Tensor renormalization group with fermions, in preparation.
+
+
+
+
+                                            – 15 –
+

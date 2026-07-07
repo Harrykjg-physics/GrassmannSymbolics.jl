@@ -1,0 +1,261 @@
+only logarithmically. This is an essential ingredient to enable us to take the thermodynamic
+limit at vanishing temperature. Thirdly, the Grassmann version of the TRG method,
+which was developed by some of the authors [6, 7, 17], allows direct manipulation of the
+Grassmann variables. Fourthly, we can obtain the partition function or the path-integral
+itself. In the thermodynamic limit, the pressure is directly related to the thermodynamic
+potential so that the equation of state can be easily obtained with the TRG method.
+     In this paper we investigate the phase structure of the Nambu-Jona-Lasinio (NJL)
+model [18, 19] at finite temperature T and chemical potential µ on the lattice, developing
+the Grassmann version of the ATRG algorithm. The Lagrangian of the NJL model in the
+
+
+
+
+                                                                                                     JHEP01(2021)121
+continuum is defined as follows:
+                                            n                                     o
+                 L = ψ̄(x)γν ∂ν ψ(x) − g0 (ψ̄(x)ψ(x))2 + (ψ̄(x)iγ5 ψ(x))2 ,                  (1.1)
+
+which has the U(1) chiral symmetry with ψ(x) → eiαγ5 ψ(x) and ψ̄(x) → ψ̄(x)eiαγ5 . This
+is an effective theory of QCD which describes the dynamical chiral symmetry breaking:
+once the strength of the coupling constant g0 exceeds a certain critical value the system
+generates a non-trivial vacuum with hψ̄(x)ψ(x)i 6= 0. The chiral phase structure of the
+NJL model on the T -µ plane is discussed by some analytical methods, e.g., the mean-field
+approximation (MFA) [20] and the functional renormalization group (FRG) [21]. Figure 1
+shows a schematic view of the expected phase structure, whose characteristic feature is
+the first-order chiral phase transition in the dense region at very low temperature [22].
+This phase transition is our primary target to investigate, employing the chiral condensate
+hψ̄(x)ψ(x)i as an order parameter. Since the chiral symmetry plays a crucial role in this
+study, we use the Kogut-Susskind fermion to formulate the NJL model on the lattice.
+The analysis of the phase structure with the TRG method would help us understand the
+thermodynamic properties of dense QCD.
+     This paper is organized as follows. In section 2 we explain the formulation of the lattice
+NJL model with the Kogut-Susskind fermion and the algorithmic details of the Grassmann
+ATRG (GATRG). In section 3, we compare the numerical results with the analytical ones
+in the heavy dense limit as a benchmark before numerical results for the chiral condensate
+and the equation of state are presented. Section 4 is devoted to summary and outlook.
+
+
+2     Formulation and numerical algorithm
+
+2.1    NJL model on the lattice
+We use the Kogut-Susskind fermion to formulate the NJL model on the lattice. Following
+refs. [23, 24], we define the model at finite chemical potential µ as
+                      4
+               1 XX            h                                                 i
+            S = a3       ην (n) eµaδν,4 χ̄(n)χ(n + ν̂) − e−µaδν,4 χ̄(n + ν̂)χ(n)
+               2 n∈Λ ν=1
+                         X                          4
+                                                   XX
+                 + ma4         χ̄(n)χ(n) − g0 a4             χ̄(n)χ(n)χ̄(n + ν̂)χ(n + ν̂),   (2.1)
+                         n∈Λ                       n∈Λ ν=1
+
+
+
+
+                                                –2–
+             𝑇
+
+
+
+
+                           2nd                         Tricritical point
+
+
+
+
+                                                                                                           JHEP01(2021)121
+                                  ! ≠0
+                                  𝜓𝜓                         1st            ! =0
+                                                                            𝜓𝜓
+
+
+
+
+                                                        𝜇
+Figure 1. Schematic view of expected phase diagram of the NJL model on the T -µ plane. Solid
+and broken curves represent the first- and second-order phase transitions, respectively. Closed circle
+denotes the tricritical point where the first-order phase transition line terminates.
+
+
+where n = (n1 , n2 , n3 , n4 )(∈ Z4 ) specifies a position in the lattice Λ, with the lattice spacing
+a. χ(n) and χ̄(n) are Grassmann-valued fields without the Dirac structure. Since they
+describe the Kogut-Susskind fermions, χ(n) and χ̄(n) are single-component Grassmann
+variables. ην (n) is the staggered sign function defined by ην (n) = (−1)n1 +···+nν−1 with
+η1 (n) = 1. The partition function is defined in the ordinal manner:
+                                                                    
+                                       Z
+                                                    dχ(n)dχ̄(n) e−S .
+                                                Y
+                                 Z=                                                              (2.2)
+                                              n∈Λ
+
+For vanishing mass m, eq. (2.1) is invariant under the following continuous chiral transfor-
+mation:
+
+                                           χ(n) → eiα(n) χ(n),                                   (2.3)
+                                                            iα(n)
+                                           χ̄(n) → χ̄(n)e                                         (2.4)
+
+with α ∈ R and (n) = (−1)n1 +n2 +n3 +n4 .
+
+2.2    Tensor network representation
+We introduce the tensor network representation for eq. (2.2) in a similar way with refs. [10,
+11].3 Hereafter, we set a = 1 for simplicity. Firstly, we expand the local Boltzmann weights
+   3
+     See ref. [25] for a different TRG approach with the Kogut-Susskind fermion, where the TRG procedure
+is applied to the Schwinger model after integrating out the fermion fields analytically.
+
+
+
+
+                                                    –3–
+in the following manners to decompose the nearest-neighbor interactions:
+           "                                                   #
+            eµδν,4
+      exp −        ην (n)χ̄(n)χ(n + ν̂)
+              2
+                        1                  µ
+                                         e 2 δν,4
+                        X         Z
+               =                           √ ην (n)χ̄(n)dΦν (n)
+                   iν,1 (n)=0
+                                              2
+                                                   µ                                                                  !iν,1 (n)
+                                                e 2 δν,4
+                                               · √ χ(n + ν̂)dΦ̄ν (n + ν̂) · Φ̄ν (n + ν̂)Φν (n)                                    ,         (2.5)
+                                                     2
+           "                                               #
+          e−µδν,4
+
+
+
+
+                                                                                                                                                    JHEP01(2021)121
+      exp         ην (n)χ̄(n + ν̂)χ(n)
+            2
+                        1                      µ
+                                         e− 2 δν,4
+                        X         Z
+               =                           √ ην (n)χ(n)dΨν (n)
+                   iν,2 (n)=0
+                                              2
+                                                       µ                                                                   !iν,2 (n)
+                                                e− 2 δν,4
+                                               · √ χ̄(n + ν̂)dΨ̄ν (n + ν̂) · Ψ̄ν (n + ν̂)Ψν (n)                                        ,    (2.6)
+                                                     2
+      eg0 χ̄(n)χ(n)χ̄(n+ν̂)χ(n+ν̂)
+                        1
+                                   √              √
+                                  ( g0 χ̄(n)χ(n) · g0 χ̄(n + ν̂)χ(n + ν̂))iν,3 (n) .
+                        X
+               =                                                                                                                            (2.7)
+                   iν,3 (n)=0
+
+Secondly, integrating out χ and χ̄ at each lattice site n, we define
+
+  Tn;i4 (n)i1 (n)i2 (n)i3 (n)i4 (n−4̂)i1 (n−1̂)i2 (n−2̂)i3 (n−3̂)
+
+                                               4           µ                           !iν,1 (n)        µ                    !iν,1 (n−ν̂)
+                                                       e 2 δν,4                                        e 2 δν,4
+                   Z
+                                   −mχ̄χ
+                                               Y
+               =       dχdχ̄ e                           √ ην (n)χ̄dΦν (n)                               √ χdΦ̄ν (n)
+                                            ν=1             2                                               2
+                                                                   !iν,2 (n)                                !iν,2 (n−ν̂)
+                                −µ                                                 µ
+                            e      δ
+                                 2 ν,4                                         e− 2 δν,4                                    √
+                       ×         √       ην (n)χdΨν (n)                          √ χ̄dΨ̄ν (n)                              ( g0 χ̄χ)iν,3 (n)
+                                     2                                              2
+                          √                                     iν,1 (n)                     iν,2 (n)
+                       × ( g0 χ̄χ)iν,3 (n−ν̂) Φ̄ν (n + ν̂)Φν (n)             Ψ̄ν (n + ν̂)Ψν (n)           .                                 (2.8)
+
+This serves as a change of variables from χ, χ̄ to the integer-valued fields iν = (iν,p )p=1,2,3
+and alternative Grassmann variables Φν , Ψν . Renaming x = i1 , y = i2 , z = i3 , t = i4 ,
+eq. (2.2) is expressed in the form,
+                                                                   X   Z Y
+                                                   Z=                          Tn;txyzt0 x0 y0 z 0 ,                                        (2.9)
+                                                           {t,x,y,z}     n∈Λ
+
+
+which is the tensor network representation of this model.4                                                   In current construction,
+Tn;txyzt0 x0 y0 z 0 is factorized as
+
+                                Tn;txyzt0 x0 y0 z 0 = In;txyzt0 x0 y0 z 0 Sn;txyzt0 x0 y0 z 0 Gn;txyzt0 x0 y0 z 0 .                        (2.10)
+  4
+    In eq. (2.9), we omit arguments in tensor indices and introduce shorthand notations such as x0 =
+x(n − 1̂), y 0 = y(n − 2̂), z 0 = z(n − 3̂), t0 = t(n − 4̂)
+
+
+
+
+                                                                       –4–
+In;txyzt0 x0 y0 z 0 denotes the contributions from the integration over χ(n) and χ̄(n). A straight-
+forward calculation shows
+
+      In;txyzt0 x0 y0 z 0 = (−1)n1 (y1 +y2 +z1 +z2 +t1 +t2 )+n2 (z1 +z2 +t1 +t2 )+n3 (t1 +t2 )
+                                                                                      0       0       0            0    0       0        0   0
+                               1 t1 +t2 +x1 +x2 +y1 +y2 +z1 +z2 +t1 +t2 +x1 +x2 +y1 +y2 +z1 +z2
+                                      
+                            × √
+                                2
+                             √ t3 +x3 +y3 +z3 +t03 +x03 +y30 +z30 µ (t1 −t2 +t01 −t02 )
+                            × g0                                 e2
+                                h                                                                                                                  i
+                                                                             ¯ txyzt0 x0 y0 z 0 ,1 ∆txyzt0 x0 y0 z 0 ,1 ,
+                                ¯ txyzt0 x0 y0 z 0 ,0 ∆txyzt0 x0 y0 z 0 ,0 + ∆
+                            × −m∆                                                                                                                       (2.11)
+
+where
+
+
+
+
+                                                                                                                                                                    JHEP01(2021)121
+              ¯ txyzt0 x0 y0 z 0 ,q = δt +t +x +x +y +y +z +z +t0 +t0 +x0 +x0 +y0 +y0 +z 0 +z 0 ,q ,
+              ∆                                                                                                                                         (2.12)
+                                        1  3  1  3  1  3  1  3  2   3   2   3   2   3   2    3
+
+              ∆txyzt0 x0 y0 z 0 ,q = δt2 +t3 +x2 +x3 +y2 +y3 +z2 +z3 +t01 +t03 +x01 +x03 +y10 +y30 +z10 +z30 ,q ,                                       (2.13)
+
+with q = 0, 1. ∆,¯ ∆ are derived from χ̄-, χ-integration, respectively. The second line in
+eq. (2.11) comes from the staggered sign factor ην (n). Consequently, In;txyzt0 x0 y0 z 0 does
+depend on n ∈ Λ. Eq. (2.11) tells us that this tensor network is uniform in t-direction, but
+has some periodic structure in x-,y-,z-directions. This periodicity corresponds to the parity
+of the spatial lattice site n = (n1 , n2 , n3 ). A graphical representation of eq. (2.9) is shown
+in figure 2(A). As a result of eqs. (2.5) and (2.6), some Grassmann variables are allowed
+to exist in Tn;txyzt0 x0 y0 z 0 . These Grassmann variables have been denoted by Gn;txyzt0 x0 y0 z 0
+in eq. (2.10). Some sign can arise reflecting on how we have arranged these Grassmann
+variables in Gn;txyzt0 x0 y0 z 0 and we have set this sign Sn;txyzt0 x0 y0 z 0 in eq. (2.10). We now
+assume that
+
+ Gn;txyzt0 x0 y0 z 0 =
+                                                                     t0          t0       x0              x0           y0           y0       z0    z0
+      dΦt41 dΨt42 dΦx1 1 dΨx1 2 dΦy21 dΨy22 dΦz31 dΨz32 dΨ̄42 dΦ̄41 dΨ̄1 2 dΦ̄1 1 dΨ̄22 dΦ̄21 dΨ̄32 dΦ̄31
+                                   t 1                          t 2                                                x1                              x2
+       × Φ̄4 (n + 4̂)Φ4 (n)                  Ψ̄4 (n + 4̂)Ψ4 (n)             Φ̄1 (n + 1̂)Φ1 (n)                                      Ψ̄1 (n + 1̂)Ψ1 (n)
+                                    y1                          y2                                                 z1                              z2
+       × Φ̄2 (n + 2̂)Φ2 (n)                  Ψ̄2 (n + 2̂)Ψ2 (n)                 Φ̄3 (n + 3̂)Φ3 (n)                                  Ψ̄3 (n + 3̂)Ψ3 (n)          ,
+                                                                                                                                                        (2.14)
+where all the Grassmann measures depend on n and their arguments are omitted. Accord-
+ing to this arrangement, Sn;txyzt0 x0 y0 z 0 is given by
+
+                    Sn;txyzt0 x0 y0 z 0 = (−1)t1 (t2 +x2 +y2 +z2 )+x1 (x2 +y2 +z2 )+y1 (y2 +z2 )+z1 z2
+                                                       0   0   0    0       0         0   0       0            0        0   0        0       0 0
+                                              × (−1)t2 (t1 +x1 +y1 +z1 )+x2 (x1 +y1 +z1 )+y2 (y1 +z1 )+z2 z1
+                                                                                                                   0    0       0        0
+                                              × (−1)(t1 +t2 +x1 +x2 +y1 +y2 +z1 +z2 )(t1 +x1 +y1 +z1 ) .                                                (2.15)
+
+
+2.3      Grassmann ATRG
+2.3.1         Procedure of the algorithm
+We now formulate Grassmann ATRG (GATRG) algorithm to coarse grain the tensor net-
+work defined by eq. (2.9). The basic idea is that we combine the ATRG procedure to
+
+
+
+
+                                                                –5–
+

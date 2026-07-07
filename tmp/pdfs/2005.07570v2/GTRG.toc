@@ -1,0 +1,9 @@
+\contentsline {section}{\numberline {1}Introduction}{1}{section.1}%
+\contentsline {section}{\numberline {2}Formalism of the Grassmann tensors}{2}{section.2}%
+\contentsline {section}{\numberline {3}General formula of tensor network for arbitrary lattice fermions}{4}{section.3}%
+\contentsline {section}{\numberline {4}Numerical applications}{6}{section.4}%
+\contentsline {section}{\numberline {5}Summary and outlook}{11}{section.5}%
+\contentsline {section}{\numberline {A}Truncation technique}{12}{appendix.A}%
+\contentsline {section}{\numberline {B}Tensor networks for 2D lattice fermions}{13}{appendix.B}%
+\contentsline {subsection}{\numberline {B.1}Wilson fermions}{13}{subsection.B.1}%
+\contentsline {subsection}{\numberline {B.2}Staggered fermions}{14}{subsection.B.2}%

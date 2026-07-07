@@ -1,0 +1,1579 @@
+                                                           Published for SISSA by       Springer
+                                                                       Received: November 17, 2024
+                                                                        Accepted: February 8, 2025
+                                                                          Published: March 5, 2025
+
+
+
+
+Grassmann tensor renormalization group approach to
+(1+1)-dimensional two-color lattice QCD at finite
+density
+
+
+
+
+                                                                                                     JHEP03(2025)027
+Kwok Ho Pai      ,a Shinichiro Akiyama        b,a   and Synge Todo   a,c,d
+
+ a
+   Department of Physics, The University of Tokyo,
+  Bunkyo-ku, Tokyo 113-0033, Japan
+ b
+   Center for Computational Sciences, University of Tsukuba,
+  Tsukuba, Ibaraki 305-8577, Japan
+ c
+   Institute for Physics of Intelligence, The University of Tokyo,
+  Bunkyo-ku, Tokyo 113-0033, Japan
+ d
+   Institute for Solid State Physics, The University of Tokyo,
+  Kashiwa, Chiba 277-8581, Japan
+  E-mail: hopai.kwok@phys.s.u-tokyo.ac.jp, akiyama@ccs.tsukuba.ac.jp,
+  wistaria@phys.s.u-tokyo.ac.jp
+
+Abstract: We construct a Grassmann tensor network representing the partition function of
+(1+1)-dimensional two-color QCD with staggered fermions. The Grassmann path integral
+is rewritten as the trace of a Grassmann tensor network by introducing two-component
+auxiliary Grassmann fields on every edge of the lattice. We introduce an efficient initial tensor
+compression scheme to reduce the size of initial tensors. The Grassmann bond-weighted
+tensor renormalization group approach is adopted to evaluate the quark number density,
+fermion condensate, and diquark condensate at different gauge couplings as a function of
+the chemical potential. Different transition behavior is observed as the quark mass is varied.
+We discuss the efficiency of our initial tensor compression scheme and the future application
+toward the corresponding higher-dimensional models.
+
+Keywords: Algorithms and Theoretical Developments, Field Theories in Lower Dimensions,
+Non-Zero Temperature and Density
+
+ArXiv ePrint: 2410.09485
+
+
+
+
+Open Access, © The Authors.
+                                                          https://doi.org/10.1007/JHEP03(2025)027
+Article funded by SCOAP3 .
+Contents
+
+1 Introduction                                                                            1
+
+2 Tensor network representation of SU(N ) Yang-Mills theory with stag-
+  gered fermion                                                                           3
+  2.1 Lattice theory                                                                      3
+  2.2 Tensor network representation                                                       3
+
+
+
+
+                                                                                               JHEP03(2025)027
+3 Algorithm                                                                               7
+  3.1 A quick review of BTRG                                                              7
+  3.2 Initial tensor compression                                                          7
+
+4 Numerical results                                                                       9
+  4.1 Infinite coupling limit                                                            11
+  4.2 Finite-β regime                                                                    12
+
+5 Conclusion                                                                             18
+
+A Coefficients of the Grassmann tensor F                                                 20
+
+B Construction of ρ                                                                      21
+
+
+
+1   Introduction
+Since numerical simulations of lattice field theories based on the Monte Carlo approach
+generally suffer from the sign problem, the tensor renormalization group (TRG) [1], which
+is a variant of real-space renormalization group on a tensor network and does not rely on
+any sampling methods, has become an attractive strategy for the Lagrangian formulation.
+Improvements in two dimensions [2–6], efficient higher dimensional algorithms [7–11], and
+extensions to fermion systems [12–15] have made the TRG approach more accessible to
+computational lattice field theories. During the last decade, TRG has been used to simulate
+various models not only in two dimensions but also in the higher dimensions such as the
+ϕ4 theory [16–22], the Schwinger model [14, 23–26], the Gross-Neveu model [27–29], the
+gauge-Higgs model [30–33], and the pure Yang-Mills theory [34–37]. Toward the TRG study
+of the quantum chromodynamics (QCD) at finite temperature and density, it is necessary to
+develop a methodology to deal with the non-Abelian gauge theory in the presence of dynamical
+fermions. Recently, several attempts have been made for the two-dimensional QCD in the
+infinite-coupling limit [38] and two-color QCD with reduced staggered fermions [39]. There
+are also various previous studies of the (1+1)-dimensional QCD based on the Hamiltonian
+formalism employing the variational tensor network method such as matrix product state
+(MPS) [40–47]. Although the TRG and MPS approaches are different tensor network
+methods, they share several aspects in their numerical calculations. In particular, both
+
+
+
+
+                                           –1–
+approaches require the discretization for the non-Abelian gauge fields. Therefore, findings
+from Lagrangian-based calculations may also yield useful information for the Hamiltonian-
+based approach, and vice versa.
+
+     Two-color QCD, the SU(2) Yang-Mills theory coupled with fermions in the fundamental
+representation of the gauge group, serves as a nice primary target for the tensor network
+approach. It has fewer degrees of freedom than the three-color QCD and the validity of
+the numerical results can be verified through comparison with the Monte Carlo method,
+particularly in four dimensions; two-color QCD has been investigated as an alternative to the
+three-color QCD because its fermion determinant is positive when the number of quark flavors
+
+
+
+
+                                                                                                    JHEP03(2025)027
+is even. This enables Monte Carlo simulations at finite density in contrast to the three-color
+case [48, 49]. Two-color QCD shares several properties with three-color QCD such as the
+spontaneous breaking of chiral symmetry at low density with a restoration of the symmetry
+at larger density. In addition, there is an instability of the Fermi sphere against the formation
+of diquark condensate at sufficiently large density in both theories. Although diquarks in
+two-color QCD are color singlets, which differs from the case in three-color QCD, lattice
+simulations of two-color QCD are expected to provide hints about the nature of deconfined
+phase and the mechanism of condensate formation in dense three-color QCD.
+
+     In this work, we construct a Grassmann tensor network representation for the partition
+function of (1+1)-dimensional two-color QCD with staggered fermions and apply the Grass-
+mann bond-weighted TRG (BTRG) algorithm [6, 50] to evaluate the expectation values of
+several physical observables. As an advantage of the Grassmann tensor network formulation,
+we can directly deal with the fermionic degrees of freedom without introducing pseudo-fermion.
+We focus on the finite density regime in the thermodynamic and vanishing temperature
+limits and investigate whether the TRG computation can capture the effect of finite gauge
+coupling, quark mass, and diquark source term. For the four-dimensional two-color QCD,
+the phase diagram in the T -µ-m space, with the temperature T , chemical potential µ, and
+quark mass m, has been intensively studied [51–60]. With a view to future applications of the
+TRG approach to the four-dimensional theory, we particularly compute the number density,
+chiral condensate, and diquark condensate, commonly used to investigate the phase structure.
+In this study, the chiral and diquark condensates are evaluated by explicitly breaking the
+U(1)A and U(1)V symmetries because continuous symmetry is not spontaneously broken in
+two dimensions [61, 62]. We confirm that their behavior is consistent with each other. We
+also see that the number density does not saturate in regions of larger chemical potential as
+the gauge interaction is weakened, approaching the continuum limit, in other words. Our
+work is the first TRG study of the non-Abelian gauge theory with finite gauge coupling in
+the presence of the fermions at finite density.
+
+     This paper is organized as follows. In section 2, we introduce the tensor network
+representation of the lattice theory. In section 3, we briefly review BTRG and describe the
+initial tensor compression scheme facilitating practical calculations. In section 4, we present
+numerical results in the infinite coupling limit and the finite coupling regime. Section 5
+is devoted to the conclusion and outlook.
+
+
+
+
+                                             –2–
+2      Tensor network representation of SU(N ) Yang-Mills theory with
+       staggered fermion
+
+2.1 Lattice theory
+
+We consider a (1 + 1)-dimensional SU(N ) Yang-Mills theory coupled with staggered fermion
+defined on a square lattice Λ with volume V = L2 . The action is given by
+
+                                               S = Sf + Sg                                       (2.1)
+
+with
+
+
+
+
+                                                                                                         JHEP03(2025)027
+                  pν (n) h µδν,2                                                     i
+                                 χ̄(n)Uν (n)χ(n + ν̂) − e−µδν,2 χ̄(n + ν̂)Uν† (n)χ(n) + m
+          X                                                                               X
+Sf =                      e                                                                 χ̄(n)χ(n),
+       n∈Λ, ν=1,2
+                    2                                                                     n
+                                                                                                 (2.2)
+         β X
+Sg = −           Re Tr U1 (n)U2 (n + 1̂)U1† (n + 2̂)U2† (n),                                     (2.3)
+         N   n
+
+where each lattice site is labeled by n = (n1 , n2 ) with nν = 1, · · · , L. The lattice spacing
+a is always set to a = 1. The N -component staggered fermions are denoted by χ(n) and
+χ̄(n) with the mass m and chemical potential µ. We define the staggered phase function as
+p1 (n) = 1 and p2 (n) = (−1)n1 . The link variables Uν (n) ∈ SU(N ) live on the link from the
+site n to n + ν̂ and the inverse gauge coupling is represented by β. The partition function
+is given by a Euclidean path integral
+                                               Z
+                                          Z=       DU DχDχ̄ e−S ,                                (2.4)
+
+where DU ≡ n dU1 (n) dU2 (n) and dU is the Haar measure of SU(N ). The Grassmann
+                 Q
+
+path integral measure is defined by DχDχ̄ ≡ n N
+                                              Q Q
+                                                   c=1 dχc (n)dχ̄c (n). We always assume the
+periodic boundary conditions for link variables and the (anti-)periodic boundary conditions
+for staggered fermions in the 1̂ (2̂) direction.
+
+2.2 Tensor network representation
+
+We begin with considering the fermionic sector. Expressing eq. (2.4) as
+                                               Z
+                                         Z=        DU Zf [U ] e−Sg ,                             (2.5)
+
+where
+                                                     Z
+                                         Zf [U ] =       DχDχ̄ e−Sf ,                            (2.6)
+
+we firstly derive a tensor network representation of Zf [U ]. Following the formalism in ref. [15],
+we introduce two N -component auxiliary Grassmann fields ην (n) and ζν (n) on every link of
+the lattice. We can decompose the fermion hopping terms in eq. (2.2) with these auxiliary
+
+
+
+
+                                                     –3–
+Grassmann fields via
+                     pν (n) µδν,2
+                                                                           
+               exp −       e      χ̄(n)Uν (n)χ(n + ν̂)
+                       2
+                                                               pν (n) µδν,2
+                        Z                                                                                      
+                    =                    exp −χ̄(n)ην (n) +          e      η̄ν (n)Uν (n)χ(n + ν̂) ,                     (2.7)
+                         η̄ν (n),ην (n)                           2
+                     pν (n) −µδν,2
+                                                            
+                                                   †
+               exp            e         χ̄(n + ν̂)Uν (n)χ(n)
+                       2
+                                                                       pν (n) −µδν,2
+                       Z                                                                        
+                                                         †
+                    =                    exp χ̄(n + ν̂)Uν (n)ζ̄ν (n) −           e     ζν (n)χ(n) .                      (2.8)
+                         ζ̄ν (n),ζν (n)                                   2
+
+
+
+
+                                                                                                                                 JHEP03(2025)027
+In eqs. (2.7) and (2.8), we introduced the following short-hand notation,
+                                                  Z              N Z
+                                                                        dθ̄c dθc e−θ̄c θc ,
+                                                                 Y
+                                                             =                                                           (2.9)
+                                                      θ̄,θ       c=1
+
+with the N -component Grassmann variables θ and θ̄. By these decompositions, it is easy to
+integrate out the original Grassmann fields χ(n) and χ̄(n) at each lattice site independently.
+The integration at the site n results in a Grassmann tensor Fn such as
+                                     X                                                              ′       ′
+                       Fn [U ] =                (Fn )xtx′ t′ [U1 (n − 1̂), U2 (n − 2̂)]X x T t X̄ x T̄ t .              (2.10)
+                                   x,t,x′ ,t′
+
+Due to eqs. (2.7) and (2.8), the coefficient tensor (Fn )xtx′ t′ depends on the link variables
+U1 (n − 1̂) and U2 (n − 2̂) and so does Fn . Since we are dealing with the N -component
+fermion theory consisting of two types of hopping terms, the subscripts x, t, x′ , t′ take
+their values on {0, 1}2N . Therefore, the coefficient tensor (Fn )xtx′ t′ is a rank-4 complex-
+valued tensor whose bond dimension is 22N . In the right-hand side of eq. (2.10), X x
+                x1        xN xN +1        x2N
+abbreviates ηx,1   · · · ηx,N ζx,1 · · · ζx,N with x = (x1 , · · · , x2N ), as well as T t . Note that X x
+(T t ) resides on the positive 1̂ (2̂) link connected to site n as shown in figure 1 (a). Similarly,
+   ′      x′           x′    x′           x′                                                            ′           ′       ′
+X̄ x = ζ̄x,N
+          2N          N +1
+             · · · ζ̄x,1      N
+                           η̄x,N · · · η̄x,1
+                                          1
+                                             with x′ = (x′1 , · · · , x′2N ), as well as T̄ t , where X̄ x (T̄ t )
+resides on the negative 1̂ (2̂) link connected to site n. See appendix A for the derivation of F .
+We can restore Zf [U ] in eq. (2.6) by contracting a Grassmann tensor network generated by Fn :
+                                                                        "              #
+                                                                            Y
+                                                  Zf [U ] = gTr                 Fn [U ] .                               (2.11)
+                                                                            n
+
+Here, “gTr” denotes the integration over all auxiliary Grassmann fields. The graphical
+representation of eq. (2.11) is illustrated in figure 1 (b).
+    We now move on to the gauge sector with β ̸= 0. We need to discretize the gauge group
+integration to derive the tensor network representation of eq. (2.5). In this study, we use
+the method in ref. [34], which approximates a group integration by an average of integrand
+evaluated using K random SU(N ) matrices picked uniformly from the group manifold:
+
+                                                                            K
+                                                                         1 X
+                                                 Z
+                                                       dU f (U ) ≃             f (Ui ).                                 (2.12)
+                                                                         K i=1
+
+
+
+
+                                                                       –4–
+                                                                                                                       JHEP03(2025)027
+Figure 1. (a) Graphical representation of Fn and the auxiliary Grassmann fields that the local tensor
+carries. (b) Tensor network representation of Zf [U ] in eq. (2.6). Notice that every local tensor is
+distinct from each other because Fn depends on the Uν residing on the links connected to it.
+
+
+
+
+Figure 2. Tensor network representation for the partition function of pure SU(N ) Yang-Mills theory
+defined on a square lattice, which is indicated by the dashed lines.
+
+
+We assign a tensor to each plaquette of the square lattice
+                                               1 (β/N ) Re Tr     Ui Uj† Uk† Ul
+                                                                                  
+                                     Gijkl ≡      e                                   ,                      (2.13)
+                                               K2
+where the indices i, j, k, l range from 1 to K. Each of them corresponds to one of the four links
+of the plaquette and its value specifies which random matrix in the set Ů = {U1 , U2 , . . . , UK }1
+is being substituted into the right-hand side of eq. (2.13). The partition function of pure
+SU(N ) Yang-Mills theory defined on a square lattice is given by the trace of a tensor network
+composed of G, as shown in figure 2.
+     Now, we combine Fn and G on the plaquette with n being its top right corner to form
+the initial tensor (see figure 3 (a)):
+
+                                                  Tn = Fn · G.                                               (2.14)
+   1
+    In this study, the group integration of every link variable is approximated using the same set of random
+matrices Ů . One can use more than one set of matrices for different links of the lattice at the cost of increasing
+the number of distinct initial tensors.
+
+
+
+
+                                                      –5–
+                                                                                                                                JHEP03(2025)027
+Figure 3. (a) Fn and G are combined to form a new Grassmann tensor. (b) Tensor network
+representation for the partition function of the full theory, which is composed of two initial tensors
+with bond dimension 22N K.
+
+
+       We then regard Tn as a new Grassmann tensor whose coefficient tensor is given by
+
+                               (Tn )xtx′ t′ = (Fn )xf tf x′f t′f [tg , xg ] · Gxg tg x′g t′g ,                         (2.15)
+
+where the subscripts in Fn are marked with f and those in G are marked with g. In the left-
+hand side of eq. (2.15), we defined a super index q by q = (qf , qg ) with q = x, t, x′ , t′ . Therefore,
+the bond dimension of Tn is 22N K.2 The partition function in eq. (2.5) is approximately
+expressed by using the fundamental tensor Tn as
+                                                                    "             #
+                                                                        Y
+                                           Z ≃ Z(K) = gTr                    Tn ,                                      (2.16)
+                                                                        n
+
+as illustrated in figure 3 (b). Note that “gTr” in eq. (2.16) means the summation over all
+subscripts marked by g and the integration over all auxiliary Grassmann fields.
+     We finally remark that the infinite coupling limit β → 0 can be easily taken within the
+current Grassmann tensor network formulation. In this limit, we can perform the SU(N )
+group integration exactly for all link variables on the lattice because the dependence of any
+Uν (n) now appears in only one local tensor in our tensor network representation:
+                                                 Z                            "               #
+                                                                                        Fn′
+                                                                                  Y
+                                  Zβ→0 =             DU Zf [U ] = gTr                             ,                    (2.17)
+                                                                                  n
+
+where
+                   YZ                     X Z                                                        
+                                                                                                              ′   ′
+         Fn′   =        dUν Fn [U ] =                  dU1 dU2 (Fn )        xtx′ t′   [U1 , U2 ] X x T t X̄ x T̄ t .   (2.18)
+                   ν                    x,t,x′ ,t′
+   2
+    We comment on a Grassmann tensor network formulation of the (1 + 1)-dimensional SU(2) Yang-Mills
+theory with the standard staggered fermion recently discussed in ref. [39]. Although their formulation results
+in the tensor network whose bond dimension is 28 K, our construction results in 24 K. This is because our
+derivation introduces the N -component auxiliary fermions for forward and backward hopping terms as in
+eqs. (2.7) and (2.8). On the other hand, ref. [39] introduces the N 2 -component auxiliary fermions for each
+hopping term.
+
+
+
+
+                                                          –6–
+                                                                                                 JHEP03(2025)027
+                Figure 4. Tensor network representation of Zβ→0 in eq. (2.17).
+
+
+The bond dimension of Fn′ is 22N . The graphical representation of eq. (2.17) is shown
+in figure 4.
+
+3   Algorithm
+3.1 A quick review of BTRG
+The coarse-graining transformation of a tensor network can be facilitated using tensor renor-
+malization group (TRG) algorithms. In TRG, the low-rank approximation of tensors, which is
+based on the singular value decomposition (SVD), is used to perform tensor contractions. In
+this study, the bond-weighted tensor renormalization group (BTRG) algorithm [6] is employed.
+Bond weights, which are some power k of the singular values from the SVD in the previous RG
+iteration, are introduced on the edges of the tensor network. It was suggested and confirmed
+in the case of the two-dimensional Ising model [6] and massless free Wilson fermion [50]
+that the optimal choice for the hyperparameter k is −1/2 for square tensor networks. The
+hyperparameter k is always set to be −1/2 in this study, and D is the bond dimension cutoff
+of the BTRG algorithm, which usually depends on the initial bond dimension.
+
+3.2 Initial tensor compression
+As we mentioned, the bond dimension of the initial tensors in the Grassmann tensor network
+representing the partition function of the full theory is 22N K. Although we only investigate
+the two-color (N = 2) case numerically in this study, the initial bond dimension is 16K. This
+implies that a very large D is inevitable for accurate TRG results.
+     To tackle this problem, we propose an efficient tensor compression scheme that aims to
+find an accurate low-rank approximation for the initial tensors. The central idea is to insert
+a pair of squeezers, which approximates the identity, on every bond of the tensor network.
+By contracting an initial tensor with the squeezers connected to it, its bond dimension can
+be reduced. Now, we explain how to construct the two squeezers on a bond connecting Tn+1̂
+and Tn . The procedure is graphically summarized in figure 5.
+     We first define a matrix notation for the coefficient tensors Tn and Tn+1̂ as
+
+                         (MA )x′ (xtt′ ) = (Tn+1̂ )xtx′ t′ (−1)fx′ (fx +ft ) ,
+                                                                                         (3.1)
+                         (MB )(tx′ t′ )x = (Tn )xtx′ t′ (−1)fx (ft +fx′ +ft′ ) .
+
+
+
+                                                 –7–
+                                                                                                         JHEP03(2025)027
+Figure 5. Procedure of constructing a pair of squeezers. (a) Two adjacent Grassmann tensors Tn and
+Tn+1̂ . (b) From the Grassmann tensor Tn , we define a Hermitian matrix ρB , whose EVD gives us a
+unitary matrix UB and the corresponding eigenvalue σB . We repeat the same procedure for Tn+1̂ and
+obtain a unitary matrix UA and the corresponding eigenvalue σA . (c) Inserting two pairs of invertible
+matrices, the truncated SVD is performed. (d) The truncated SVD in (c) defines the pair of squeezers.
+
+
+In eq. (3.1), we introduced a Grassmann parity function fq for a super index q = (qf , qg ) as
+                                              2N
+                                              X
+                                       fq =         qf,i mod 2,                                  (3.2)
+                                              i=1
+                                                                          ′    ′
+which diagnoses the Grassmann parity of Qqf (Qqf = X xf , T tf , X̄ xf , T̄ tf ). Therefore, Grass-
+mann fields will not appear explicitly in the following discussion, and the corresponding
+Grassmann algebra has already been encoded by the sign factors in eq. (3.1). Under this
+notation, the question becomes a low-rank approximation of the matrix MB MA . An obvious
+solution is a truncated SVD. In this study, a more computationally economical approach
+is considered.
+
+
+
+
+                                                –8–
+    We insert an identity I = L−1         −1
+                               B LB RA RA in the middle of MB MA and perform an SVD
+on M ′ ≡ LB RA = U sV † . The resulting expression MB L−1    † −1
+                                                       B U sV RA MA is a compact SVD
+of MB MA when
+
+                                    E † E = I with E = MB L−1
+                                                           B                                           (3.3)
+
+and
+                                                        −1
+                                  W † W = I with W † = RA  MA .                                        (3.4)
+
+To find an LB satisfying eq. (3.3), we define a Hermitian matrix ρB = MB† MB which
+corresponds to the coefficient tensor of Tn† Tn . The eigenvalue decomposition (EVD) on ρB
+
+
+
+
+                                                                                                                JHEP03(2025)027
+gives a unitary matrix UB , which diagonalizes ρB and the corresponding eigenvalues σB .
+                                 √
+Then, L−1       √1
+        B = UB σB and LB =         σB UB† . Similarly, another Hermitian matrix ρA = MA MA†
+                                                       †
+which corresponds to the coefficient tensor of Tn+1̂ Tn+ 1̂
+                                                            is constructed and we perform an
+                      −1       1     †                                     √
+EVD on ρA . Then, RA = √σA UA satisfies eq. (3.4) with RA = UA σA . To obtain a
+low-rank approximation of MB MA , we only keep the largest D′ singular values and vectors
+in the decomposition M ′ = U sV † . D′ ≤ 22N K is the smallest integer satisfying the following
+condition                               PD ′ 2
+                                           y=1 sy
+                                        P22N K 2 ≥ r,                                      (3.5)
+                                          y=1 sy
+
+where r ≤ 1 is a parameter of this compression scheme. The number of singular values
+                                                  ′
+retained from the even sector of M is denoted as Deven  ≤ 22N −1 K. We then define the two
+                            √             √            †
+squeezers as PB = UB √1σB U s and QA = sV † √1σA UA . Without truncation, PB QA = I .
+The size of PB and QA after truncation are 22N K × D′ and D′ × 22N K respectively. The
+matrix representation of the compressed tensors at site n and n + 1̂ are MB PB and QA MA
+respectively. One can then read off the corresponding coefficient tensors Tn′ and Tn+    ′
+                                                                                           1̂
+                                                                                              .
+     Through this procedure, the bond dimension being considered is reduced from 2 K to  2N
+  ′
+D , which depends on the parameter r according to eq. (3.5). As shown in figure 6, there
+are four different types of bonds in the Grassmann tensor network representing the partition
+function. One can repeat the above steps to construct a pair of squeezers for each of the
+remaining types of bonds and contract the initial tensor at each lattice with the four squeezers
+connected to it to obtain a compressed initial tensor.3
+
+
+4       Numerical results
+By expressing the partition function (2.4) in terms of the trace of a Grassmann tensor
+network, one can compute the free energy density f = lnZ/V directly with TRG algorithms.
+Then, the expectation value of a physical observable ⟨O⟩ ≡ Z −1 DU DχDχ̄ O e−S is given
+                                                                 R
+
+by the partial derivative of f .4 Two physical observables of interest in this study are the
+    3
+     The bond dimension of the four indices of the compressed initial tensor should be, in general, different
+from each other. It is because the bond dimension after compression D′ is determined by eq. (3.5), and the
+singular value spectrum s is different for the four different types of bonds in the tensor network.
+   4
+     We note that the expectation value can also be expressed as the trace of a tensor network composed of an
+impurity tensor on some lattice sites and the earlier defined tensor Tn on the remaining sites [63, 64].
+
+
+
+
+                                                   –9–
+                                                                                                JHEP03(2025)027
+Figure 6. (a) Insertion of pairs of squeezers on every bond. (b) Compressed Grassmann tensor
+network.
+
+
+quark number density defined as
+                                                   ∂f
+                                           ⟨n⟩ =      ,                                 (4.1)
+                                                   ∂µ
+and the fermion condensate, which is defined as
+                                                   ∂f
+                                         ⟨χ̄χ⟩ =      .                                 (4.2)
+                                                   ∂m
+In this study, the partial derivatives in eqs. (4.1) and (4.2) are evaluated by the forward
+difference:
+                                        f (µ + ∆µ) − f (µ)
+                                 ⟨n⟩ ≃                     ,                            (4.3)
+                                               ∆µ
+                                        f (m + ∆m) − f (m)
+                                ⟨χ̄χ⟩ ≃                      .                          (4.4)
+                                                ∆m
+    In addition to the number density and fermion condensate, we also investigate the
+formation of diquark condensate. When we compute the diquark condensate, we add a
+diquark source term to the action (2.1) as
+                                 λ Xh T                            i
+                      S′ = S +       χ (n)σ2 χ(n) + χ̄(n)σ2 χ̄T (n) ,                   (4.5)
+                                 2 n
+
+where λ is a real parameter controlling the magnitude of the diquark source term, and the
+superscript T means a transpose. The partition function and free energy density evaluated
+with S ′ now depend on λ. It is straightforward to include this diquark source term in our
+Grassmann tensor network representation because it only contains single-site terms. See
+appendix A for the derivation of the initial tensor elements with the  new action S ′ . The
+                                                                 P  T
+expectation value of the diquark condensate defined as χχ ≡ n χ σ2 χ + χ̄σ2 χ̄T /2V
+can be computed by
+                        1                                                        ∂f
+                            Z              X                              ′
+                                                                     
+                ⟨χχ⟩ ≡          DU DχDχ̄        χT σ2 χ + χ̄σ2 χ̄T       e−S =      .   (4.6)
+                       2V                   n                                    ∂λ
+
+
+
+                                            – 10 –
+     The two-color lattice QCD theory under consideration has the symmetry U(1)V × U(1)A
+at a finite chemical potential µ, in the vanishing λ limit and chiral limit m = 0. The U(1)V and
+U(1)A symmetry correspond to the baryon number and axial charge conservation, respectively.
+A finite quark mass m ̸= 0 breaks the U(1)A symmetry: χ → eiαϵ(n) χ, χ̄ → χ̄eiαϵ(n) (α ∈ R)
+                                                                        ′             ′
+explicitly, and a finite λ breaks the U(1)V symmetry: χ → eiα χ, χ̄ → χ̄e−iα (α′ ∈ R),
+explicitly. Note that ϵ(n) is defined as ϵ(n) = (−1)n1 +n2 , which plays the similar role of
+γ5 in the staggered fermion theory. Therefore, these observables are intensively studied in
+the four-dimensional theory [51–60].
+     However, since no spontaneous breaking of continuous symmetry happens in two di-
+mensions [61, 62], we expect limm→0 limV →∞ ⟨χ̄χ⟩ = 0, and limλ→0 limV →∞ ⟨χχ⟩ = 0. To
+
+
+
+
+                                                                                                               JHEP03(2025)027
+illustrate that the behavior of the aforementioned physical observables which reveals the
+phase structure of the theory in higher dimensions can be properly reproduced by the TRG
+approach, we always set m > 0 and/or λ > 0 in this study,5 which explicitly breaks the
+symmetry of this model and allows a finite value of ⟨χ̄χ⟩ and ⟨χχ⟩. In particular, the diquark
+condensate is evaluated by
+
+                                                f (λ + ∆λ) − f (λ)
+                                       ⟨χχ⟩ ≃                      .                                   (4.7)
+                                                       ∆λ
+
+4.1 Infinite coupling limit
+As mentioned in section 2.2, the gauge group integration can be integrated exactly in the
+infinite coupling limit, and the bond dimension of the initial tensors is 24 = 16. Therefore, the
+initial tensor compression scheme introduced in section 3.2 is not employed at β = 0. In the
+following, we set a bond dimension cutoff D = 84, which suffices to suppress the finite-D effect.
+     Figure 7 shows the quark number density, fermion condensate, and diquark condensate
+with m = 0.1 and on a lattice volume V = 220 . All these quantities do not depend on
+the chemical potential up to some point, µc1 . These are the characteristic features of the
+so-called Silver-Blaze phenomena [65]. Since the Silver-Blaze phenomena take place only in
+the thermodynamic and zero-temperature limits, the lattice volume V = 220 is sufficiently
+large to obtain these limits. We observe the Silver-Blaze region where ⟨n⟩ = 0 from µ = 0 to
+µc1 ≈ 0.22. As µ further increases, we see an intermediate phase, which extends over a finite
+region of chemical potential µc1 < µ < µc2 , with µc2 ≈ 0.46, characterized by 0 < ⟨n⟩ < 2
+and non-zero ⟨χχ⟩. As µ > µc2 , ⟨n⟩/2 saturates to one, the maximum according to the
+Pauli exclusion principle on the lattice, and ⟨χχ⟩ is suppressed to some values very close to
+zero. On the other hand, the fermion condensate ⟨χ̄χ⟩ takes a constant finite value in the
+Silver-Blaze region and decreases in the intermediate phase. When µ > µc2 , ⟨χ̄χ⟩ is reduced
+to some very small values as ⟨χχ⟩. The qualitative behavior of the observables computed by
+BTRG at finite m and/or λ is similar to that reported in the previous mean-field theory [54].
+     For a larger quark mass m = 1 and the same lattice volume V = 220 , a sharp transition
+happens, and the intermediate phase becomes a very narrow region in µ as shown in figure 8.
+We see µc1 ≈ 0.982 and µc2 ≈ 1. Apart from this difference, the qualitative behavior of ⟨n⟩,
+⟨χ̄χ⟩ and ⟨χχ⟩ at m = 1, β = 0 is similar to that at m = 0.1. Particularly, as shown in the
+inset of figure 8, there is still no discontinuity of physical quantities observed for m = 1 in
+  5
+      The quark number density ⟨n⟩ and the fermion condensate ⟨χ̄χ⟩ are calculated at λ = 0 in this study.
+
+
+
+
+                                                   – 11 –
+                                     m = 0.1, β = 0, V = 220 , D = 84
+                 1.4                                                           hni/2
+                                                                               hχ̄χi
+                 1.2                                                           hχχi
+
+                 1.0
+
+                 0.8
+
+                 0.6
+
+
+
+
+                                                                                                           JHEP03(2025)027
+                 0.4
+
+                 0.2
+
+                 0.0
+
+                       0.0     0.1     0.2      0.3       0.4    0.5     0.6       0.7
+                                                      µ
+
+
+Figure 7. Quark number density ⟨n⟩, fermion condensate ⟨χ̄χ⟩ and diquark condensate ⟨χχ⟩ as a
+function of chemical potential µ at m = 0.1, β = 0, in the thermodynamic limit. The bond dimension
+in the calculations is D = 84. To evaluate the numerical differences in eqs. (4.3), (4.4), and (4.7), we
+set ∆µ = 0.04, ∆m = 10−4 , and λ = ∆λ = 10−4 .
+
+
+the thermodynamic limit. It is fair to identify the transition in the intermediate phase as
+a crossover, instead of a first-order phase transition.
+     We also show the number density ⟨n⟩ and diquark condensate ⟨χχ⟩ as a function of µ,
+for m = 0.1 and m = 1, at different lattice volumes in figure 9. For both quark masses, the
+thermodynamic limit is reached when V = 220 . In the intermediate phase, ⟨χχ⟩ increases
+with the lattice volume until the thermodynamic limit is achieved. As shown in the inset
+of figure 9(d), the negative value of ⟨χχ⟩ observed in the intermediate phase might indicate
+that the current choice of bond dimension (D = 84) is not large enough for the calculations
+in small lattice volume.
+
+4.2 Finite-β regime
+
+For β > 0, the initial tensor compression scheme is applied before the BTRG calculation.
+Therefore, we first demonstrate the efficiency of our compression scheme in this section.
+In table 1, we can see how the four compressed bond dimensions D′ vary with the ratio
+parameter r defined in eq. (3.5) at m = 0.1, β = 1.6, µ = 0.4, λ = 0, and K = 14 as a
+representative. When r = 1, no compression is made, and we have an original bond dimension
+that is equal to 16K = 224 with K = 14. For an r close enough to one, e.g., r = 0.9999,
+the bond dimension of the initial tensors is reduced from 224 to less than half of its original
+value after compression. The number of tensor elements is only 5.3% of the original one
+in this case. We also present another example in table 2, where β is changed to 0.8. It
+confirms that our initial tensor compression scheme is more efficient at a smaller β. In the
+following, we always set r = 0.9999.
+
+
+
+
+                                                – 12 –
+                                                 m = 1, β = 0, V = 220 , D = 84
+              1.2
+
+
+
+              1.0
+                    1.25
+
+              0.8   1.00
+
+
+
+
+                                                                                                              JHEP03(2025)027
+                    0.75                                                                            hni/2
+              0.6                                                                                   hχ̄χi
+                    0.50                                                                            hχχi
+
+                    0.25
+              0.4
+
+                    0.00
+                           0.97   0.98    0.99       1.00   1.01
+              0.2
+
+
+
+              0.0
+
+                    0.7             0.8                 0.9              1.0         1.1     1.2        1.3
+                                                                          µ
+
+
+Figure 8. Quark number density ⟨n⟩, fermion condensate ⟨χ̄χ⟩ and diquark condensate ⟨χχ⟩ as a
+function of chemical potential µ at m = 1, β = 0, in the thermodynamic limit. The bond dimension
+in the calculations is D = 84. To evaluate the numerical differences in eqs. (4.3), (4.4), and (4.7),
+we set ∆µ = 0.02, ∆m = 10−4 , and λ = ∆λ = 10−4 . The inset shows the three quantities in the
+intermediate phase, where ⟨n⟩ is evaluated using a finer ∆µ = 0.004.
+
+
+
+
+                                                 ′            ′      ′          ′
+                          r               D1            D2         D3          D4    compression rate
+                          1               224           224        224         224        100%
+                      0.99999             148           148        143         143       17.8%
+                      0.99995             122           122        118         118       8.23%
+                      0.9999              110           110        105         105       5.30%
+                      0.9995              80            80         79          79        1.59%
+                       0.999              70            70         67          67        0.874%
+                        0.99              35            35         33          33       0.0530%
+
+Table 1. Efficiency of our initial tensor compression scheme. We set m = 0.1, β = 1.6, µ = 0.4, λ = 0
+                                                         ′      ′
+and K = 14 as a representative. As shown in figure 6, D1 and D2 denote the spatial bond dimensions
+      ′       ′
+and D3 and D4 denote the temporal ones. The compression rate in the last column is measured as
+                             ′
+the number of elements in Tn divided by the number of elements in Tn .
+
+
+
+
+                                                                   – 13 –
+  2.00         V    = 26                                                                                                            V   = 26
+               V    = 28                                                                                                            V   = 28
+                                                                                                                  0.8
+  1.75                                                                                                                              V   = 210
+               V    = 210
+               V    = 212                                                                                                           V   = 212
+  1.50
+               V    = 214                                                                                                           V   = 214
+                                                                                                                  0.6
+  1.25         V    = 216                                                                                                           V   = 216
+               V    = 218                                                                                                           V   = 218
+
+
+
+
+                                                                                                               hχχi
+hni
+
+
+
+
+  1.00         V    = 220                                                                                                           V   = 220
+                                                                                                                  0.4
+  0.75
+
+  0.50                                                                                                            0.2
+  0.25
+
+  0.00                                                                                                            0.0
+
+         0.0         0.1    0.2     0.3         0.4             0.5                   0.6            0.7                     0.0         0.1      0.2         0.3         0.4           0.5         0.6         0.7
+
+
+
+
+                                                                                                                                                                                                                        JHEP03(2025)027
+                                          µ                                                                                                                         µ
+
+         (a) ⟨n⟩ as a function of µ at m = 0.1.                                                                             (b) ⟨χχ⟩ as a function of µ at m = 0.1.
+
+  2.00         V   = 26                                                                                                             V   = 26
+               V   = 28                                                                                                             V   = 28
+               V   = 210                                                                                          0.5               V   = 210
+  1.75
+               V   = 212                                                                                                            V   = 212
+               V   = 214                                                                                                            V   = 214
+  1.50
+               V   = 216                                                                                          0.4               V   = 216                               0.6
+
+               V   = 218                                                                                                            V   = 218
+  1.25
+               V   = 220                        2.0                                                                                 V   = 220
+                                                                                                                                                                            0.4
+                                                                                                                  0.3
+                                                                                                               hχχi
+hni
+
+
+
+
+  1.00
+                                                1.5
+                                                                                                                                                                            0.2
+  0.75                                                                                                            0.2
+                                                1.0
+
+                                                                                                                                                                            0.0
+  0.50
+                                                0.5
+                                                                                                                  0.1                                                             0.97 0.98 0.99 1.00 1.01 1.02
+  0.25                                          0.0
+                                                      0.97    0.98       0.99    1.00       1.01
+  0.00                                                                                                            0.0
+
+         0.7          0.8     0.9         1.0           1.1                     1.2                1.3                       0.6        0.7     0.8     0.9         1.0           1.1         1.2         1.3     1.4
+                                           µ                                                                                                                         µ
+
+
+         (c) ⟨n⟩ as a function of µ at m = 1.                                                                               (d) ⟨χχ⟩ as a function of µ at m = 1.
+
+Figure 9. Volume dependence of physical quantities in the infinite coupling limit β = 0. The bond
+dimension in the calculations is D = 84. To evaluate the numerical differences in eqs. (4.3) and (4.7),
+we set ∆µ = 0.04 for m = 0.1, ∆µ = 0.02 for m = 1, and λ = ∆λ = 10−4 . At m = 1, the insets
+show the volume dependence of ⟨n⟩ and ⟨χχ⟩ in the intermediate phase, where ⟨n⟩ is evaluated by
+∆µ = 0.004.
+
+
+                                                                     ′                      ′              ′            ′
+                                        r                    D1                   D2                 D3         D4                 compression rate
+                                        1                    224                  224                224        224                     100%
+                                    0.99999                  86                   86                 84         84                      2.07%
+                                    0.99995                  68                   68                 66         66                     0.800%
+                                    0.9999                   61                   61                 59         59                     0.514%
+                                    0.9995                   46                   46                 43         43                     0.155%
+                                     0.999                   39                   39                 37         37                    0.0827%
+                                      0.99                   19                   19                 19         19                    0.00518%
+
+Table 2. Another example illustrating the efficiency of our initial tensor compression scheme with
+                                                                        ′      ′
+m = 0.1, β = 0.8, µ = 0.4, λ = 0 and K = 14. As shown in figure 6, D1 and D2 denote the spatial
+                       ′       ′
+bond dimensions and D3 and D4 denote the temporal ones. The compression rate in the last column
+                                           ′
+is measured as the number of elements in Tn divided by the number of elements in Tn .
+
+
+
+
+                                                                                                         – 14 –
+                               number density, m = 0.1, β = 1.2, V = 220 , K = 14
+                 2.00         D = 100
+                              D = 125
+                 1.75         D = 150
+
+
+                 1.50
+
+
+                 1.25
+               hni
+
+
+
+
+                 1.00
+
+
+
+
+                                                                                                        JHEP03(2025)027
+                 0.75
+
+
+                 0.50
+
+
+                 0.25
+
+
+                 0.00
+
+                        0.1      0.2        0.3        0.4         0.5        0.6
+                                                       µ
+
+
+Figure 10. Quark number density ⟨n⟩ as a function of chemical potential µ at m = 0.1, β = 1.2,
+in the thermodynamic limit. We set the bond dimensions D = 100, 125, and 150. The sample size
+for the discretization of gauge group integrations is K = 14. To evaluate the numerical difference in
+eq. (4.3), we set ∆µ = 0.04.
+
+
+    Next, we check the algorithmic parameter dependence of the BTRG results. At m = 0.1,
+β = 1.2 and V = 220 , we calculate ⟨n⟩ as a function of µ using different bond dimension D as
+shown in figure 10, with a fixed number of sampled SU(2) matrices K = 14. The qualitative
+behavior of ⟨n⟩ and the position of the two transition points µc1/c2 are showing consistency
+as D ≥ 100, despite some small deviations in the numerical values of ⟨n⟩.
+     Similarly, ⟨n⟩ at m = 0.1, β = 1.2 and V = 220 calculated with different K and various
+matrix sets Ůi are shown in figure 11(a) with D = 125. The results suggest that K = 14
+suffices for our purpose and ⟨n⟩ obtained from different Ůi exhibit similar qualitative behavior.
+Therefore, we always set K = 14 and D = 150 for the finite-β calculations in this study.
+     ⟨n⟩ at the same m, β and V , calculated with a fixed K = 14 and D = 150, using
+the three matrix sets adopted in figure 11(a), are illustrated in figure 11(b). Comparing
+figure 11(a) and 11(b), the results near µc2 are affected more by the sample size K, rather
+than the choice of random matrix set. On the other hand, the results in the Silver-Blaze
+region rely more on which matrix set is being picked. Negative ⟨n⟩ is seen around µ = 0.2,
+presumably because a finite number of SU(2) matrices are used to approximate the gauge
+group integration. Since the SU(2) matrices in each matrix set are randomly sampled, it
+is normal that some particular matrix set is able to give a better approximation under a
+fixed and finite sample size. For example, we can see from figure 11 that the negative ⟨n⟩
+issue is eased when the matrix set Ů2 is picked.
+     We also comment on the practice of taking a statistical average over trials using distinct
+sets of SU(2) matrices. It is believed to be able to reduce the systematic bias due to the
+
+
+
+
+                                                   – 15 –
+                                   number density, m = 0.1, β = 1.2, V = 220 , D = 125
+                  2.00           K = 10, Ů1
+                                 K = 12, Ů2
+                  1.75
+                                 K = 14, Ů3
+
+                  1.50
+
+
+                  1.25
+               hni
+
+
+
+
+                  1.00
+
+
+
+
+                                                                                                        JHEP03(2025)027
+                  0.75
+
+
+                  0.50
+
+
+                  0.25
+
+
+                  0.00
+
+                         0.1           0.2       0.3       0.4         0.5         0.6
+                                                           µ
+
+
+                                                         (a)
+
+
+                               number density, m = 0.1, β = 1.2, V = 220 , K = 14, D = 150
+                  2.00           Ů1
+                                 Ů2
+                  1.75           Ů3
+
+                  1.50
+
+
+                  1.25
+               hni
+
+
+
+
+                  1.00
+
+
+                  0.75
+
+
+                  0.50
+
+
+                  0.25
+
+
+                  0.00
+
+                         0.1           0.2       0.3       0.4         0.5         0.6
+                                                           µ
+
+
+                                                         (b)
+
+Figure 11. Quark number density ⟨n⟩ as a function of chemical potential µ at m = 0.1, β = 1.2, in
+the thermodynamic limit. We set ∆µ = 0.04 to evaluate the numerical difference in eq. (4.3). ((a)):
+the sample sizes for the discretization of gauge group integrations are set to be K = 10, 12, and 14,
+with a distinct random matrix set Ůi chosen for each K. The bond dimension is set to be D = 125.
+((b)): the sample size is fixed to be K = 14, and the calculation is repeated using the same three
+matrix sets. The bond dimension is set to be D = 150.
+
+
+
+
+                                                       – 16 –
+                              m = 0.1, β = 0.8, V = 220 , K = 14, D = 150
+                1.4                                                           hni/2
+                                                                              hχ̄χi
+                1.2
+                                                                              hχχi
+
+                1.0
+
+                0.8
+
+                0.6
+
+
+
+
+                                                                                                       JHEP03(2025)027
+                0.4
+
+                0.2
+
+                0.0
+
+                      0.1     0.2       0.3       0.4        0.5        0.6
+                                                  µ
+
+
+Figure 12. Quark number density ⟨n⟩, fermion condensate ⟨χ̄χ⟩ and diquark condensate ⟨χχ⟩ as a
+function of chemical potential µ at m = 0.1, β = 0.8, in the thermodynamic limit. The bond dimension
+in the calculations is D = 150. The sample size for the discretization of gauge group integrations
+is K = 14. To evaluate the numerical differences in eqs. (4.3), (4.4), and (4.7), we set ∆µ = 0.04,
+∆m = 10−4 , and λ = ∆λ = 10−4 .
+
+
+
+finite-K effect and improve the accuracy of the data such as reproducing the Silver-Blaze
+phenomenon better in the small µ regime. However, it is computationally demanding; we
+have found that so many trials are required to stabilize the numerical results, particularly
+the numerical differences. Therefore, we employ the same matrix set at different µ for a
+specific observable at a particular (m, β).
+     Now, we see the numerical results of ⟨n⟩, ⟨χ̄χ⟩ and ⟨χχ⟩ as a function of µ in the
+thermodynamic limit V = 220 , at a finite β = 0.8. For m = 0.1, the behavior of the three
+observables shown in figure 12 is similar to that at β = 0. We observe a more extended
+intermediate phase in µ as β becomes non-zero. At m = 0.1 and β = 0.8, µc1 = 0.22 and
+µc2 = 0.52. For m = 1, we see a sharp transition in figure 13 as in the infinite coupling limit
+while the intermediate phase shifts slightly in µ with µc1 ≈ 0.986 and µc2 ≈ 1.004. From
+the inset of figure 13, the crossover nature persists even when β becomes finite. The volume
+dependence of ⟨n⟩ and ⟨χχ⟩ at m = 0.1 and m = 1 are shown in figure 14.
+    Finally, we describe the β dependence for µc1 and µc2 at m = 0.1. As shown in figure 15,
+the first transition point appears to be robust against β, i.e., µc1 ≈ 0.22 for 0 ≤ β ≤ 1.6 at
+m = 0.1. We expect that µc1 becomes smaller as β increases because the mass gap vanishes
+in the limit of β → ∞. To observe such behavior, we might need to compute the number
+density with β > 1.6 or to employ finer ∆µ to improve the accuracy of the finite difference
+in eq. (4.3). On the other hand, the second transition point µc2 is located at larger µ as β
+increases. It is expected because ⟨n⟩ does not saturate in regions of larger µ as the gauge
+coupling is weakened, namely approaching the continuum limit.
+
+
+
+
+                                               – 17 –
+                                          m = 1, β = 0.8, V = 220 , K = 14, D = 150
+              1.2
+
+
+
+              1.0
+                     1.25
+
+              0.8    1.00
+
+
+                     0.75                                                                      hni/2
+              0.6                                                                              hχ̄χi
+
+
+
+
+                                                                                                       JHEP03(2025)027
+                     0.50                                                                      hχχi
+
+              0.4    0.25
+
+
+                     0.00
+
+              0.2           0.97    0.98    0.99   1.00   1.01
+
+
+
+
+              0.0
+
+                    0.80           0.85       0.90        0.95     1.00   1.05   1.10   1.15    1.20
+                                                                    µ
+
+
+Figure 13. Quark number density ⟨n⟩, fermion condensate ⟨χ̄χ⟩ and diquark condensate ⟨χχ⟩ as a
+function of chemical potential µ at m = 1, β = 0.8, in the thermodynamic limit. The bond dimension
+in the calculations is D = 150. The sample size for the discretization of gauge group integrations
+is K = 14. To evaluate the numerical differences in eqs. (4.3), (4.4), and (4.7), we set ∆µ = 0.02,
+∆m = 10−4 , and λ = ∆λ = 10−4 . The inset shows the three quantities in the intermediate phase,
+where ⟨n⟩ is evaluated using a finer ∆µ = 0.004.
+
+
+5    Conclusion
+
+In this work, we have investigated the (1 + 1)-dimensional two-color QCD at finite density
+with staggered fermions using the TRG approach. We have used a random sampling
+method to discretize the gauge group integration and construct a Grassmann tensor network
+representation for the partition function. Since TRG calculations for non-Abelian gauge
+theories coupled with fermions are computationally challenging due to the very large initial
+bond dimension, we have proposed an efficient initial tensor compression scheme that can also
+be applied to other lattice models. We have evaluated the expectation values of the quark
+number density, fermion condensate, and diquark condensate. These observables are widely
+employed to investigate the phase structure of two-color QCD in higher dimensions. We have
+made BTRG calculations both at the infinite coupling limit and the finite coupling regime.
+Since there is no spontaneous breaking of continuous global symmetry in two dimensions, the
+fermion condensate and diquark condensate are computed by explicitly breaking the U(1)A
+and U(1)V . Under this setting, we have found that the behavior of the observables calculated
+by the TRG approach is similar to that reported in a previous mean-field study [54] for
+the higher-dimensional two-color QCD. We have also studied how the positions of the two
+transition points vary as the gauge coupling changes.
+
+
+
+
+                                                                 – 18 –
+                                                                                                          0.8
+  2.00           V    = 26                                                                                             V   = 26
+                 V    = 28                                                                                0.7          V   = 28
+  1.75                                                                                                                 V   = 210
+                 V    = 210
+                 V    = 212                                                                               0.6          V   = 212
+  1.50
+                 V    = 214                                                                                            V   = 214
+                                                                                                          0.5          V   = 216
+  1.25           V    = 216
+                 V    = 218                                                                                            V   = 218
+
+
+
+
+                                                                                                     hχχi
+                                                                                                          0.4
+hni
+
+
+
+
+  1.00           V    = 220                                                                                            V   = 220
+
+  0.75                                                                                                    0.3
+
+  0.50                                                                                                    0.2
+
+  0.25                                                                                                    0.1
+
+  0.00                                                                                                    0.0
+
+         0.1           0.2           0.3       0.4                0.5             0.6                            0.0        0.1      0.2      0.3          0.4          0.5          0.6      0.7
+                                               µ                                                                                                     µ
+
+
+
+
+                                                                                                                                                                                                      JHEP03(2025)027
+         (a) ⟨n⟩ as a function of µ at m = 0.1.                                                                 (b) ⟨χχ⟩ as a function of µ at m = 0.1.
+
+  2.00           V   = 26                                                                                              V   = 26
+                                                                                                          0.6          V   = 28
+                 V   = 28
+  1.75           V   = 210                                                                                             V   = 210
+                 V   = 212                                                                                             V   = 212
+                                                                                                          0.5
+                 V   = 214                                                                                             V   = 214
+  1.50
+                 V   = 216                                                                                             V   = 216                             0.6
+
+                 V   = 218                                                                                0.4          V   = 218
+  1.25
+                 V   = 220                           2.0                                                               V   = 220
+                                                                                                                                                             0.4
+                                                                                                     hχχi
+hni
+
+
+
+
+  1.00
+                                                     1.5                                                  0.3
+                                                                                                                                                             0.2
+  0.75
+                                                     1.0
+                                                                                                          0.2
+  0.50                                                                                                                                                       0.0
+                                                     0.5
+                                                                                                                                                                   0.97 0.98 0.99 1.00 1.01 1.02
+                                                                                                          0.1
+  0.25
+                                                     0.0
+
+                                                           0.97   0.98   0.99   1.00   1.01
+  0.00                                                                                                    0.0
+
+          0.80       0.85     0.90     0.95   1.00     1.05         1.10        1.15          1.20              0.80       0.85    0.90    0.95     1.00         1.05         1.10     1.15    1.20
+                                               µ                                                                                                     µ
+
+
+           (c) ⟨n⟩ as a function of µ at m = 1.                                                                 (d) ⟨χχ⟩ as a function of µ at m = 1.
+
+Figure 14. Volume dependence of physical quantities at β = 0.8. The bond dimension in the
+calculations is D = 150. The sample size for the discretization of gauge group integrations is K = 14.
+To evaluate the numerical differences in eqs. (4.3) and (4.7), we set ∆µ = 0.04 for m = 0.1, ∆µ = 0.02
+for m = 1, and λ = ∆λ = 10−4 . At m = 1, the insets show the volume dependence of ⟨n⟩ and ⟨χχ⟩ in
+the intermediate phase, where ⟨n⟩ is evaluated by ∆µ = 0.004.
+
+
+
+
+     Our results encourage a future application of the TRG approach to the higher-dimensional
+two-color QCD. It is possible to improve our construction of initial tensors such that more
+SU(2) matrices are used to discretize the gauge group integration, i.e., a larger K is allowed,
+without increasing the memory requirement significantly. In higher-dimensional cases where
+spontaneous breaking of continuous symmetry can exist, it is instructive to apply the TRG
+approach to evaluate the order parameters and perform extrapolations toward the chiral limit
+(m = 0) and the vanishing λ limit. We also emphasize that our Grassmann tensor network
+representation for the partition function can be extended to the three-color theory, which
+suffers from the sign problem at finite density, without conceptual difficulties.
+
+    Finally, we note that inhomogeneous phases in two-color QCD and related models [47, 66–
+68] have attracted attention recently. As another future direction, we will explore the
+applicability of the TRG approach in studying the spatial dependence of physical quantities.
+
+
+
+
+                                                                                                 – 19 –
+                                     number density, m = 0.1, V = 220 , K = 14
+                   2.0         β   = 0, D = 84
+                               β   = 0.4, D = 150
+                               β   = 0.8, D = 150
+                   1.5         β   = 1.2, D = 150
+                               β   = 1.6, D = 150
+                 hni
+
+
+
+
+                   1.0
+
+
+
+
+                                                                                                                JHEP03(2025)027
+                   0.5
+
+
+
+                   0.0
+
+                         0.1        0.2         0.3      0.4       0.5           0.6
+                                                         µ
+
+
+Figure 15. Quark number density ⟨n⟩ as a function of chemical potential µ at m = 0.1, β =
+0, 0.4, 0.8, 1.2, 1.6 in the thermodynamic limit. The bond dimension in the infinite coupling calculation
+is D = 84, and the bond dimension in the finite β calculations is D = 150. At a finite β, the sample
+size for the discretization of gauge group integrations is K = 14. To evaluate the numerical differences
+in eq. (4.3), we set ∆µ = 0.04.
+
+
+Acknowledgments
+A part of the numerical calculation for the present work was carried out with ohtaka provided
+by the Institute for Solid State Physics, the University of Tokyo. This work is supported by the
+Endowed Project for Quantum Software Research and Education, the University of Tokyo [69],
+and the Center of Innovations for Sustainable Quantum AI (JST Grant Number JPMJPF2221).
+SA acknowledges the support from JSPS KAKENHI (JP23K13096, JP24H00214) and the Top
+Runners in Strategy of Transborder Advanced Researches (TRiSTAR) program conducted as
+the Strategic Professional Development Program for Young Researchers by the MEXT.
+
+A     Coefficients of the Grassmann tensor F
+Here, we discuss one method to derive the tensor elements of F in eq. (2.10). For simplicity, we
+consider the two-color case where N = 2. We also label the spacetime direction ν by ν = x, t
+not by ν = 1, 2. In this case, the integration over the original staggered fermions is written as
+             Z
+       F=        dχ1 dχ̄1 dχ2 dχ̄2 e−m(χ̄1 χ1 +χ̄2 χ2 ) (1 + χ̄1 A) (1 + χ1 B) (1 + χ̄2 C) (1 + χ2 D)
+
+          = ABCD + mCD + mAB + m2 ,                                                                     (A.1)
+where A, B, C, and D are sums of terms with one auxiliary Grassmann variable, and their
+expressions are given by
+    A = −ηx,1 − ηt,1 + (Ux† )11 ζ̄x,1 + (Ux† )12 ζ̄x,2 + (Ut† )11 ζ̄t,1 + (Ut† )12 ζ̄t,2 ,              (A.2)
+        1h                                                                                       i
+    B=     − (Ux )11 η̄x,1 − (Ux )21 η̄x,2 − a+ (Ut )11 η̄t,1 − a+ (Ut )21 η̄t,2 + ζx,1 + a− ζt,1 ,     (A.3)
+        2
+
+
+
+                                                      – 20 –
+    C = −ηx,2 − ηt,2 + (Ux† )21 ζ̄x,1 + (Ux† )22 ζ̄x,2 + (Ut† )21 ζ̄t,1 + (Ut† )22 ζ̄t,2 ,                           (A.4)
+        1h                                                                                       i
+    D=     − (Ux )12 η̄x,1 − (Ux )22 η̄x,2 − a+ (Ut )12 η̄t,1 − a+ (Ut )22 η̄t,2 + ζx,2 + a− ζt,2 ,                  (A.5)
+        2
+with a± = e±µ pt (n). After expanding out the second line in eq. (A.1), one can compare like
+terms in eqs. (A.1) and (2.10),
+                           h    then obtain the elementsi of coefficient tensor F . When a
+                      P      T                     T
+diquark source term n λ χ (n)σ2 χ(n) + χ̄(n)σ2 χ̄ (n) /2 is added to the action, then the
+Grassmann tensor F in eq. (2.10) is given by ABCD +m(AB +CD)+iλ(AC +BD)+m2 +λ2 .
+
+B    Construction of ρ
+
+
+
+
+                                                                                                                             JHEP03(2025)027
+In section 3.2, we introduced a Hermitian matrix as ρB = MB† MB . It is computationally
+demanding to obtain ρB directly through this formula since it is a multiplication between
+a 16K × 163 K 3 matrix and a 163 K 3 × 16K matrix.
+    In this study, we obtain ρB (and ρA by similar steps) following another equivalent method.
+First, we perform the following SVD on the coefficient tensor Tn as
+                                                                        2K2
+                                                                      16X
+                   (−1)   fx (ft +fx′ )+fx′ ft
+                                                    (Tn )xtx′ t′ =            (UB )x′ ty (sB )y (VB† )yxt′ .         (B.1)
+                                                                        y=1
+
+Since the direct calculation of eq. (B.1) is also demanding, we employ a randomized SVD [5]
+with the oversampling parameter p ∼ 0.07(16K)2 and the iteration number of QR decom-
+position r′ = 7 in this step.
+    Then we substitute eq. (B.1) into the definition of ρB :
+
+                                    (MB∗ )(tx′ t′ )x (MB )(tx′ t′ )x̃
+                          X
+            (ρB )xx̃ =
+                         t,x′ ,t′
+
+                                    (−1)fx (ft +fx′ )+fx′ ft (Tn∗ )xtx′ t′ (−1)fx̃ (ft +fx′ )+fx′ ft (Tn )x̃tx′ t′
+                          X
+                     =
+                         t,x′ ,t′
+
+                                          (UB )∗x′ ty (sB )y (VB† )∗yxt′ (UB )x′ tỹ (sB )ỹ (VB† )ỹx̃t′
+                          X X
+                     =                                                                                               (B.2)
+                         t,x′ ,t′ y,ỹ
+
+                                        δy,ỹ (sB )y (VB† )∗yxt′ (sB )ỹ (VB† )ỹx̃t′
+                         XX
+                     =
+                          t′   y,ỹ
+
+                                        (sB )2y (VB† )∗yxt′ (VB† )yx̃t′ .
+                         XX
+                     =
+                          t′        y
+
+From the third to the fourth line of eq. (B.2), we used the property UB† UB = I of an SVD.
+eq. (B.2) shows that ρB can be made once sB and VB† in eq. (B.1) are obtained.
+
+Data Availability Statement. This article has no associated data or the data will not
+be deposited.
+
+Code Availability Statement. This article has no associated code or the code will not
+be deposited.
+
+Open Access. This article is distributed under the terms of the Creative Commons Attri-
+bution License (CC-BY4.0), which permits any use, distribution and reproduction in any
+medium, provided the original author(s) and source are credited.
+
+
+
+
+                                                               – 21 –
+References
+ [1] M. Levin and C.P. Nave, Tensor renormalization group approach to 2D classical lattice models,
+     Phys. Rev. Lett. 99 (2007) 120601 [cond-mat/0611687] [INSPIRE].
+ [2] Z.Y. Xie et al., Second Renormalization of Tensor-Network States, Phys. Rev. Lett. 103 (2009)
+     160601 [arXiv:0809.0182] [INSPIRE].
+ [3] G. Evenbly and G. Vidal, Tensor Network Renormalization, Phys. Rev. Lett. 115 (2015) 180405
+     [INSPIRE].
+ [4] S. Yang, Z.-C. Gu and X.-G. Wen, Loop Optimization for Tensor Network Renormalization,
+     Phys. Rev. Lett. 118 (2017) 110504 [INSPIRE].
+
+
+
+
+                                                                                                         JHEP03(2025)027
+ [5] S. Morita, R. Igarashi, H.-H. Zhao and N. Kawashima, Tensor renormalization group with
+     randomized singular value decomposition, Phys. Rev. E 97 (2018) 033310.
+ [6] D. Adachi, T. Okubo and S. Todo, Bond-weighted Tensor Renormalization Group, Phys. Rev. B
+     105 (2022) L060402 [arXiv:2011.01679] [INSPIRE].
+ [7] Z.Y. Xie et al., Coarse-graining renormalization by higher-order singular value decomposition,
+     Phys. Rev. B 86 (2012) 045139 [arXiv:1201.1144] [INSPIRE].
+ [8] D. Adachi, T. Okubo and S. Todo, Anisotropic Tensor Renormalization Group, Phys. Rev. B
+     102 (2020) 054432 [arXiv:1906.02007] [INSPIRE].
+ [9] D. Kadoh and K. Nakayama, Renormalization group on a triad network, arXiv:1912.02414
+     [INSPIRE].
+[10] T. Yamashita and T. Sakurai, A parallel computing method for the higher order tensor
+     renormalization group, Comput. Phys. Commun. 278 (2022) 108423 [arXiv:2110.03607]
+     [INSPIRE].
+[11] K. Nakayama, Randomized higher-order tensor renormalization group, arXiv:2307.14191
+     [INSPIRE].
+[12] Z.-C. Gu, F. Verstraete and X.-G. Wen, Grassmann tensor network states and its renormalization
+     for strongly correlated fermionic and bosonic states, arXiv:1004.2563 [INSPIRE].
+[13] Z.-C. Gu, Efficient simulation of Grassmann tensor product states, Phys. Rev. B 88 (2013)
+     115139 [arXiv:1109.4470] [INSPIRE].
+[14] Y. Shimizu and Y. Kuramashi, Grassmann tensor renormalization group approach to one-flavor
+     lattice Schwinger model, Phys. Rev. D 90 (2014) 014508 [arXiv:1403.0642] [INSPIRE].
+[15] S. Akiyama and D. Kadoh, More about the Grassmann tensor renormalization group, JHEP 10
+     (2021) 188 [arXiv:2005.07570] [INSPIRE].
+[16] Y. Shimizu, Tensor renormalization group approach to a lattice boson model, Mod. Phys. Lett. A
+     27 (2012) 1250035 [INSPIRE].
+[17] Y. Shimizu, Analysis of the (1 + 1)-dimensional lattice ϕ4 model using the tensor renormalization
+     group, Chin. J. Phys. 50 (2012) 749 [INSPIRE].
+[18] D. Kadoh et al., Tensor network analysis of critical coupling in two dimensional ϕ4 theory,
+     JHEP 05 (2019) 184 [arXiv:1811.12376] [INSPIRE].
+[19] D. Kadoh et al., Investigation of complex ϕ4 theory at finite density in two dimensions using
+     TRG, JHEP 02 (2020) 161 [arXiv:1912.13092] [INSPIRE].
+[20] C. Delcamp and A. Tilloy, Computing the renormalization group flow of two-dimensional ϕ4
+     theory with tensor networks, Phys. Rev. Res. 2 (2020) 033278 [arXiv:2003.12993] [INSPIRE].
+
+
+
+
+                                               – 22 –
+[21] S. Akiyama et al., Tensor renormalization group approach to four-dimensional complex ϕ4 theory
+     at finite density, JHEP 09 (2020) 177 [arXiv:2005.04645] [INSPIRE].
+[22] S. Akiyama, Y. Kuramashi and Y. Yoshimura, Phase transition of four-dimensional lattice ϕ4
+     theory with tensor renormalization group, Phys. Rev. D 104 (2021) 034507 [arXiv:2101.06953]
+     [INSPIRE].
+[23] Y. Shimizu and Y. Kuramashi, Critical behavior of the lattice Schwinger model with a topological
+     term at θ = π using the Grassmann tensor renormalization group, Phys. Rev. D 90 (2014)
+     074503 [arXiv:1408.0897] [INSPIRE].
+[24] Y. Shimizu and Y. Kuramashi, Berezinskii-Kosterlitz-Thouless transition in lattice Schwinger
+
+
+
+
+                                                                                                        JHEP03(2025)027
+     model with one flavor of Wilson fermion, Phys. Rev. D 97 (2018) 034502 [arXiv:1712.07808]
+     [INSPIRE].
+[25] N. Butt et al., Tensor network formulation of the massless Schwinger model with staggered
+     fermions, Phys. Rev. D 101 (2020) 094509 [arXiv:1911.01285] [INSPIRE].
+[26] A. Yosprakob, J. Nishimura and K. Okunishi, A new technique to incorporate multiple fermion
+     flavors in tensor renormalization group method for lattice gauge theories, JHEP 11 (2023) 187
+     [arXiv:2309.01422] [INSPIRE].
+[27] S. Takeda and Y. Yoshimura, Grassmann tensor renormalization group for the one-flavor lattice
+     Gross-Neveu model with finite chemical potential, PTEP 2015 (2015) 043B01
+     [arXiv:1412.7855] [INSPIRE].
+[28] S. Akiyama, Matrix product decomposition for two- and three-flavor Wilson fermions: benchmark
+     results in the lattice Gross-Neveu model at finite density, Phys. Rev. D 108 (2023) 034514
+     [arXiv:2304.01473] [INSPIRE].
+[29] S. Akiyama, Y. Kuramashi, T. Yamashita and Y. Yoshimura, Restoration of chiral symmetry in
+     cold and dense Nambu-Jona-Lasinio model with tensor renormalization group, JHEP 01 (2021)
+     121 [arXiv:2009.11583] [INSPIRE].
+[30] J. Unmuth-Yockey et al., Universal features of the Abelian Polyakov loop in 1+1 dimensions,
+     Phys. Rev. D 98 (2018) 094511 [arXiv:1807.09186] [INSPIRE].
+[31] A. Bazavov, S. Catterall, R.G. Jha and J. Unmuth-Yockey, Tensor renormalization group study
+     of the non-Abelian Higgs model in two dimensions, Phys. Rev. D 99 (2019) 114507
+     [arXiv:1901.11443] [INSPIRE].
+[32] S. Akiyama and Y. Kuramashi, Tensor renormalization group study of (3+1)-dimensional Z2
+     gauge-Higgs model at finite density, JHEP 05 (2022) 102 [arXiv:2202.10051] [INSPIRE].
+[33] S. Akiyama and Y. Kuramashi, Critical endpoint of (3+1)-dimensional finite density Z3
+     gauge-Higgs model with tensor renormalization group, JHEP 10 (2023) 077 [arXiv:2304.07934]
+     [INSPIRE].
+[34] M. Fukuma, D. Kadoh and N. Matsumoto, Tensor network approach to two-dimensional
+     Yang-Mills theories, PTEP 2021 (2021) 123B03 [arXiv:2107.14149] [INSPIRE].
+[35] M. Hirasawa, A. Matsumoto, J. Nishimura and A. Yosprakob, Tensor renormalization group and
+     the volume independence in 2D U(N) and SU(N) gauge theories, JHEP 12 (2021) 011
+     [arXiv:2110.05800] [INSPIRE].
+[36] T. Kuwahara and A. Tsuchiya, Toward tensor renormalization group study of three-dimensional
+     non-Abelian gauge theory, PTEP 2022 (2022) 093B02 [arXiv:2205.08883] [INSPIRE].
+
+
+
+
+                                               – 23 –
+[37] A. Yosprakob and K. Okunishi, Tensor renormalization group study of the three-dimensional
+     SU(2) and SU(3) gauge theories with the reduced tensor network formulation,
+     arXiv:2406.16763 [INSPIRE].
+[38] J. Bloch and R. Lohmayer, Grassmann higher-order tensor renormalization group approach for
+     two-dimensional strong-coupling QCD, Nucl. Phys. B 986 (2023) 116032 [arXiv:2206.00545]
+     [INSPIRE].
+[39] M. Asaduzzaman et al., Tensor network representation of non-abelian gauge theory coupled to
+     reduced staggered fermions, JHEP 05 (2024) 195 [arXiv:2312.16167] [INSPIRE].
+[40] S. Kühn, E. Zohar, J.I. Cirac and M.C. Bañuls, Non-Abelian string breaking phenomena with
+     Matrix Product States, JHEP 07 (2015) 130 [arXiv:1505.04441] [INSPIRE].
+
+
+
+
+                                                                                                          JHEP03(2025)027
+[41] P. Silvi et al., Finite-density phase diagram of a (1+1)-d non-abelian lattice gauge theory with
+     tensor networks, Quantum 1 (2017) 9 [arXiv:1606.05510] [INSPIRE].
+[42] M.C. Bañuls et al., Efficient basis formulation for 1+1 dimensional SU(2) lattice gauge theory:
+     spectral calculations with matrix product states, Phys. Rev. X 7 (2017) 041046
+     [arXiv:1707.06434] [INSPIRE].
+[43] P. Sala et al., Variational study of U(1) and SU(2) lattice gauge theories with Gaussian states in
+     1+1 dimensions, Phys. Rev. D 98 (2018) 034505 [arXiv:1805.05190] [INSPIRE].
+[44] P. Silvi, Y. Sauer, F. Tschirsich and S. Montangero, Tensor network simulation of an SU(3)
+     lattice gauge theory in 1D, Phys. Rev. D 100 (2019) 074512 [arXiv:1901.04403] [INSPIRE].
+[45] M. Rigobello, G. Magnifico, P. Silvi and S. Montangero, Hadrons in (1+1)D Hamiltonian
+     hardcore lattice QCD, arXiv:2308.04488 [INSPIRE].
+[46] H. Liu, T. Bhattacharya, S. Chandrasekharan and R. Gupta, Phases of 2d massless QCD with
+     qubit regularization, arXiv:2312.17734 [INSPIRE].
+[47] T. Hayata, Y. Hidaka and K. Nishimura, Dense QCD2 with matrix product states, JHEP 07
+     (2024) 106 [arXiv:2311.11643] [INSPIRE].
+[48] J.B. Kogut et al., Chiral Symmetry Restoration in Baryon Rich Environments, Nucl. Phys. B
+     225 (1983) 93 [INSPIRE].
+[49] A. Nakamura, Quarks and Gluons at Finite Temperature and Density, Phys. Lett. B 149 (1984)
+     391 [INSPIRE].
+[50] S. Akiyama, Bond-weighting method for the Grassmann tensor renormalization group, JHEP 11
+     (2022) 030 [arXiv:2208.03227] [INSPIRE].
+[51] S. Hands, J.B. Kogut, M.-P. Lombardo and S.E. Morrison, Symmetries and spectrum of SU(2)
+     lattice gauge theory at finite chemical potential, Nucl. Phys. B 558 (1999) 327
+     [hep-lat/9902034] [INSPIRE].
+[52] J.B. Kogut, M.A. Stephanov and D. Toublan, On two color QCD with baryon chemical potential,
+     Phys. Lett. B 464 (1999) 183 [hep-ph/9906346] [INSPIRE].
+[53] J.B. Kogut, D. Toublan and D.K. Sinclair, The phase diagram of four flavor SU(2) lattice gauge
+     theory at nonzero chemical potential and temperature, Nucl. Phys. B 642 (2002) 181
+     [hep-lat/0205019] [INSPIRE].
+[54] Y. Nishida, K. Fukushima and T. Hatsuda, Thermodynamics of strong coupling two color QCD
+     with chiral and diquark condensates, Phys. Rept. 398 (2004) 281 [hep-ph/0306066] [INSPIRE].
+[55] S. Hands, P. Sitch and J.-I. Skullerud, Hadron Spectrum in a Two-Colour Baryon-Rich Medium,
+     Phys. Lett. B 662 (2008) 405 [arXiv:0710.1966] [INSPIRE].
+
+
+
+
+                                                – 24 –
+[56] N. Strodthoff, B.-J. Schaefer and L. von Smekal, Quark-meson-diquark model for two-color QCD,
+     Phys. Rev. D 85 (2012) 074007 [arXiv:1112.5401] [INSPIRE].
+[57] S. Cotter, P. Giudice, S. Hands and J.-I. Skullerud, Towards the phase diagram of dense
+     two-color matter, Phys. Rev. D 87 (2013) 034507 [arXiv:1210.4496] [INSPIRE].
+[58] V.V. Braguta et al., Study of the phase diagram of dense two-color QCD within lattice
+     simulation, Phys. Rev. D 94 (2016) 114510 [arXiv:1605.04090] [INSPIRE].
+[59] K. Iida, E. Itou and T.-G. Lee, Two-colour QCD phases and the topology at low temperature and
+     high density, JHEP 01 (2020) 181 [arXiv:1910.07872] [INSPIRE].
+[60] K. Iida, E. Itou, K. Murakami and D. Suenaga, Lattice study on finite density QC2 D towards
+
+
+
+
+                                                                                                       JHEP03(2025)027
+     zero temperature, JHEP 10 (2024) 022 [arXiv:2405.20566] [INSPIRE].
+[61] N.D. Mermin and H. Wagner, Absence of ferromagnetism or antiferromagnetism in
+     one-dimensional or two-dimensional isotropic Heisenberg models, Phys. Rev. Lett. 17 (1966) 1133
+     [INSPIRE].
+[62] S.R. Coleman, There are no Goldstone bosons in two-dimensions, Commun. Math. Phys. 31
+     (1973) 259 [INSPIRE].
+[63] Y. Yoshimura et al., Calculation of fermionic Green functions with Grassmann higher-order
+     tensor renormalization group, Phys. Rev. D 97 (2018) 054511 [arXiv:1711.08121] [INSPIRE].
+[64] S. Morita and N. Kawashima, Calculation of higher-order moments by higher-order tensor
+     renormalization group, Comput. Phys. Commun. 236 (2019) 65 [arXiv:1806.10275] [INSPIRE].
+[65] T.D. Cohen, Functional integrals for QCD at nonzero chemical potential and zero density, Phys.
+     Rev. Lett. 91 (2003) 222001 [hep-ph/0307089] [INSPIRE].
+[66] V. Schon and M. Thies, Emergence of Skyrme crystal in Gross-Neveu and ’t Hooft models at
+     finite density, Phys. Rev. D 62 (2000) 096002 [hep-th/0003195] [INSPIRE].
+[67] M. Thies and K. Urlichs, Revised phase diagram of the Gross-Neveu model, Phys. Rev. D 67
+     (2003) 125015 [hep-th/0302092] [INSPIRE].
+[68] T. Kojo, A (1+1) dimensional example of Quarkyonic matter, Nucl. Phys. A 877 (2012) 70
+     [arXiv:1106.2187] [INSPIRE].
+[69] Quantum Software Project, https://qsw.phys.s.u-tokyo.ac.jp/.
+
+
+
+
+                                              – 25 –
+

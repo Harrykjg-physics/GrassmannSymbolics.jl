@@ -1,0 +1,1037 @@
+                                                      Published for SISSA by         Springer
+                                                                   Received: September 29,   2020
+                                                                    Revised: November 28,    2020
+                                                                    Accepted: December 2,    2020
+                                                                    Published: January 20,   2021
+
+
+
+
+Restoration of chiral symmetry in cold and dense
+
+
+
+
+                                                                                                    JHEP01(2021)121
+Nambu-Jona-Lasinio model with tensor
+renormalization group
+
+
+Shinichiro Akiyama,a Yoshinobu Kuramashi,b Takumi Yamashitac
+and Yusuke Yoshimurab
+a
+  Graduate School of Pure and Applied Sciences, University of Tsukuba,
+  Tsukuba, Ibaraki 305-8571, Japan
+b
+  Center for Computational Sciences, University of Tsukuba,
+  Tsukuba, Ibaraki 305-8577, Japan
+c
+  Faculty of Engineering, Information and Systems, University of Tsukuba,
+  Tsukuba, Ibaraki 305-8573, Japan
+    E-mail: akiyama@het.ph.tsukuba.ac.jp, kuramasi@het.ph.tsukuba.ac.jp,
+    yamasita@ccs.tsukuba.ac.jp, yoshimur@ccs.tsukuba.ac.jp
+
+Abstract: We analyze the chiral phase transition of the Nambu-Jona-Lasinio model in the
+cold and dense region on the lattice, developing the Grassmann version of the anisotropic
+tensor renormalization group algorithm. The model is formulated with the Kogut-Susskind
+fermion action. We use the chiral condensate as an order parameter to investigate the
+restoration of the chiral symmetry. The first-order chiral phase transition is clearly observed
+in the dense region at vanishing temperature with µ/T ∼ O(103 ) on a large volume of
+V = 10244 . We also present the results for the equation of state.
+
+Keywords: Field Theories in Higher Dimensions, Lattice Quantum Field Theory, Effec-
+tive Field Theories
+
+ArXiv ePrint: 2009.11583
+
+
+
+
+Open Access, c The Authors.
+                                                     https://doi.org/10.1007/JHEP01(2021)121
+Article funded by SCOAP3 .
+Contents
+
+1 Introduction                                                                                         1
+
+2 Formulation and numerical algorithm                                                                  2
+  2.1 NJL model on the lattice                                                                         2
+  2.2 Tensor network representation                                                                    3
+  2.3 Grassmann ATRG                                                                                   5
+
+
+
+
+                                                                                                            JHEP01(2021)121
+      2.3.1 Procedure of the algorithm                                                                 5
+      2.3.2 Some techniques                                                                            7
+
+3 Numerical results                                                                                    9
+  3.1 Setup                                                                                            9
+  3.2 Heavy dense limit as a benchmark                                                                 9
+  3.3 Chiral phase transition                                                                         10
+  3.4 Equation of state                                                                               12
+
+4 Summary and outlook                                                                                14
+
+
+
+
+1       Introduction
+
+The phase structure and the equation of state for QCD at finite temperature and density
+are essential ingredients to understand the evolution and the current state of the universe
+quantitatively. Although the lattice QCD simulation has been expected to be an ideal
+tool to investigate the non-perturbative aspects of QCD, it has not been successful to
+reveal the nature of QCD at finite density. This is due to the sign problem caused by the
+introduction of the chemical potential in the lattice QCD simulations based on the Monte
+Carlo algorithm, see, e.g., ref. [1].
+     The tensor renormalization group (TRG) method, which was originally proposed by
+Levin and Nave to study two-dimensional (2d) classical spin models in 2007 [2], has several
+superior features over the Monte Carlo method.1 Firstly, the TRG method, and also
+other tensor network methods, are free from the sign problem. This virtue was confirmed
+by successful application of these methods to various 2d quantum field theories which
+contain the sign problem [6, 8–13].2 Moreover, the authors have successfully employed the
+anisotropic TRG (ATRG) algorithm to analyze the Bose condensation in the 4d complex φ4
+theory at finite density [16]. Secondly, the computational cost depends on the system size
+    1
+     In this paper the TRG method or the TRG approach refers to not only the original numerical algorithm
+proposed by Levin and Nave but also its extensions [3–7].
+   2
+     The TRG study of the sign problem was also performed by introducing the complex coupling or the
+chemical potential to the 2d classical O(2) spin model [14, 15].
+
+
+
+
+                                                 –1–
+only logarithmically. This is an essential ingredient to enable us to take the thermodynamic
+limit at vanishing temperature. Thirdly, the Grassmann version of the TRG method,
+which was developed by some of the authors [6, 7, 17], allows direct manipulation of the
+Grassmann variables. Fourthly, we can obtain the partition function or the path-integral
+itself. In the thermodynamic limit, the pressure is directly related to the thermodynamic
+potential so that the equation of state can be easily obtained with the TRG method.
+     In this paper we investigate the phase structure of the Nambu-Jona-Lasinio (NJL)
+model [18, 19] at finite temperature T and chemical potential µ on the lattice, developing
+the Grassmann version of the ATRG algorithm. The Lagrangian of the NJL model in the
+
+
+
+
+                                                                                                     JHEP01(2021)121
+continuum is defined as follows:
+                                            n                                     o
+                 L = ψ̄(x)γν ∂ν ψ(x) − g0 (ψ̄(x)ψ(x))2 + (ψ̄(x)iγ5 ψ(x))2 ,                  (1.1)
+
+which has the U(1) chiral symmetry with ψ(x) → eiαγ5 ψ(x) and ψ̄(x) → ψ̄(x)eiαγ5 . This
+is an effective theory of QCD which describes the dynamical chiral symmetry breaking:
+once the strength of the coupling constant g0 exceeds a certain critical value the system
+generates a non-trivial vacuum with hψ̄(x)ψ(x)i 6= 0. The chiral phase structure of the
+NJL model on the T -µ plane is discussed by some analytical methods, e.g., the mean-field
+approximation (MFA) [20] and the functional renormalization group (FRG) [21]. Figure 1
+shows a schematic view of the expected phase structure, whose characteristic feature is
+the first-order chiral phase transition in the dense region at very low temperature [22].
+This phase transition is our primary target to investigate, employing the chiral condensate
+hψ̄(x)ψ(x)i as an order parameter. Since the chiral symmetry plays a crucial role in this
+study, we use the Kogut-Susskind fermion to formulate the NJL model on the lattice.
+The analysis of the phase structure with the TRG method would help us understand the
+thermodynamic properties of dense QCD.
+     This paper is organized as follows. In section 2 we explain the formulation of the lattice
+NJL model with the Kogut-Susskind fermion and the algorithmic details of the Grassmann
+ATRG (GATRG). In section 3, we compare the numerical results with the analytical ones
+in the heavy dense limit as a benchmark before numerical results for the chiral condensate
+and the equation of state are presented. Section 4 is devoted to summary and outlook.
+
+
+2     Formulation and numerical algorithm
+
+2.1    NJL model on the lattice
+We use the Kogut-Susskind fermion to formulate the NJL model on the lattice. Following
+refs. [23, 24], we define the model at finite chemical potential µ as
+                      4
+               1 XX            h                                                 i
+            S = a3       ην (n) eµaδν,4 χ̄(n)χ(n + ν̂) − e−µaδν,4 χ̄(n + ν̂)χ(n)
+               2 n∈Λ ν=1
+                         X                          4
+                                                   XX
+                 + ma4         χ̄(n)χ(n) − g0 a4             χ̄(n)χ(n)χ̄(n + ν̂)χ(n + ν̂),   (2.1)
+                         n∈Λ                       n∈Λ ν=1
+
+
+
+
+                                                –2–
+             𝑇
+
+
+
+
+                           2nd                         Tricritical point
+
+
+
+
+                                                                                                           JHEP01(2021)121
+                                  ! ≠0
+                                  𝜓𝜓                         1st            ! =0
+                                                                            𝜓𝜓
+
+
+
+
+                                                        𝜇
+Figure 1. Schematic view of expected phase diagram of the NJL model on the T -µ plane. Solid
+and broken curves represent the first- and second-order phase transitions, respectively. Closed circle
+denotes the tricritical point where the first-order phase transition line terminates.
+
+
+where n = (n1 , n2 , n3 , n4 )(∈ Z4 ) specifies a position in the lattice Λ, with the lattice spacing
+a. χ(n) and χ̄(n) are Grassmann-valued fields without the Dirac structure. Since they
+describe the Kogut-Susskind fermions, χ(n) and χ̄(n) are single-component Grassmann
+variables. ην (n) is the staggered sign function defined by ην (n) = (−1)n1 +···+nν−1 with
+η1 (n) = 1. The partition function is defined in the ordinal manner:
+                                                                    
+                                       Z
+                                                    dχ(n)dχ̄(n) e−S .
+                                                Y
+                                 Z=                                                              (2.2)
+                                              n∈Λ
+
+For vanishing mass m, eq. (2.1) is invariant under the following continuous chiral transfor-
+mation:
+
+                                           χ(n) → eiα(n) χ(n),                                   (2.3)
+                                                            iα(n)
+                                           χ̄(n) → χ̄(n)e                                         (2.4)
+
+with α ∈ R and (n) = (−1)n1 +n2 +n3 +n4 .
+
+2.2    Tensor network representation
+We introduce the tensor network representation for eq. (2.2) in a similar way with refs. [10,
+11].3 Hereafter, we set a = 1 for simplicity. Firstly, we expand the local Boltzmann weights
+   3
+     See ref. [25] for a different TRG approach with the Kogut-Susskind fermion, where the TRG procedure
+is applied to the Schwinger model after integrating out the fermion fields analytically.
+
+
+
+
+                                                    –3–
+in the following manners to decompose the nearest-neighbor interactions:
+           "                                                   #
+            eµδν,4
+      exp −        ην (n)χ̄(n)χ(n + ν̂)
+              2
+                        1                  µ
+                                         e 2 δν,4
+                        X         Z
+               =                           √ ην (n)χ̄(n)dΦν (n)
+                   iν,1 (n)=0
+                                              2
+                                                   µ                                                                  !iν,1 (n)
+                                                e 2 δν,4
+                                               · √ χ(n + ν̂)dΦ̄ν (n + ν̂) · Φ̄ν (n + ν̂)Φν (n)                                    ,         (2.5)
+                                                     2
+           "                                               #
+          e−µδν,4
+
+
+
+
+                                                                                                                                                    JHEP01(2021)121
+      exp         ην (n)χ̄(n + ν̂)χ(n)
+            2
+                        1                      µ
+                                         e− 2 δν,4
+                        X         Z
+               =                           √ ην (n)χ(n)dΨν (n)
+                   iν,2 (n)=0
+                                              2
+                                                       µ                                                                   !iν,2 (n)
+                                                e− 2 δν,4
+                                               · √ χ̄(n + ν̂)dΨ̄ν (n + ν̂) · Ψ̄ν (n + ν̂)Ψν (n)                                        ,    (2.6)
+                                                     2
+      eg0 χ̄(n)χ(n)χ̄(n+ν̂)χ(n+ν̂)
+                        1
+                                   √              √
+                                  ( g0 χ̄(n)χ(n) · g0 χ̄(n + ν̂)χ(n + ν̂))iν,3 (n) .
+                        X
+               =                                                                                                                            (2.7)
+                   iν,3 (n)=0
+
+Secondly, integrating out χ and χ̄ at each lattice site n, we define
+
+  Tn;i4 (n)i1 (n)i2 (n)i3 (n)i4 (n−4̂)i1 (n−1̂)i2 (n−2̂)i3 (n−3̂)
+
+                                               4           µ                           !iν,1 (n)        µ                    !iν,1 (n−ν̂)
+                                                       e 2 δν,4                                        e 2 δν,4
+                   Z
+                                   −mχ̄χ
+                                               Y
+               =       dχdχ̄ e                           √ ην (n)χ̄dΦν (n)                               √ χdΦ̄ν (n)
+                                            ν=1             2                                               2
+                                                                   !iν,2 (n)                                !iν,2 (n−ν̂)
+                                −µ                                                 µ
+                            e      δ
+                                 2 ν,4                                         e− 2 δν,4                                    √
+                       ×         √       ην (n)χdΨν (n)                          √ χ̄dΨ̄ν (n)                              ( g0 χ̄χ)iν,3 (n)
+                                     2                                              2
+                          √                                     iν,1 (n)                     iν,2 (n)
+                       × ( g0 χ̄χ)iν,3 (n−ν̂) Φ̄ν (n + ν̂)Φν (n)             Ψ̄ν (n + ν̂)Ψν (n)           .                                 (2.8)
+
+This serves as a change of variables from χ, χ̄ to the integer-valued fields iν = (iν,p )p=1,2,3
+and alternative Grassmann variables Φν , Ψν . Renaming x = i1 , y = i2 , z = i3 , t = i4 ,
+eq. (2.2) is expressed in the form,
+                                                                   X   Z Y
+                                                   Z=                          Tn;txyzt0 x0 y0 z 0 ,                                        (2.9)
+                                                           {t,x,y,z}     n∈Λ
+
+
+which is the tensor network representation of this model.4                                                   In current construction,
+Tn;txyzt0 x0 y0 z 0 is factorized as
+
+                                Tn;txyzt0 x0 y0 z 0 = In;txyzt0 x0 y0 z 0 Sn;txyzt0 x0 y0 z 0 Gn;txyzt0 x0 y0 z 0 .                        (2.10)
+  4
+    In eq. (2.9), we omit arguments in tensor indices and introduce shorthand notations such as x0 =
+x(n − 1̂), y 0 = y(n − 2̂), z 0 = z(n − 3̂), t0 = t(n − 4̂)
+
+
+
+
+                                                                       –4–
+In;txyzt0 x0 y0 z 0 denotes the contributions from the integration over χ(n) and χ̄(n). A straight-
+forward calculation shows
+
+      In;txyzt0 x0 y0 z 0 = (−1)n1 (y1 +y2 +z1 +z2 +t1 +t2 )+n2 (z1 +z2 +t1 +t2 )+n3 (t1 +t2 )
+                                                                                      0       0       0            0    0       0        0   0
+                               1 t1 +t2 +x1 +x2 +y1 +y2 +z1 +z2 +t1 +t2 +x1 +x2 +y1 +y2 +z1 +z2
+                                      
+                            × √
+                                2
+                             √ t3 +x3 +y3 +z3 +t03 +x03 +y30 +z30 µ (t1 −t2 +t01 −t02 )
+                            × g0                                 e2
+                                h                                                                                                                  i
+                                                                             ¯ txyzt0 x0 y0 z 0 ,1 ∆txyzt0 x0 y0 z 0 ,1 ,
+                                ¯ txyzt0 x0 y0 z 0 ,0 ∆txyzt0 x0 y0 z 0 ,0 + ∆
+                            × −m∆                                                                                                                       (2.11)
+
+where
+
+
+
+
+                                                                                                                                                                    JHEP01(2021)121
+              ¯ txyzt0 x0 y0 z 0 ,q = δt +t +x +x +y +y +z +z +t0 +t0 +x0 +x0 +y0 +y0 +z 0 +z 0 ,q ,
+              ∆                                                                                                                                         (2.12)
+                                        1  3  1  3  1  3  1  3  2   3   2   3   2   3   2    3
+
+              ∆txyzt0 x0 y0 z 0 ,q = δt2 +t3 +x2 +x3 +y2 +y3 +z2 +z3 +t01 +t03 +x01 +x03 +y10 +y30 +z10 +z30 ,q ,                                       (2.13)
+
+with q = 0, 1. ∆,¯ ∆ are derived from χ̄-, χ-integration, respectively. The second line in
+eq. (2.11) comes from the staggered sign factor ην (n). Consequently, In;txyzt0 x0 y0 z 0 does
+depend on n ∈ Λ. Eq. (2.11) tells us that this tensor network is uniform in t-direction, but
+has some periodic structure in x-,y-,z-directions. This periodicity corresponds to the parity
+of the spatial lattice site n = (n1 , n2 , n3 ). A graphical representation of eq. (2.9) is shown
+in figure 2(A). As a result of eqs. (2.5) and (2.6), some Grassmann variables are allowed
+to exist in Tn;txyzt0 x0 y0 z 0 . These Grassmann variables have been denoted by Gn;txyzt0 x0 y0 z 0
+in eq. (2.10). Some sign can arise reflecting on how we have arranged these Grassmann
+variables in Gn;txyzt0 x0 y0 z 0 and we have set this sign Sn;txyzt0 x0 y0 z 0 in eq. (2.10). We now
+assume that
+
+ Gn;txyzt0 x0 y0 z 0 =
+                                                                     t0          t0       x0              x0           y0           y0       z0    z0
+      dΦt41 dΨt42 dΦx1 1 dΨx1 2 dΦy21 dΨy22 dΦz31 dΨz32 dΨ̄42 dΦ̄41 dΨ̄1 2 dΦ̄1 1 dΨ̄22 dΦ̄21 dΨ̄32 dΦ̄31
+                                   t 1                          t 2                                                x1                              x2
+       × Φ̄4 (n + 4̂)Φ4 (n)                  Ψ̄4 (n + 4̂)Ψ4 (n)             Φ̄1 (n + 1̂)Φ1 (n)                                      Ψ̄1 (n + 1̂)Ψ1 (n)
+                                    y1                          y2                                                 z1                              z2
+       × Φ̄2 (n + 2̂)Φ2 (n)                  Ψ̄2 (n + 2̂)Ψ2 (n)                 Φ̄3 (n + 3̂)Φ3 (n)                                  Ψ̄3 (n + 3̂)Ψ3 (n)          ,
+                                                                                                                                                        (2.14)
+where all the Grassmann measures depend on n and their arguments are omitted. Accord-
+ing to this arrangement, Sn;txyzt0 x0 y0 z 0 is given by
+
+                    Sn;txyzt0 x0 y0 z 0 = (−1)t1 (t2 +x2 +y2 +z2 )+x1 (x2 +y2 +z2 )+y1 (y2 +z2 )+z1 z2
+                                                       0   0   0    0       0         0   0       0            0        0   0        0       0 0
+                                              × (−1)t2 (t1 +x1 +y1 +z1 )+x2 (x1 +y1 +z1 )+y2 (y1 +z1 )+z2 z1
+                                                                                                                   0    0       0        0
+                                              × (−1)(t1 +t2 +x1 +x2 +y1 +y2 +z1 +z2 )(t1 +x1 +y1 +z1 ) .                                                (2.15)
+
+
+2.3      Grassmann ATRG
+2.3.1         Procedure of the algorithm
+We now formulate Grassmann ATRG (GATRG) algorithm to coarse grain the tensor net-
+work defined by eq. (2.9). The basic idea is that we combine the ATRG procedure to
+
+
+
+
+                                                                –5–
+                                                                                                                         JHEP01(2021)121
+Figure 2. Schematic illustration of the coarse-graining with the GATRG. Coordinate axes in Λ
+are shown as dotted lines with arrows. Different numbers are assigned to specify different tensors.
+(A) Initial tensor network in eq. (2.9). Eight types of tensor are located at a spatial unit cube. A
+periodic structure is explicitly shown on x-y plane. The tensor network is uniform in t-direction. (B)
+The first coarse-graining along z-direction reduces types of tensor from eight to four. The tensor
+network becomes uniform in t-, z-directions. (C) The second coarse-graining along y-direction
+makes the structure uniform except in x-direction. (D) Totally uniform tensor network is obtained
+by the third coarse-graining along x-direction. In the following coarse-graining steps, the structure
+is invariant.
+
+
+compress In;txyzt0 x0 y0 z 0 Sn;txyzt0 x0 y0 z 0 in eq. (2.10) with the Grassmann HOTRG (GHOTRG)
+procedure to deal with Gn;txyzt0 x0 y0 z 0 in eq. (2.10).
+     Let us consider the coarse-graining along z-direction. Our aim is to construct a kind of
+block-spin transformation, Tn+3̂ · Tn 7→ T 0 . We start from constructing the transformation
+Gn+3̂ · Gn 7→ G 0 , employing the GHOTRG procedure demonstrated in refs. [7, 17]. A
+straightforward extension to the 4d system gives us
+
+          0                                    t̃ x̃ ỹ z1  z20    0
+                                                                 t̃ ¯x̃ ỹ 0       z0   z0
+         Gt̃x̃ỹz                                                            2
+                  t̃0 x̃0 ỹ 0 z 0 = σn+3̂,n dη dξ dθ dΦ3 dΨ3 dη̄ dξ dθ̄ dΨ̄3 dΦ̄3
+                                                                                  1
+
+                                                                        z1                         z2
+                                      ¯ x̃ (θ̄θ)ỹ Φ̄3 (n + 3̂)Φ3 (n)
+                           × (η̄η)t̃ (ξξ)                                        Ψ̄3 (n + 3̂)Ψ3 (n)         .   (2.16)
+
+
+One can confirm this expression by integrating out some of the Grassmann variables in
+Gn+3̂ · Gn with the help of some shifting technique.5 From now on, we call the exponent of
+Grassmann number as the fermion index. In eq. (2.16), new fermion indices, t̃, x̃, ỹ, t̃0 , x̃0 , ỹ 0 ,
+                                                           ¯ θ̄. The resulting sign factor
+are introduced with new Grassmann variables, η, ξ, θ, η̄, ξ,
+
+   5
+       See ref. [7] for more details.
+
+
+
+
+                                                       –6–
+σn+3̂,n in eq. (2.16) is
+
+ σn+3̂,n = (−1)z1 (n)+z2 (n)
+              × (−1)[t1 (n+3̂)+t2 (n+3̂)][t1 (n)+t2 (n)]+[t1 (n+3̂)+t2 (n+3̂)+x1 (n+3̂)+x2 (n+3̂)][x1 (n)+x2 (n)]
+              × (−1)[t1 (n+3̂)+t2 (n+3̂)+x1 (n+3̂)+x2 (n+3̂)+y1 (n+3̂)+y2 (n+3̂)][y1 (n)+y2 (n)]
+                         0            0      0      0        0         0          0         0         0      0
+              × (−1)[y1 (n+3̂)+y2 (n+3̂)][y1 (n)+y2 (n)]+[x1 (n+3̂)+x2 (n+3̂)+y1 (n+3̂)+y2 (n+3̂)][x1 (n)+x2 (n)]
+                         0        0          0          0         0         0         0     0
+              × (−1)[t1 (n+3̂)+t2 (n+3̂)+x1 (n+3̂)+x2 (n+3̂)+y1 (n+3̂)+y2 (n+3̂)][t1 (n)+t2 (n)] .           (2.17)
+
+We now move on to the ATRG procedure for In;txyzt0 x0 y0 z 0 Sn;txyzt0 x0 y0 z 0 . In the following,
+
+
+
+
+                                                                                                                      JHEP01(2021)121
+we set Tn;txyzt0 x0 y0 z 0 = In;txyzt0 x0 y0 z 0 Sn;txyzt0 x0 y0 z 0 . Incorporating with σn+3̂,n in eq. (2.16), a
+total block-spin transformation, Tn+3̂ · Tn 7→ T 0 , is accomplished. In other words, what we
+have to formulate is a block-spin transformation, σn+3̂,n · Tn+3̂ · Tn 7→ T 0 . The sign factor
+σn+3̂,n consists of two types of index; ones are z1 , z2 living on the coarse-graining direction
+and the others are t1 , t2 , x1 , x2 , y1 , y2 living on the other directions. We deal with them in
+                             (CG)                                         (NCG)            (CG)            (CG)
+a separate way. Let σn             = (−1)z1 (n)+z2 (n) and σn+3̂,n = σn+3̂,n /σn . Then σn                       is
+included in the swapping bond part of the ATRG.6 This is quite natural because one has to
+contract the tensors with respect to the index z in the swapping step of the ATRG. On the
+               (NCG)
+other hand, σn+3̂,n is handled both in finding squeezers and in contracting these squeezers
+and local tensors. Modifying these procedures in the ATRG, the GATRG is formulated.
+     The coarse-graining along z-direction is followed by the series of coarse-graining along
+y-, x-, and t-directions. Figure 2 shows a schematic picture of the first three times of
+coarse-graining. Though the original tensor network in eq. (2.9) consists of several types
+of local tensor, the GATRG reduces them under a sequential coarse-graining process and
+we obtain a uniform tensor network in all directions.
+     As a final supplement, we comment on another implementation for GATRG. It is also
+possible to coarse-grain Gn;txyzt0 x0 y0 z 0 following the philosophy of the ATRG. Gn;txyzt0 x0 y0 z 0
+can be decomposed by introducing some extra Grassmann variables in the swapping bond
+part, based on the same idea in the Grassmann TRG [6, 10]. This implementation must
+reproduce the same result with the GATRG explained above if no finite bond dimension is
+introduced. However, the results obtained with the finite bond calculation are possibly dif-
+ferent because these two GATRGs assume non-identical cost functions in optimization. We
+have numerically confirmed that this another GATRG also works, applying it to evaluate
+the tensor network in eq. (2.9). We have also found that the deviation between resulting
+thermodynamic potentials obtained by two types of GATRG tends to be smaller as the
+bond dimension is increased.
+
+2.3.2     Some techniques
+Eq. (2.11) reveals that T takes a finite value if and only if its Grassmann parity is even.
+This feature can be understood as a kind of Z2 symmetry, which enables us to introduce the
+block diagonal representation for some tensors treated in the GATRG algorithm. We carry
+   6
+    See refs. [4, 26] for more details about the swapping bond part and the squeezers used in the ATRG
+algorithm.
+
+
+
+
+                                                        –7–
+out the singular value decomposition (SVD) in the swapping bond part and the higher-
+order SVD in finding squeezers under the block diagonal representation for corresponding
+tensors. This blocking technique is of essential importance because it naturally defines the
+fermion indices introduced in eq. (2.16). For instance, in order to find the squeezers in
+coarse-graining along ν-direction, we need to indirectly carry out the following SVD,
+                                                                D
+                                                                         Uν0 ν1 ,k sk V † k,ν2 ν3 ,
+                                                                X
+                                        Q ν 0 ν1 ν2 ν 3 ≈                                                                    (2.18)
+                                                               k=1
+
+with D the bond dimension in the GATRG. In the block diagonal representation, this is
+
+
+
+
+                                                                                                                                      JHEP01(2021)121
+expressed by
+          "                   #     "                           #"                            #"                       #
+              Q(even)    0      U (even)    0                            s(even) 0                    V (even)†    0
+                        (odd) ≈                                                                                          .   (2.19)
+                0     Q            0     U (odd)                            0 s(odd)                      0     V (odd)†
+
+Let k̃ be the fermion index for k. Then we assign k̃ = 0(1) when sk comes from the matrix
+s(even) (s(odd) ). In addition, the information of the fermion index k̃ can be encoded in the
+ordering of k:
+
+                                                 k = 1, · · · , d, d + 1, · · · , D .
+                                                        | {z } |                   {z         }
+                                                             k̃=0                  k̃=1
+
+This means that D largest singular values in s consist of d singular values in s(even) and
+D − d singular values in s(odd) . A similar ordering trick is also available in the initial tensor
+network representation.7 Each index in the initial tensor Tn;txyzt0 x0 y0 z 0 is composed of three
+integers, say i = (i1 , i2 , i3 ), running from (0, 0, 0) to (1, 1, 1). Note that i1 , i2 and i3 have
+been introduced via eqs. (2.5), (2.6) and (2.7), respectively. Then the following mapping
+is practically useful:
+
+                       (0, 0, 0) 7→ 1, (1, 1, 0) 7→ 2, (0, 0, 1) 7→ 3, (1, 1, 1) 7→ 4,
+                       (1, 0, 0) 7→ 5, (0, 1, 0) 7→ 6, (1, 0, 1) 7→ 7, (0, 1, 1) 7→ 8.
+
+As we have seen in eq. (2.14), the third component, say i3 , does not affect the Grassmann
+parity in the initial tensor. As a result, the parity of the sum of the first two components,
+i1 and i2 , corresponds to the Grassmann parity. Then the fermion index can be encoded
+in the ordering as
+
+                                             1, 2, 3, 4 , 5, 6, 7, 8 .
+                                             |          {z          }      |         {z           }
+                                            (fermion index)=0 (fermion index)=1
+
+Thanks to this trick, eq. (2.17) is simplified with the corresponding fermion indices as
+
+       σn+3̂,n = (−1)z̃(n)+t̃(n+3̂)t̃(n)+[t̃(n+3̂)+x̃(n+3̂)]x̃(n)+[t̃(n+3̂)+x̃(n+3̂)+ỹ(n+3̂)]ỹ(n)
+                              0         0           0               0          0          0             0        0      0
+                    × (−1)ỹ (n+3̂)ỹ (n)+[x̃ (n+3̂)+ỹ (n+3̂)]x̃ (n)+[t̃ (n+3̂)+x̃ (n+3̂)+ỹ (n+3̂)]t̃ (n) .                (2.20)
+  7
+      Another ordering trick is demonstrated in ref. [27].
+
+
+
+
+                                                                        –8–
+     The last technique to be mentioned is the parallel computation, which reduces the
+execution time of the GATRG. The essence of this technique in the ATRG is demonstrated
+in ref. [28]; the computational cost per process of tensor contraction is reduced from O(D9 )
+to O(D8 ). As in refs. [16, 28], we employ the randomized SVD (RSVD) in the swapping
+bond part. The accuracy of the RSVD is controlled by the oversampling parameter p and
+q iterations of QR decomposition. Under the block diagonal representation, we apply the
+RSVD with p = 4D and q = D to each block matrix.
+
+3     Numerical results
+
+
+
+
+                                                                                                JHEP01(2021)121
+3.1    Setup
+We choose a large value of g0 = 32 for the four-fermi coupling in eq. (2.1), because the
+FRG analysis in ref. [21] indicates the vanishing phase transition for smaller g0 . The
+partition function of eq. (2.9) is evaluated, using the GATRG algorithm on a lattice up to
+the volume V = L4 (L = 2m , m ∈ N). We assume the periodic boundary conditions for x-,
+y-, z-directions and the anti-periodic boundary condition for t-direction.
+     Before investigating the restoration of the chiral symmetry at vanishing fermion mass,
+we check the efficiency of the GATRG algorithm by benchmarking with the NJL model
+in the heavy dense limit, which is defined as m → ∞ and µ → ∞, keeping eµ /m fixed.
+The heavy dense limit gives us an opportunity to compare numerical results with the exact
+analytical ones.
+
+3.2    Heavy dense limit as a benchmark
+In the heavy dense limit, the number density hni and the fermion condensate hχ̄(n)χ(n)i
+at vanishing temperature can be derived analytically as
+
+                                        hni = Θ(µ − µc ),                               (3.1)
+                                              1
+                                hχ̄(n)χ(n)i = Θ(µc − µ),                                (3.2)
+                                              m
+where Θ denotes the step function and µc = ln(2m) [29].
+    Figures 3 and 4 show the numerical results for hni and hχ̄(n)χ(n)i obtained by the
+GATRG algorithm choosing m = 104 with D = 30. The number density is calculated by
+the numerical derivative of the thermodynamic potential in terms of the chemical potential:
+                             1 ∂ ln Z(µ)   1 ln Z(µ + ∆µ) − ln Z(µ)
+                     hni =               ≈                          .                   (3.3)
+                             V     ∂µ      V          ∆µ
+In the vicinity of µc , we have set ∆µ = 4.0 × 10−3 . The fermion condensate is also obtained
+via the numerical derivative of the thermodynamic potential in terms of m:
+                                        1 ln Z(m + ∆m) − ln Z(m)
+                  hχ̄(n)χ(n)i|m=104 =                                                   (3.4)
+                                        V          ∆m                m=104
+
+with ∆m = 1. Since there is little difference between the L = 128 and 1024 results, the
+L = 1024 lattice is sufficiently large to estimate the thermodynamic limit at vanishing tem-
+perature. The numerical results well reproduce the analytical ones, including the location
+
+
+
+
+                                           –9–
+                    1.2
+
+                                 Heavy dense limit at T = 0
+                    1.0          L = 128
+                                 L = 1024
+
+                    0.8
+
+
+                    0.6
+              <n>
+
+
+
+                    0.4
+
+
+                    0.2
+
+
+
+
+                                                                                                  JHEP01(2021)121
+                    0.0
+
+
+                    -0.2
+                       9.70       9.75          9.80             9.85     9.90    9.95   10.00
+                                                                  µ
+
+Figure 3. Number density at m = 104 and g0 = 32 on 1284 and 10244 lattices as a function of
+µ with D = 30. ∆µ = 4.0 × 10−3 in the vicinity of µc . Green line denotes the step function in
+eq. (3.1).
+                          -4
+                     1×10
+
+                          -4
+                     1×10
+
+                            -5
+                     8×10
+
+                            -5
+                     6×10
+              −χ>
+             <χ
+
+
+
+
+                            -5
+                     4×10
+
+                            -5
+                     2×10           Heavy dense limit at T = 0
+                                    L = 128
+                                    L = 1024
+                            0
+
+                            -5
+                     -2×109.70                     9.80                    9.90          10.00
+                                     9.75                         9.85            9.95
+                                                                      µ
+
+Figure 4. Fermion condensate at m = 104 and g0 = 32 on 1284 and 10244 lattices as a function of
+µ with D = 30. Green line denotes the step function in eq. (3.2).
+
+
+of µc = ln(2m) = 9.903, both for hni and hχ̄(n)χ(n)i in the heavy dense limit. Note that
+the results quickly converge with respect to D; the difference between ln Z(D = 25) and
+ln Z(D = 30) has been already suppressed less than 2.1 × 10−3 % in the vicinity of µc .
+
+3.3   Chiral phase transition
+Having confirmed the efficiency of the GATRG algorithm in the heavy dense limit, let
+us turn to the calculation with the light fermion masses. We first check the convergence
+
+
+
+
+                                                          – 10 –
+                         -2
+                    10                                                          µ = 2.875
+                                                                                µ = 4.0
+                         -3
+                    10
+
+
+                         -4
+                    10
+                δ
+
+
+                         -5
+                    10
+
+
+                     -6
+
+
+
+
+                                                                                                                 JHEP01(2021)121
+                    10
+
+
+                         -7
+                    10
+
+                          25     30          35         40          45         50           55
+                                                         D
+
+Figure 5. Convergence behavior of thermodynamic potential as a function of D on V = 10244
+with m = 0.01.
+
+
+behavior of the thermodynamic potential by defining the quantity
+
+                                           ln Z(D) − ln Z(D = 55)
+                                      δ=                                                                (3.5)
+                                                ln Z(D = 55)
+
+on V = 10244 . In figure 5, we plot the D dependence of δ at µ = 2.875, which is near the
+phase transition point and µ = 4.0, which is in the dense region with the restored chiral
+symmetry, as we will see below. Although both of them are in the cold and dense region
+characterized with µ/T ∼ O(103 ), where the Monte Carlo simulation should be severely
+hindered by the sign problem, good convergent behaviors are observed in the GATRG
+calculation; near the transition point, δ is reduced to about 10−4 up to D = 55 and better
+convergence behavior, δ . 10−7 , is observed at µ = 4.0. Hereafter we present the results
+at D = 55.
+    We investigate the chiral phase transition employing the chiral condensate hχ̄(n)χ(n)i,
+as an order parameter, which is defined by
+
+                                                           1 ∂
+                                 hχ̄(n)χ(n)i = lim lim          ln Z,                                   (3.6)
+                                                  m→0 V →∞ V ∂m
+
+in the cold region. We calculate hχ̄(n)χ(n)i with the numerical derivative of thermodynamic
+potential and the chiral extrapolation with the corresponding results at finite mass in the
+thermodynamic limit.8 In this study, the partial derivative in eq. (3.6) is numerically
+   8
+    It is possible to evaluate the chiral condensate with the impurity tensor method [17, 30]. Since eq. (2.9)
+consists of eight types of tensor, there are eight configurations of an impurity tensor. Consequently, the
+computational cost is eight times larger than that of coarse-graining eq. (2.9). One can also evaluate the
+number density discussed below with the impurity tensor method, which requires four times larger cost
+than that to coarse-grain eq. (2.9) .
+
+
+
+
+                                                   – 11 –
+                     0.10
+
+                                                                          m = 0.01
+                                                                          m = 0.02
+                     0.08
+
+
+               −χ>   0.06
+
+
+                     0.04
+              <χ
+
+
+
+
+                     0.02
+
+
+
+
+                                                                                                    JHEP01(2021)121
+                     0.00
+
+
+                     -0.02
+                         0.0      1.0       2.0            3.0      4.0              5.0
+                                                    µ
+
+Figure 6. Chiral condensate at m = 0.01 and 0.02 on 10244 lattice as a function of µ with D = 55.
+
+
+evaluated via
+                                ∂        ln Z(m + ∆m) − ln Z(m)
+                                  ln Z ≈                        ,                          (3.7)
+                               ∂m                 ∆m
+with ∆m = 0.01. In figure 6, we plot the µ dependence of the chiral condensate at
+m = 0.01 and 0.02 on the L4 = 10244 lattice. The signals show slight fluctuations as a
+function of µ around the transition point. Away from the transition point, we have found
+little response in hχ̄(n)χ(n)i to changes in mass. Figure 7 presents the results in the chiral
+limit obtained by the chiral extrapolation with the data at m = 0.01 and 0.02 on two
+volumes of L4 = 1284 and 10244 . It is hard to find the difference between the L = 128
+and 1024 results. This allows us to consider the L = 1024 result to be essentially in the
+thermodynamic limit. We observe the discontinuity from a finite value to zero for the
+chiral condensate at µc = 3.0625 ± 0.0625, which is a clear indication of the first-order
+phase transition. Note that enlarging the bond dimension D is more essential than adding
+the data points at different fermion masses in order to increase the numerical accuracy
+around µc found in figure 7.
+
+3.4   Equation of state
+The equation of state is a relation between the pressure and the particle number density.
+Here we present both results as functions of µ, respectively. In the thermodynamic limit,
+the pressure P is directly obtained from the thermodynamic potential:
+
+                                                  ln Z
+                                           P =         ,                                   (3.8)
+                                                   V
+where the vast homogeneous system is assumed. In figure 8, we plot the µ dependence of
+the pressure at m = 0.01. We find a kink behavior at µc = 3.0625±0.0625, where the chiral
+
+
+
+
+                                             – 12 –
+                    0.10
+
+                                                                         L = 128
+                                                                         L = 1024
+                    0.08
+
+
+
+             <χχ>   0.06
+
+
+
+                    0.04
+              −
+
+
+
+
+                    0.02
+
+
+
+
+                                                                                                  JHEP01(2021)121
+                    0.00
+
+
+
+                    -0.02
+                        0.0       1.0      2.0         3.0         4.0              5.0
+                                                 µ
+
+
+Figure 7. Chiral condensate extrapolated in the chiral limit as a function of µ with D = 55 on
+1284 and 10244 lattices.
+
+                    4.5
+
+                              L = 128
+                              L = 1024
+                    4.0
+
+
+
+                    3.5
+              P
+
+
+
+
+                    3.0
+
+
+
+                    2.5
+
+
+
+                    2.0
+                      0.0        1.0      2.0         3.0         4.0               5.0
+                                                 µ
+
+         Figure 8. Pressure at m = 0.01 as a function of µ on 1284 and 10244 lattices.
+
+
+
+condensate shows the discontinuity. Note that the m = 0.02 result shows little difference
+from the m = 0.01 one.
+     Figure 9 shows the µ dependence of the particle number density hni obtained by
+eq. (3.3). We observe an abrupt jump from hni = 0 to hni = 1 at µc = 2.9375 ± 0.0625.
+This is another indication of the first-order phase transition. The small shift of µc compared
+to the cases of chiral condensate and pressure is attributed to the definition of the numerical
+derivative in eq. (3.3).
+
+
+
+
+                                            – 13 –
+                      1.2
+
+                               L = 128
+                      1.0      L = 1024
+
+
+                      0.8
+
+
+                      0.6
+                <n>
+
+
+
+                      0.4
+
+
+                      0.2
+
+
+
+
+                                                                                                   JHEP01(2021)121
+                      0.0
+
+
+                      -0.2
+                         0.0      1.0       2.0          3.0         4.0         5.0
+                                                   µ
+
+    Figure 9. Particle number density at m = 0.01 as a function of µ on 1284 and 10244 lattices.
+
+
+4     Summary and outlook
+
+We have investigated the restoration of the chiral symmetry of the NJL model in the
+dense region at very low temperature, employing the Kogut-Susskind fermion action on
+the extremely large lattice of V = 10244 , which is in the thermodynamic limit at zero
+temperature, essentially. The first-order phase transition is clearly observed using the
+chiral condensate as an order parameter. At the critical chemical potential, we also find
+the jump of the number density.
+     This is the third successful application of the TRG method to the 4d lattice theories,
+following the Ising model [31] and the complex φ4 theory at finite density [16]. This study is
+also the first application to the 4d fermionic system. As a next step, it would be interesting
+to determine the critical end point of this model.
+
+
+
+Acknowledgments
+
+Numerical calculation for the present work was carried out with the Oakforest-PACS (OFP)
+and the Cygnus computers under the Interdisciplinary Computational Science Program of
+Center for Computational Sciences, University of Tsukuba. This work is supported in part
+by Grants-in-Aid for Scientific Research from the Ministry of Education, Culture, Sports,
+Science and Technology (MEXT) (No. 20H00148).
+
+
+Open Access. This article is distributed under the terms of the Creative Commons
+Attribution License (CC-BY 4.0), which permits any use, distribution and reproduction in
+any medium, provided the original author(s) and source are credited.
+
+
+
+
+                                              – 14 –
+References
+
+ [1] P. de Forcrand, Simulating QCD at finite density, PoS(LAT2009)010 [arXiv:1005.0539]
+     [INSPIRE].
+ [2] M. Levin and C.P. Nave, Tensor renormalization group approach to 2D classical lattice
+     models, Phys. Rev. Lett. 99 (2007) 120601 [cond-mat/0611687] [INSPIRE].
+ [3] Z.Y. Xie et al., Coarse-graining renormalization by higher-order singular value
+     decomposition, Phys. Rev. B 86 (2012) 045139.
+ [4] D. Adachi, T. Okubo and S. Todo, Anisotropic tensor renormalization group, Phys. Rev. B
+
+
+
+
+                                                                                                    JHEP01(2021)121
+     102 (2020) 054432 [arXiv:1906.02007] [INSPIRE].
+ [5] D. Kadoh and K. Nakayama, Renormalization group on a triad network, arXiv:1912.02414
+     [INSPIRE].
+ [6] Y. Shimizu and Y. Kuramashi, Grassmann tensor renormalization group approach to
+     one-flavor lattice Schwinger model, Phys. Rev. D 90 (2014) 014508 [arXiv:1403.0642]
+     [INSPIRE].
+ [7] R. Sakai, S. Takeda and Y. Yoshimura, Higher order tensor renormalization group for
+     relativistic fermion systems, PTEP 2017 (2017) 063B07 [arXiv:1705.07764] [INSPIRE].
+ [8] Y. Shimizu and Y. Kuramashi, Critical behavior of the lattice Schwinger model with a
+     topological term at θ = π using the Grassmann tensor renormalization group, Phys. Rev. D
+     90 (2014) 074503 [arXiv:1408.0897] [INSPIRE].
+ [9] Y. Shimizu and Y. Kuramashi, Berezinskii-Kosterlitz-Thouless transition in lattice Schwinger
+     model with one flavor of Wilson fermion, Phys. Rev. D 97 (2018) 034502
+     [arXiv:1712.07808] [INSPIRE].
+[10] S. Takeda and Y. Yoshimura, Grassmann tensor renormalization group for the one-flavor
+     lattice Gross-Neveu model with finite chemical potential, PTEP 2015 (2015) 043B01
+     [arXiv:1412.7855] [INSPIRE].
+[11] D. Kadoh, Y. Kuramashi, Y. Nakamura, R. Sakai, S. Takeda and Y. Yoshimura, Tensor
+     network formulation for two-dimensional lattice N = 1 Wess-Zumino model, JHEP 03
+     (2018) 141 [arXiv:1801.04183] [INSPIRE].
+[12] D. Kadoh, Y. Kuramashi, Y. Nakamura, R. Sakai, S. Takeda and Y. Yoshimura,
+     Investigation of complex φ4 theory at finite density in two dimensions using TRG, JHEP 02
+     (2020) 161 [arXiv:1912.13092] [INSPIRE].
+[13] Y. Kuramashi and Y. Yoshimura, Tensor renormalization group study of two-dimensional
+     U(1) lattice gauge theory with a θ term, JHEP 04 (2020) 089 [arXiv:1911.06480] [INSPIRE].
+[14] A. Denbleyker et al., Controlling sign problems in spin models using tensor renormalization,
+     Phys. Rev. D 89 (2014) 016008 [arXiv:1309.6623] [INSPIRE].
+[15] L.-P. Yang, Y. Liu, H. Zou, Z.Y. Xie and Y. Meurice, Fine structure of the entanglement
+     entropy in the O(2) model, Phys. Rev. E 93 (2016) 012138 [arXiv:1507.01471] [INSPIRE].
+[16] S. Akiyama, D. Kadoh, Y. Kuramashi, T. Yamashita and Y. Yoshimura, Tensor
+     renormalization group approach to four-dimensional complex φ4 theory at finite density,
+     JHEP 09 (2020) 177 [arXiv:2005.04645] [INSPIRE].
+
+
+
+
+                                             – 15 –
+[17] Y. Yoshimura, Y. Kuramashi, Y. Nakamura, S. Takeda and R. Sakai, Calculation of
+     fermionic Green functions with Grassmann higher-order tensor renormalization group, Phys.
+     Rev. D 97 (2018) 054511 [arXiv:1711.08121] [INSPIRE].
+[18] Y. Nambu and G. Jona-Lasinio, Dynamical model of elementary particles based on an
+     analogy with superconductivity. 1., Phys. Rev. 122 (1961) 345 [INSPIRE].
+[19] Y. Nambu and G. Jona-Lasinio, Dynamical model of elementary particles based on an
+     analogy with superconductivity. II, Phys. Rev. 124 (1961) 246 [INSPIRE].
+[20] M. Buballa, NJL model analysis of quark matter at large density, Phys. Rept. 407 (2005) 205
+     [hep-ph/0402234] [INSPIRE].
+
+
+
+
+                                                                                                   JHEP01(2021)121
+[21] K.-I. Aoki, S.-I. Kumamoto and M. Yamada, Phase structure of NJL model with weak
+     renormalization group, Nucl. Phys. B 931 (2018) 105 [arXiv:1705.03273] [INSPIRE].
+[22] M. Asakawa and K. Yazaki, Chiral restoration at finite density and temperature, Nucl. Phys.
+     A 504 (1989) 668 [INSPIRE].
+[23] I.-H. Lee and R.E. Shrock, Chiral symmetry breaking phase transition in lattice gauge Higgs
+     theories with fermions, Phys. Rev. Lett. 59 (1987) 14 [INSPIRE].
+[24] S.P. Booth, R.D. Kenway and B.J. Pendleton, The phase diagram of the gauge invariant
+     Nambu-Jona-Lasinio model, Phys. Lett. B 228 (1989) 115 [INSPIRE].
+[25] N. Butt, S. Catterall, Y. Meurice, R. Sakai and J. Unmuth-Yockey, Tensor network
+     formulation of the massless Schwinger model with staggered fermions, Phys. Rev. D 101
+     (2020) 094509 [arXiv:1911.01285] [INSPIRE].
+[26] H. Oba, Cost reduction of the bond-swapping part in an anisotropic tensor renormalization
+     group, PTEP 2020 (2020) 013B02 [arXiv:1908.07295] [INSPIRE].
+[27] S. Akiyama and D. Kadoh, More about the Grassmann tensor renormalization group,
+     arXiv:2005.07570 [INSPIRE].
+[28] S. Akiyama, Y. Kuramashi, T. Yamashita and Y. Yoshimura, Phase transition of
+     four-dimensional Ising model with tensor network scheme, PoS(LATTICE2019)138
+     [arXiv:1911.12954] [INSPIRE].
+[29] J.M. Pawlowski and C. Zielinski, Thirring model at finite density in 2 + 1 dimensions with
+     stochastic quantization, Phys. Rev. D 87 (2013) 094509 [arXiv:1302.2249] [INSPIRE].
+[30] S. Morita and N. Kawashima, Calculation of higher-order moments by higher-order tensor
+     renormalization group, Comput. Phys. Commun. 236 (2019) 65.
+[31] S. Akiyama, Y. Kuramashi, T. Yamashita and Y. Yoshimura, Phase transition of
+     four-dimensional Ising model with higher-order tensor renormalization group, Phys. Rev. D
+     100 (2019) 054510 [arXiv:1906.06060] [INSPIRE].
+
+
+
+
+                                             – 16 –
+

@@ -1,5 +1,6 @@
 using Test
 using GrassmannSymbolics
+using Symbolics
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Helper: extract the coefficient of a monomial from a GrassmannExpr,
@@ -318,4 +319,43 @@ coeff(e::GrassmannExpr) = scalar_part(e)   # scalar part
         @test coeff(sq, [η]) == 2
     end
 
+    # ── 14. Symbolic utilities and local tensor kernel ────────────────────────
+    @testset "Coefficient utilities / local tensor" begin
+        @grassmann ψ η
+        ψbar = dual(ψ)
+        ηbar = dual(η)
+
+        @test -η == (-1) * η
+        @test grassmann(:ξ, 1:2; bar=true) == dual.(grassmann(:ξ, 1:2))
+
+        expression = 2η + 3(η * ηbar)
+        doubled = map_coefficients(c -> 2c, expression)
+        @test get_coeff(doubled, [η]) == 4
+        @test get_coeff(doubled, [η, ηbar]) == 6
+        @test symbolically_equal(doubled, 2 * expression)
+
+        @variables a
+        substituted = substitute_coefficients(a * η, Dict(a => 7))
+        @test get_coeff(substituted, [η]) == 7
+
+        @grassmann θ
+        renamed = substitute_generators(η * θ, Dict(η => θ, θ => η))
+        @test get_coeff(renamed, [η, θ]) == -1
+        @test iszero(map_generators(_ -> η, η * θ))
+
+        # ∫dψ dψbar exp(-3ψbarψ)
+        #   exp(-ψbarη + 1/2 ηbarψ) = -3 - 1/2 ηηbar.
+        tensor = local_grassmann_tensor(
+            3 * ψbar * ψ,
+            [-ψbar * η + (1 // 2) * ηbar * ψ],
+            [ψ, ψbar],
+        )
+        @test scalar_part(tensor) == -3
+        @test get_coeff(tensor, [η, ηbar]) == -(1 // 2)
+        @test is_even(tensor)
+
+        closed = contract_grassmann((1 + η,), ((ηbar, η),))
+        @test scalar_part(closed) == 1
+        @test isempty(generators(closed))
+    end
 end # @testset "GrassmannSymbolics"

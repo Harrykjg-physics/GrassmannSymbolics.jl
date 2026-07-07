@@ -1,0 +1,55 @@
+
+\section{Truncation technique}
+\label{sec:truncation}
+
+We introduce the singular value decomposition of a Grassmann tensor, 
+which is equivalent to the decomposition for the corresponding coefficient tensor. 
+Let $\mathcal{T}_{\Psi\Phi}$ be a Grassmann tensor whose rank is $2N$. 
+We represent the coefficient tensor of $\mathcal{T}_{\Psi\Phi}$ as $2^{N}\times2^{N}$ 
+matrix $T_{IJ}$ with $I=(i_{1},\cdots,i_{N})$ and $J=(i_{N+1},\cdots,i_{2N})$. 
+Since the Grassmann parity of $\mathcal{T}_{\psi\phi}$ is even, $T_{IJ}$ takes a non-zero value if and only if
+\begin{align}
+	\sum_{k=1}^{2N}i_{k}\mod2=0
+\end{align}
+is satisfied. This condition allows us to obtain a block diagonal matrix representation for $T_{IJ}$. According to Ref.~\cite{Kadoh}, we now define the following decimal numeral system,
+\begin{align}
+	I=
+	\begin{cases}
+		\sum_{k=1}^{2N}2^{k-1}i_{k}~~~&(i_{2}+\cdots+i_{2N}\mod2=0) \\
+		1-i_{1}+\sum_{k=2}^{2N}2^{k-1}i_{k}~~~&(i_{2}+\cdots+i_{2N}\mod2=1).
+	\end{cases}
+\end{align}
+Thanks to this decimal numeral system, the parity of $\sum_{k=1}^{2N}i_{k}$ corresponds with that of $I$. Applying this system for $I$ and $J$ in $T_{IJ}$, one obtains the block diagonal matrix
+\begin{align}
+	T=
+	\begin{bmatrix}
+		T^{\mathrm{E}} & 0 \\
+		0 & T^{\mathrm{O}}
+	\end{bmatrix}
+	.
+\end{align} 
+The singular value decomposition for $T$ is obtained from that for $T^{\mathrm{E}}$ and $T^{\mathrm{O}}$,
+\begin{align}
+\label{eq:even}
+	T^{\mathrm{E}}_{IJ}=\sum_{K:\mathrm{even}}U^{\mathrm{E}}_{IK}\sigma^{\mathrm{E}}_{K}V^{\mathrm{E}}_{JK},
+\end{align}
+\begin{align}
+\label{eq:odd}
+	T^{\mathrm{O}}_{IJ}=\sum_{K:\mathrm{odd}}U^{\mathrm{O}}_{IK}\sigma^{\mathrm{O}}_{K}V^{\mathrm{O}}_{JK}.
+\end{align}
+Picking up the largest $D$ numbers of singular values and corresponding singular vectors, $T$ is approximated with a lower-rank matrix. 
+
+We apply the above technique for $MM^{\dag}$, where $M$ is the coefficient tensor in Eq.~\eqref{eq:M_HOTRG}. In Eq.~\eqref{eq:isometry}, the Grassmann isometry defines new bond Grassmann numbers $\Phi$ and $\bar{\Phi}$. It is worth emphasizing that the parity of these Grassmann numbers correspond to the parity of $K$ in Eqs.~\eqref{eq:even} and \eqref{eq:odd}. This property is significantly useful in developing the current Grassmann HOTRG.
+
+
+
+
+
+
+
+
+
+
+
+
+

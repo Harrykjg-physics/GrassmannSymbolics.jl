@@ -1,0 +1,37 @@
+
+\section{Introduction}
+\label{sec:introduction}
+
+Tensor renormalization group (TRG) is a promising computational approach to study the lattice field theory. 
+The dynamics of the theory can be investigated by the TRG
+mostly in the thermodynamic limit without suffering from the negative sign problem
+since it does not employ any stochastic process. 
+The TRG was originally proposed by Levin and Nave as a 
+real space renormalization group 
+for the two-dimensional Ising model \cite{Levin:2006jai}. 
+Extensions to fermionic systems were firstly discussed by Gu {\it et al.} \cite{Gu:2010yh,Gu:2013gba},  
+and the Grassmann TRG has been applied to many models such as
+the Schwinger model with and without $\theta$ term 
+\cite{Shimizu:2014uva,Shimizu:2014fsa,Shimizu:2017onf}, 
+the Gross-Neveu model with finite density \cite{Takeda:2014vwa}, 
+and $\mathcal{N}=1$ Wess-Zumino model \cite{Kadoh:2018hqq}.
+\footnote{See Refs.~\cite{Sakai:2017jwp,Yoshimura:2017jpk,Meurice:2018fky,Butt:2019uul} for other related studies. }
+These earlier works have verified that the TRG is also useful to evaluate 
+the path integral over the Grassmann variables. 
+ 
+In this paper, we introduce a different way from these studies to derive a tensor network 
+representation and to implement the Grassmann TRG. The tensor network 
+is derived with auxiliary Grassmann fields. 
+As an advantage over the conventional tensor network formulation, 
+this method allows us to find a general formula, characterized by the singular 
+value decomposition for the Dirac matrix, to obtain the tensor network representation for any lattice 
+fermion theory with only nearest neighbor interactions. 
+
+
+This paper is organized as follows. In Sec. \ref{sec:formulation}, we define a 
+Grassmann tensor and its contraction rule. We explain how to construct the 
+tensor network with auxiliary Grassmann fields in Sec. \ref{sec:TN}. 
+To see the validity of the current formulation, numerical results for the two-dimensional free 
+Wilson fermion are provided in Sec. \ref{sec:GTRG}. Sec. \ref{sec:summary} is 
+devoted to summary and outlook.
+

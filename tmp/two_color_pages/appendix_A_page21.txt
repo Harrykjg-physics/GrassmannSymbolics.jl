@@ -1,0 +1,62 @@
+                                     number density, m = 0.1, V = 220 , K = 14
+                   2.0         β   = 0, D = 84
+                               β   = 0.4, D = 150
+                               β   = 0.8, D = 150
+                   1.5         β   = 1.2, D = 150
+                               β   = 1.6, D = 150
+                 hni
+
+
+
+
+                   1.0
+
+
+
+
+                                                                                                                JHEP03(2025)027
+                   0.5
+
+
+
+                   0.0
+
+                         0.1        0.2         0.3      0.4       0.5           0.6
+                                                         µ
+
+
+Figure 15. Quark number density ⟨n⟩ as a function of chemical potential µ at m = 0.1, β =
+0, 0.4, 0.8, 1.2, 1.6 in the thermodynamic limit. The bond dimension in the infinite coupling calculation
+is D = 84, and the bond dimension in the finite β calculations is D = 150. At a finite β, the sample
+size for the discretization of gauge group integrations is K = 14. To evaluate the numerical differences
+in eq. (4.3), we set ∆µ = 0.04.
+
+
+Acknowledgments
+A part of the numerical calculation for the present work was carried out with ohtaka provided
+by the Institute for Solid State Physics, the University of Tokyo. This work is supported by the
+Endowed Project for Quantum Software Research and Education, the University of Tokyo [69],
+and the Center of Innovations for Sustainable Quantum AI (JST Grant Number JPMJPF2221).
+SA acknowledges the support from JSPS KAKENHI (JP23K13096, JP24H00214) and the Top
+Runners in Strategy of Transborder Advanced Researches (TRiSTAR) program conducted as
+the Strategic Professional Development Program for Young Researchers by the MEXT.
+
+A     Coefficients of the Grassmann tensor F
+Here, we discuss one method to derive the tensor elements of F in eq. (2.10). For simplicity, we
+consider the two-color case where N = 2. We also label the spacetime direction ν by ν = x, t
+not by ν = 1, 2. In this case, the integration over the original staggered fermions is written as
+             Z
+       F=        dχ1 dχ̄1 dχ2 dχ̄2 e−m(χ̄1 χ1 +χ̄2 χ2 ) (1 + χ̄1 A) (1 + χ1 B) (1 + χ̄2 C) (1 + χ2 D)
+
+          = ABCD + mCD + mAB + m2 ,                                                                     (A.1)
+where A, B, C, and D are sums of terms with one auxiliary Grassmann variable, and their
+expressions are given by
+    A = −ηx,1 − ηt,1 + (Ux† )11 ζ̄x,1 + (Ux† )12 ζ̄x,2 + (Ut† )11 ζ̄t,1 + (Ut† )12 ζ̄t,2 ,              (A.2)
+        1h                                                                                       i
+    B=     − (Ux )11 η̄x,1 − (Ux )21 η̄x,2 − a+ (Ut )11 η̄t,1 − a+ (Ut )21 η̄t,2 + ζx,1 + a− ζt,1 ,     (A.3)
+        2
+
+
+
+                                                      – 20 –
+
