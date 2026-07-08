@@ -359,4 +359,44 @@ NJL & staggered 费米子与局域多费米相互作用；局域 Boltzmann 因�
 
 这个模型和 NJL 一样提醒我们：文献式 (A8)--(A10) 中有部分符号来自辅助场及测度的重排。如果目标数据结构只保存 Grassmann 单项而不显式保存测度对象，就应把这些重排号作为 metadata，而不能重复乘入投影后的 coefficient。最终自动化接口因此至少应暴露三层信息：局域积分系数、外部腿单项顺序、以及用于网络收缩的测度/排序约定。
 
+\section{Nearest-neighbor compiler layer in code}
+The symbolic implementation now separates the universal local Grassmann
+integral from the model-dependent decomposition.  A compiled nearest-neighbor
+tensor specification contains
+\begin{equation}
+ \mathcal T = \int D\psi\,\exp[-S_{\rm onsite}(\psi,\bar\psi)]
+ \prod_c \exp[B_c(\psi,\bar\psi;\eta_c,\bar\eta_c)],
+\end{equation}
+together with the external leg order, channel tags, and metadata needed to
+compare with a paper convention.  In the Julia source this is represented by
+\path{LocalChannel}, \path{NearestNeighborTensorSpec}, and
+\path{compile_nearest_neighbor_tensor}.  The higher-level structured interface
+\path{NearestNeighborAction} collects onsite terms \path{OnsiteTerm} and
+factorized nearest-neighbor hopping terms \path{FactorizedHoppingTerm}, then
+lowers them to the same tensor specification by \path{nearest_neighbor_tensor_spec}.
+A rank-one hopping factor
+\begin{equation}
+ \exp\{L(\psi,\bar\psi)R(\psi',\bar\psi')\}
+\end{equation}
+is entered after Grassmann Hubbard--Stratonovich splitting as two local
+channels, for example
+\begin{equation}
+ B_L = \alpha L\eta,\qquad B_R=\beta\bar\eta R,
+\end{equation}
+with the signs and square-root normalisations fixed by the reference
+convention.  The compiler does not hide this choice: it records the resulting
+leg order and the channel tags, because the examples above show that the same
+closed partition function may correspond to different published elementary
+tensors if auxiliary legs or Berezin measures are reordered.
+
+This layer is therefore ``universal'' in the following precise sense.  Once an
+arbitrary nearest-neighbor fermion action has been decomposed into onsite terms
+and local channel exponents, the package can derive the elementary Grassmann
+tensor by symbolic expansion and Berezin integration.  The remaining
+model-specific work is the exact channel decomposition itself: dense hopping
+matrices, gauge link sums, source terms, and four-fermion interactions must be
+factorized into a finite list of local channels before invoking the compiler.
+For the models audited in this document, those decomposition rules are encoded
+in the corresponding files under \path{examples/}.
+
 \end{document}

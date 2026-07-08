@@ -354,7 +354,60 @@ coeff(e::GrassmannExpr) = scalar_part(e)   # scalar part
         @test get_coeff(tensor, [η, ηbar]) == -(1 // 2)
         @test is_even(tensor)
 
-        closed = contract_grassmann((1 + η,), ((ηbar, η),))
+        @grassmann chi eta
+        chibar = dual(chi)
+        etabar = dual(eta)
+        ascii_tensor = local_grassmann_tensor(
+            3 * chibar * chi,
+            [-chibar * eta + (1 // 2) * etabar * chi],
+            [chi, chibar],
+        )
+        channels = split_hopping_channel(
+            chibar,
+            eta,
+            chi;
+            left_scale=-1,
+            right_scale=1 // 2,
+            tag=:test_hopping,
+        )
+        spec = NearestNeighborTensorSpec(
+            3 * chibar * chi,
+            [chi, chibar],
+            channels;
+            leg_order=[eta, etabar],
+            metadata=Dict(:model => :one_component_test),
+        )
+        compiled = compile_nearest_neighbor_tensor(spec)
+        @test symbolically_equal(compiled.tensor, ascii_tensor)
+        @test compiled.legs == [eta, etabar]
+        @test compiled.metadata[:model] == :one_component_test
+        @test compiled.channels[1].tag == :test_hopping
+
+        action = NearestNeighborAction(
+            [chi, chibar];
+            terms=[
+                OnsiteTerm(3 * chibar * chi; tag=:mass),
+                FactorizedHoppingTerm(
+                    chibar,
+                    eta,
+                    chi;
+                    left_scale=-1,
+                    right_scale=1 // 2,
+                    tag=:test_hopping,
+                ),
+            ],
+            leg_order=[eta, etabar],
+            metadata=Dict(:model => :one_component_action_test),
+        )
+        action_spec = nearest_neighbor_tensor_spec(action)
+        action_compiled = compile_nearest_neighbor_tensor(action)
+        @test symbolically_equal(action_compiled.tensor, ascii_tensor)
+        @test action_compiled.legs == [eta, etabar]
+        @test length(action_spec.channels) == 2
+        @test action_compiled.metadata[:model] == :one_component_action_test
+        @test action_compiled.metadata[:term_tags] == [:mass, :test_hopping]
+
+        closed = contract_grassmann((1 + eta,), ((etabar, eta),))
         @test scalar_part(closed) == 1
         @test isempty(generators(closed))
     end

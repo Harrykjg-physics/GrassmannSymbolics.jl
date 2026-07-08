@@ -81,6 +81,14 @@ exp(m * η * θ)             # 1 + m·ηθ
 | `integrate(e, order)` | Perform a Berezin integral with an explicit measure order |
 | `contract_grassmann(tensors, pairs)` | Contract oriented legs with Gaussian link measures |
 | `local_grassmann_tensor(...)` | Integrate physical site fields and leave auxiliary tensor legs |
+| `LocalChannel(exponent; legs, tag)` | One local factor `exp(exponent)` plus the tensor legs it introduces |
+| `NearestNeighborTensorSpec(...)` | A reusable nearest-neighbor local tensor specification |
+| `split_hopping_channel(left, aux, right; ...)` | Split a rank-one hopping term into two auxiliary Grassmann factors |
+| `compile_nearest_neighbor_tensor(spec)` | Compile a nearest-neighbor tensor spec to `(tensor, legs, channels, ...)` |
+| `OnsiteTerm(action; tag)` | Structured onsite contribution to a local action |
+| `FactorizedHoppingTerm(left, aux, right; ...)` | Structured rank-one nearest-neighbor hopping contribution |
+| `NearestNeighborAction(measure_order; terms, ...)` | Build a tensor spec from structured local action terms |
+| `nearest_neighbor_tensor_spec(action)` | Lower a structured action to `NearestNeighborTensorSpec` |
 | `generators(e)` | List all generators appearing in `e` |
 | `is_even(e)` | True if all terms have even grade |
 | `is_odd(e)` | True if all terms have odd grade |
@@ -108,6 +116,62 @@ T = local_grassmann_tensor(
 )
 # T = -3 - 1/2 ηηbar
 ```
+
+For already-factorized nearest-neighbor hopping terms, the higher-level compiler
+keeps the tensor, leg order, channel metadata, and measure convention bundled
+together:
+
+```julia
+@grassmann chi eta
+chibar, etabar = dual(chi), dual(eta)
+
+channels = split_hopping_channel(
+    chibar,
+    eta,
+    chi;
+    left_scale=-1,
+    right_scale=1 // 2,
+    tag=:forward_hopping,
+)
+
+spec = NearestNeighborTensorSpec(
+    3chibar * chi,
+    [chi, chibar],
+    channels;
+    leg_order=[eta, etabar],
+    metadata=Dict(:model => :one_component_test),
+)
+
+compiled = compile_nearest_neighbor_tensor(spec)
+compiled.tensor
+```
+
+The same example can be written one level higher as a structured local action:
+
+```julia
+action = NearestNeighborAction(
+    [chi, chibar];
+    terms=[
+        OnsiteTerm(3chibar * chi; tag=:mass),
+        FactorizedHoppingTerm(
+            chibar,
+            eta,
+            chi;
+            left_scale=-1,
+            right_scale=1 // 2,
+            tag=:forward_hopping,
+        ),
+    ],
+    leg_order=[eta, etabar],
+)
+
+compiled = compile_nearest_neighbor_tensor(action)
+```
+
+This compiler layer assumes each nearest-neighbor term has already been written
+as local left/right factors. Dense hopping matrices, gauge-field sums, or
+four-fermion channels still need a model-specific decomposition step before
+calling `compile_nearest_neighbor_tensor`.
 
 The derivation conventions and the model-by-model audit are documented in
 [`docs/grassmann_tensor_derivation.tex`](docs/grassmann_tensor_derivation.tex).

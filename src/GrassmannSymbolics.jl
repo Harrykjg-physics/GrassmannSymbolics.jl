@@ -37,5 +37,14 @@ export is_grassmann
 export integrate
 export contract_grassmann
 export local_grassmann_tensor
+export LocalChannel
+export NearestNeighborTensorSpec
+export split_hopping_channel
+export compile_nearest_neighbor_tensor
+export LocalActionTerm
+export OnsiteTerm
+export FactorizedHoppingTerm
+export NearestNeighborAction
+export nearest_neighbor_tensor_spec
 
 end # module GrassmannSymbolics
