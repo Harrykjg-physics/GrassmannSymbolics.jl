@@ -13,14 +13,36 @@ Inspired by the Python package [grassmanntn](https://github.com/ayosprakob/grass
 - **Symbolic coefficients**: works seamlessly with `Symbolics.jl` variables
 - **Unicode display**: pretty-prints with subscripts and combining overbar
 
-## Installation
+## Installation and package registration
+
+This repository is a standard Julia package named `GrassmannSymbolics`.
+For local development, register it in your active Julia environment with:
 
 ```julia
-# From the Julia REPL (package mode):
-pkg> dev path/to/GrassmannSymbolics
-# or, once registered:
-pkg> add GrassmannSymbolics
+using Pkg
+Pkg.develop(path="path/to/GrassmannSymbolics")
 ```
+
+For read-only use directly from a local checkout, install it by path:
+
+```julia
+using Pkg
+Pkg.add(path="path/to/GrassmannSymbolics")
+```
+
+When working inside this repository, activate the package project directly:
+
+```julia
+using Pkg
+Pkg.activate(".")
+Pkg.instantiate()
+using GrassmannSymbolics
+```
+
+To publish the package to Julia's General registry later, push this repository
+to a public Git host, tag a release matching `version` in `Project.toml`, and
+open a registration request with JuliaRegistrator. The package metadata needed
+for that workflow lives in `Project.toml`.
 
 ## Quick Start
 
@@ -175,7 +197,18 @@ calling `compile_nearest_neighbor_tensor`.
 
 The derivation conventions and the model-by-model audit are documented in
 [`docs/grassmann_tensor_derivation.tex`](docs/grassmann_tensor_derivation.tex).
+
 ## Running Tests
+
+From this repository:
+
+```julia
+using Pkg
+Pkg.activate(".")
+Pkg.test()
+```
+
+After `Pkg.develop(path="path/to/GrassmannSymbolics")` from another environment:
 
 ```julia
 using Pkg
