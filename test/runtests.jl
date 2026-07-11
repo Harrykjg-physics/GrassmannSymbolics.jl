@@ -411,4 +411,43 @@ coeff(e::GrassmannExpr) = scalar_part(e)   # scalar part
         @test scalar_part(closed) == 1
         @test isempty(generators(closed))
     end
+
+    @testset "Coefficient arrays" begin
+        @grassmann a b c d
+        expression = 5 + 2a + 3b * c - 7a * d
+        groups = ((a, b), (c, d))
+
+        @test occupation_bits_from_index(1, 2) == (0, 0)
+        @test occupation_bits_from_index(2, 2) == (1, 1)
+        @test occupation_bits_from_index(3, 2) == (0, 1)
+        @test occupation_bits_from_index(4, 2) == (1, 0)
+        @test occupation_index_from_bits((1, 1)) == 2
+        @test occupation_index_from_bits((0, 1)) == 3
+        @test occupation_index_from_bits((1, 0)) == 4
+
+        array = coefficient_array(expression, groups)
+        @test size(array) == (4, 4)
+        @test array[1, 1] == 5
+        @test array[4, 1] == 2
+        @test array[3, 4] == 3
+        @test array[4, 3] == -7
+
+        binary_array = coefficient_array(expression, groups; index_order=:little_endian)
+        @test binary_array[2, 1] == 2
+        @test binary_array[3, 2] == 3
+        @test binary_array[2, 3] == -7
+
+        @variables x
+        substituted = coefficient_array(x * a * b, ((a, b),); substitutions=Dict(x => 11))
+        @test size(substituted) == (4,)
+        @test substituted[2] == 11
+
+        oracle_array = coefficient_array(bits -> sum(bits), groups)
+        @test oracle_array[1, 1] == 0
+        @test oracle_array[2, 2] == 4
+
+        width_array = coefficient_array(bits -> sum(bits), (2, 2))
+        @test size(width_array) == (4, 4)
+        @test width_array[2, 2] == 4
+    end
 end # @testset "GrassmannSymbolics"

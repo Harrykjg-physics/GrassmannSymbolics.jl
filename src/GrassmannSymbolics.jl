@@ -7,6 +7,7 @@ include("generator.jl")
 include("gexpr.jl")
 include("berezin.jl")
 include("localtensor.jl")
+include("coefficientarray.jl")
 include("show.jl")
 
 # ── public API ────────────────────────────────────────────────────────────────
@@ -46,5 +47,14 @@ export OnsiteTerm
 export FactorizedHoppingTerm
 export NearestNeighborAction
 export nearest_neighbor_tensor_spec
+export coefficient_array
+export coefficient_tensor
+export coefficient_array_shape
+export occupation_bit_tuples
+export occupation_bits_from_index
+export occupation_bits_from_indices
+export occupation_index_from_bits
+export occupied_legs_from_bits
+export parameter_substitutions
 
 end # module GrassmannSymbolics
