@@ -1,206 +1,171 @@
 # GrassmannSymbolics.jl
 
-A Julia package for symbolic computation with **Grassmann (anticommuting) numbers** and the exterior algebra.  
-Inspired by the Python package [grassmanntn](https://github.com/ayosprakob/grassmanntn) and leveraging [Symbolics.jl](https://symbolics.juliasymbolics.org/) for symbolic coefficients.
+[![CI](https://github.com/Harrykjg-physics/GrassmannSymbolics/actions/workflows/CI.yml/badge.svg)](https://github.com/Harrykjg-physics/GrassmannSymbolics/actions/workflows/CI.yml)
+[![Documentation](https://github.com/Harrykjg-physics/GrassmannSymbolics/actions/workflows/Documentation.yml/badge.svg)](https://github.com/Harrykjg-physics/GrassmannSymbolics/actions/workflows/Documentation.yml)
+
+`GrassmannSymbolics.jl` is a Julia package for symbolic calculations with
+Grassmann, or anticommuting, variables.  It is designed for deriving local
+Grassmann tensor-network tensors from fermionic lattice actions with
+nearest-neighbor interactions.
+
+The public documentation site is:
+
+```text
+https://harrykjg-physics.github.io/GrassmannSymbolics/
+```
+
+The source repository is:
+
+```text
+https://github.com/Harrykjg-physics/GrassmannSymbolics
+```
 
 ## Features
 
-- **Grassmann generators** with optional subscript indices (η₁, η₂, …) and conjugates (η̄)
-- **Full exterior algebra arithmetic**: addition, subtraction, scalar multiplication/division, anticommutative products
-- **Automatic nilpotency**: η² = 0, higher products terminate automatically
-- **`exp` function**: finite Taylor series via nilpotency
-- **Berezin integration**: composable `d(η)` operators
-- **Symbolic coefficients**: works seamlessly with `Symbolics.jl` variables
-- **Unicode display**: pretty-prints with subscripts and combining overbar
+- Grassmann generators with indexed and dual/barred variants.
+- Sparse exterior-algebra expressions with automatic anticommutation signs.
+- Nilpotent finite exponentials.
+- Berezin integration with explicit measure order.
+- Symbolic coefficients via `Symbolics.jl`.
+- Local Grassmann tensor construction from onsite actions and factorized
+  nearest-neighbor hopping channels.
+- Coefficient tensor extraction as ordinary Julia `Array` objects.
+- Model examples for Wilson/staggered fermions, Gross-Neveu-Wilson models,
+  Schwinger model, two-color QCD, NJL, and 1D Hubbard.
 
-## Installation and package registration
+## Installation
 
-This repository is a standard Julia package named `GrassmannSymbolics`.
-For local development, register it in your active Julia environment with:
-
-```julia
-using Pkg
-Pkg.develop(path="path/to/GrassmannSymbolics")
-```
-
-For read-only use directly from a local checkout, install it by path:
+Before registration in Julia's General registry, install from the GitHub
+repository:
 
 ```julia
 using Pkg
-Pkg.add(path="path/to/GrassmannSymbolics")
+Pkg.add(url="https://github.com/Harrykjg-physics/GrassmannSymbolics")
 ```
 
-When working inside this repository, activate the package project directly:
+For local development:
 
 ```julia
 using Pkg
-Pkg.activate(".")
-Pkg.instantiate()
-using GrassmannSymbolics
+Pkg.develop(path="/path/to/GrassmannSymbolics")
 ```
 
-To publish the package to Julia's General registry later, push this repository
-to a public Git host, tag a release matching `version` in `Project.toml`, and
-open a registration request with JuliaRegistrator. The package metadata needed
-for that workflow lives in `Project.toml`.
+After registration in General:
 
-## Quick Start
+```julia
+using Pkg
+Pkg.add("GrassmannSymbolics")
+```
+
+## Quick start
 
 ```julia
 using GrassmannSymbolics
 
-# Create generators
-@grassmann η θ ψ          # η, θ, ψ
-ηbar = dual(η)             # η̄
-η1, η2 = grassmann(:η, 1:2)  # η₁, η₂
+@grassmann eta xi
 
-# Anticommutation
-η * θ                      # ηθ
-θ * η                      # -ηθ
-η * η                      # 0   (nilpotency)
+eta * xi      # eta*xi
+xi * eta      # -eta*xi
+eta * eta     # 0
 
-# Arithmetic
-2η + 3θ                    # 2η + 3θ
-(1 + η) * (1 + θ)          # 1 + θ + η + ηθ
+exp(eta * xi) # 1 + eta*xi
 
-# Powers and exp
-η^2                        # 0
-exp(η * θ)                 # 1 + ηθ
-exp(1 + η)                 # ℯ + ℯ·η
-exp(η + θ)                 # 1 + η + θ  because (η + θ)² = 0
+integrate(eta * xi, [xi, eta]) # 1
+integrate(eta * xi, [eta, xi]) # -1
+```
 
-# Berezin integration
-d(η) * GrassmannExpr(η)    # 1
-d(η) * (η * θ)             # θ
-d(θ) * d(η) * (η * θ)     # 1
-d(η) * d(θ) * (η * θ)     # -1
+With symbolic coefficients:
 
-# With Symbolics.jl
+```julia
 using Symbolics
-@variables a b m
-a*η + b*θ                  # symbolic coefficients
-exp(m * η * θ)             # 1 + m·ηθ
+@variables m
+
+@grassmann psi
+psibar = dual(psi)
+
+expr = exp(m * psibar * psi)
 ```
 
-## API Reference
-
-| Name | Description |
-|------|-------------|
-| `@grassmann η θ ...` | Batch-create generators bound to local variables |
-| `grassmann(:η)` | Create a single generator |
-| `grassmann(:η, 1:n)` | Create a vector of indexed generators η₁…ηₙ |
-| `dual(η)` | Return the conjugate η̄ |
-| `d(η)` | Create a Berezin measure; chain with `*` |
-| `scalar_part(e)` | Extract the grade-0 coefficient |
-| `grassmann_part(e)` | Extract all grade ≥ 1 terms |
-| `get_coeff(e, [η,θ])` | Extract the coefficient of a given monomial |
-| `map_coefficients(f, e)` | Transform scalar coefficients without changing monomials |
-| `map_generators(f, e)` | Relabel tensor legs and restore canonical signs |
-| `substitute_generators(e, rules)` | Instantiate local tensor legs on lattice sites |
-| `simplify_coefficients(e)` | Simplify all coefficients with Symbolics.jl |
-| `substitute_coefficients(e, rules)` | Substitute Symbolics.jl variables coefficient-wise |
-| `symbolically_equal(a, b)` | Compare expressions after coefficient simplification |
-| `integrate(e, order)` | Perform a Berezin integral with an explicit measure order |
-| `contract_grassmann(tensors, pairs)` | Contract oriented legs with Gaussian link measures |
-| `local_grassmann_tensor(...)` | Integrate physical site fields and leave auxiliary tensor legs |
-| `LocalChannel(exponent; legs, tag)` | One local factor `exp(exponent)` plus the tensor legs it introduces |
-| `NearestNeighborTensorSpec(...)` | A reusable nearest-neighbor local tensor specification |
-| `split_hopping_channel(left, aux, right; ...)` | Split a rank-one hopping term into two auxiliary Grassmann factors |
-| `compile_nearest_neighbor_tensor(spec)` | Compile a nearest-neighbor tensor spec to `(tensor, legs, channels, ...)` |
-| `OnsiteTerm(action; tag)` | Structured onsite contribution to a local action |
-| `FactorizedHoppingTerm(left, aux, right; ...)` | Structured rank-one nearest-neighbor hopping contribution |
-| `NearestNeighborAction(measure_order; terms, ...)` | Build a tensor spec from structured local action terms |
-| `nearest_neighbor_tensor_spec(action)` | Lower a structured action to `NearestNeighborTensorSpec` |
-| `generators(e)` | List all generators appearing in `e` |
-| `is_even(e)` | True if all terms have even grade |
-| `is_odd(e)` | True if all terms have odd grade |
-| `is_grassmann(e)` | True if any term has grade ≥ 1 |
-
-## Local Grassmann tensors
-
-The model-independent site kernel computes
-
-```math
-\mathcal T = \int D\psi\,e^{-S_{\mathrm{onsite}}}\prod_k e^{B_k},
-```
-
-where `B_k` are the local auxiliary-field factors obtained from directed
-nearest-neighbor hopping terms:
-
-```julia
-@grassmann ψ η
-ψbar, ηbar = dual(ψ), dual(η)
-
-T = local_grassmann_tensor(
-    3ψbar * ψ,
-    [-ψbar * η + (1 // 2) * ηbar * ψ],
-    [ψ, ψbar],
-)
-# T = -3 - 1/2 ηηbar
-```
-
-For already-factorized nearest-neighbor hopping terms, the higher-level compiler
-keeps the tensor, leg order, channel metadata, and measure convention bundled
-together:
+## Local tensor kernel
 
 ```julia
 @grassmann chi eta
-chibar, etabar = dual(chi), dual(eta)
+chibar = dual(chi)
+etabar = dual(eta)
 
-channels = split_hopping_channel(
-    chibar,
-    eta,
-    chi;
-    left_scale=-1,
-    right_scale=1 // 2,
-    tag=:forward_hopping,
-)
-
-spec = NearestNeighborTensorSpec(
+T = local_grassmann_tensor(
     3chibar * chi,
+    [-chibar * eta + (1 // 2) * etabar * chi],
     [chi, chibar],
-    channels;
-    leg_order=[eta, etabar],
-    metadata=Dict(:model => :one_component_test),
 )
-
-compiled = compile_nearest_neighbor_tensor(spec)
-compiled.tensor
 ```
 
-The same example can be written one level higher as a structured local action:
+The physical variables `chi, chibar` are integrated out, while the auxiliary
+variables `eta, etabar` remain as tensor legs.
+
+## Coefficient arrays
+
+Grassmann tensors can be materialized as Julia arrays after choosing leg groups
+and parameter substitutions:
 
 ```julia
-action = NearestNeighborAction(
-    [chi, chibar];
-    terms=[
-        OnsiteTerm(3chibar * chi; tag=:mass),
-        FactorizedHoppingTerm(
-            chibar,
-            eta,
-            chi;
-            left_scale=-1,
-            right_scale=1 // 2,
-            tag=:forward_hopping,
-        ),
-    ],
-    leg_order=[eta, etabar],
-)
+@grassmann a b c d
+expr = 2a*b + 3c*d + 5a*b*c*d
 
-compiled = compile_nearest_neighbor_tensor(action)
+groups = [[a, b], [c, d]]
+A = coefficient_array(expr, groups)
 ```
 
-This compiler layer assumes each nearest-neighbor term has already been written
-as local left/right factors. Dense hopping matrices, gauge-field sums, or
-four-fermion channels still need a model-specific decomposition step before
-calling `compile_nearest_neighbor_tensor`.
+By default grouped indices use a parity-preserving order:
 
-The derivation conventions and the model-by-model audit are documented in
-[`docs/grassmann_tensor_derivation.tex`](docs/grassmann_tensor_derivation.tex).
+```text
+(0, 0) -> 1
+(1, 1) -> 2
+(0, 1) -> 3
+(1, 0) -> 4
+```
 
-## Running Tests
+## Examples
 
-From this repository:
+The `examples/` directory contains model derivations and validation helpers:
+
+```text
+Free_Wilson_and_Staggered.jl
+Simple_quardratic_model.jl
+Single_Flavor_Gross_Neveu_Wilson.jl
+Schwinger_model_theta_term.jl
+two_color_QCD.jl
+two_flavor_Gross_Neveu_Wilson.jl
+three_flavor_Gross_Neveu_Wilson.jl
+NJL.jl
+1D_Hubbard.jl
+coefficient_tensors.jl
+```
+
+The detailed derivation workflow is documented in:
+
+```text
+docs/grassmann_tensor_derivation.tex
+output/pdf/grassmann_tensor_derivation.pdf
+```
+
+## Two-flavor GNW erratum
+
+In `Ref/2d_gn.pdf`, the impurity derivation for the two-flavor
+Gross-Neveu-Wilson model has a sign swap in Eq. (3.79) and Eq. (3.80).  The
+direct symbolic Berezin insertion gives:
+
+```julia
+b116 = (m1 + 2 - im*H) * (m2 + 2 + im*H) + (gσ2 - gπ2)/2
+c116 = (m2 + 2 - im*H) * (m2 + 2 + im*H) + (gσ2 + gπ2)/2
+```
+
+The PDF writes the opposite `gπ2` signs.  Correcting these two coefficients
+makes the pure tensor and the chiral, pseudoscalar-singlet, and
+pseudoscalar-triplet impurity tensors agree with direct symbolic integration to
+machine precision.
+
+## Running tests
 
 ```julia
 using Pkg
@@ -208,16 +173,42 @@ Pkg.activate(".")
 Pkg.test()
 ```
 
-After `Pkg.develop(path="path/to/GrassmannSymbolics")` from another environment:
+## Building documentation locally
 
 ```julia
 using Pkg
-Pkg.test("GrassmannSymbolics")
+Pkg.activate("docs")
+Pkg.develop(path="..")
+Pkg.instantiate()
+include("docs/make.jl")
 ```
 
-## Design Notes
+## Julia package registration
 
-- **Representation**: `GrassmannExpr` stores a sparse `Dict{Vector{GrassmannGenerator}, Any}` mapping each sorted monomial to its coefficient.  The empty vector `[]` represents the scalar "1".
-- **Sign computation**: arbitrary input lists are normalized by inversion counting; products of already-canonical monomials use a linear-time ordered merge that tracks permutation parity.
-- **exp**: uses the decomposition `exp(c + X) = exp(c) · Σ Xᵖ/p!`, which terminates because `X` is nilpotent.
-- **Berezin integral**: applies `∫dg` to each term by locating `g` in the sorted monomial, extracting it with the appropriate sign `(-1)^(position-1)`.
+The package metadata is already present in `Project.toml`:
+
+```toml
+name = "GrassmannSymbolics"
+uuid = "4c7e4f2a-8b3d-4e9a-b5c1-3f2d1e0a9c7b"
+version = "0.1.0"
+```
+
+The standard registration route is JuliaRegistrator:
+
+1. Push the release commit to GitHub.
+2. On the release commit, issue, or pull request, comment:
+
+   ```text
+   @JuliaRegistrator register
+   ```
+
+3. Review the generated pull request in
+   `https://github.com/JuliaRegistries/General`.
+4. After the registry pull request is merged, TagBot can create the matching
+   GitHub tag and release from the registered version.
+
+See also `docs/src/registration.md`.
+
+## License
+
+This package is distributed under the MIT license.  See `LICENSE`.

@@ -21,9 +21,11 @@ function _tfgnw_generators()
     etabar = dual.(eta)
     zetabar = dual.(zeta)
 
+    # Ref/2d_gn.pdf Eq. (3.12) rewrites each flavor sector as
+    # dpsi1 dpsi2 dpsibar1 dpsibar2 before evaluating the two-flavor integrals.
     measure_order = GrassmannGenerator[
-        psi[1, 1], psibar[1, 1], psi[1, 2], psibar[1, 2],
-        psi[2, 1], psibar[2, 1], psi[2, 2], psibar[2, 2],
+        psi[1, 1], psi[1, 2], psibar[1, 1], psibar[1, 2],
+        psi[2, 1], psi[2, 2], psibar[2, 1], psibar[2, 2],
     ]
     legs = GrassmannGenerator[
         alpha[1], beta[1], eta[1], zeta[1],
@@ -243,6 +245,3 @@ if abspath(PROGRAM_FILE) == @__FILE__
     println("pseudoscalar_singlet_terms_", length(model.pseudoscalar_singlet.terms))
     println("pseudoscalar_triplet_terms_", length(model.pseudoscalar_triplet.terms))
 end
-
-
-
