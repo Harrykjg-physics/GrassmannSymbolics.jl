@@ -24,7 +24,7 @@ After the documentation workflow is enabled on GitHub Pages, the public manual
 is served at:
 
 ```text
-https://harrykjg-physics.github.io/GrassmannSymbolics/
+https://harrykjg-physics.github.io/GrassmannSymbolics.jl/
 ```
 
 ## Installation
@@ -33,7 +33,7 @@ During development, install the package from a checkout:
 
 ```julia
 using Pkg
-Pkg.develop(path="/path/to/GrassmannSymbolics")
+Pkg.develop(path="/path/to/GrassmannSymbolics.jl")
 ```
 
 After registration in Julia's General registry, users will be able to install it

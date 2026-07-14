@@ -1,7 +1,7 @@
 # GrassmannSymbolics.jl
 
-[![CI](https://github.com/Harrykjg-physics/GrassmannSymbolics/actions/workflows/CI.yml/badge.svg)](https://github.com/Harrykjg-physics/GrassmannSymbolics/actions/workflows/CI.yml)
-[![Documentation](https://github.com/Harrykjg-physics/GrassmannSymbolics/actions/workflows/Documentation.yml/badge.svg)](https://github.com/Harrykjg-physics/GrassmannSymbolics/actions/workflows/Documentation.yml)
+[![CI](https://github.com/Harrykjg-physics/GrassmannSymbolics.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/Harrykjg-physics/GrassmannSymbolics.jl/actions/workflows/CI.yml)
+[![Documentation](https://github.com/Harrykjg-physics/GrassmannSymbolics.jl/actions/workflows/Documentation.yml/badge.svg)](https://github.com/Harrykjg-physics/GrassmannSymbolics.jl/actions/workflows/Documentation.yml)
 
 `GrassmannSymbolics.jl` is a Julia package for symbolic calculations with
 Grassmann, or anticommuting, variables.  It is designed for deriving local
@@ -11,13 +11,13 @@ nearest-neighbor interactions.
 The public documentation site is:
 
 ```text
-https://harrykjg-physics.github.io/GrassmannSymbolics/
+https://harrykjg-physics.github.io/GrassmannSymbolics.jl/
 ```
 
 The source repository is:
 
 ```text
-https://github.com/Harrykjg-physics/GrassmannSymbolics
+https://github.com/Harrykjg-physics/GrassmannSymbolics.jl
 ```
 
 ## Features
@@ -40,14 +40,14 @@ repository:
 
 ```julia
 using Pkg
-Pkg.add(url="https://github.com/Harrykjg-physics/GrassmannSymbolics")
+Pkg.add(url="https://github.com/Harrykjg-physics/GrassmannSymbolics.jl")
 ```
 
 For local development:
 
 ```julia
 using Pkg
-Pkg.develop(path="/path/to/GrassmannSymbolics")
+Pkg.develop(path="/path/to/GrassmannSymbolics.jl")
 ```
 
 After registration in General:

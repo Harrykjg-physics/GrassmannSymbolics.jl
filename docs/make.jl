@@ -14,8 +14,8 @@ makedocs(;
     sitename="GrassmannSymbolics.jl",
     remotes=nothing,
     format=Documenter.HTML(;
-        canonical="https://harrykjg-physics.github.io/GrassmannSymbolics/",
-        repolink="https://github.com/Harrykjg-physics/GrassmannSymbolics",
+        canonical="https://harrykjg-physics.github.io/GrassmannSymbolics.jl/",
+        repolink="https://github.com/Harrykjg-physics/GrassmannSymbolics.jl",
         edit_link="main",
         assets=String[],
     ),
@@ -34,7 +34,7 @@ makedocs(;
 
 if get(ENV, "CI", "false") == "true"
     deploydocs(;
-        repo="github.com/Harrykjg-physics/GrassmannSymbolics.git",
+        repo="github.com/Harrykjg-physics/GrassmannSymbolics.jl.git",
         devbranch="main",
         push_preview=true,
     )

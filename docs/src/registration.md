@@ -47,7 +47,7 @@ This repository includes a Documenter.jl workflow.  Once GitHub Pages is enabled
 for the generated `gh-pages` branch, the documentation URL is:
 
 ```text
-https://harrykjg-physics.github.io/GrassmannSymbolics/
+https://harrykjg-physics.github.io/GrassmannSymbolics.jl/
 ```
 
 The workflow file is:
