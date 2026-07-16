@@ -131,6 +131,8 @@ The `examples/` directory contains model derivations and validation helpers:
 
 ```text
 Free_Wilson_and_Staggered.jl
+Wilson_Majorana_Fermion.jl
+Two_Flavor_Staggered_Gross_Neveu.jl
 Simple_quardratic_model.jl
 Single_Flavor_Gross_Neveu_Wilson.jl
 Schwinger_model_theta_term.jl

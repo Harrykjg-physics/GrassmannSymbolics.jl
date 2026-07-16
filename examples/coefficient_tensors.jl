@@ -2,6 +2,8 @@ using GrassmannSymbolics
 using Symbolics
 
 include(joinpath(@__DIR__, "Free_Wilson_and_Staggered.jl"))
+include(joinpath(@__DIR__, "Wilson_Majorana_Fermion.jl"))
+include(joinpath(@__DIR__, "Two_Flavor_Staggered_Gross_Neveu.jl"))
 include(joinpath(@__DIR__, "Simple_quardratic_model.jl"))
 include(joinpath(@__DIR__, "Single_Flavor_Gross_Neveu_Wilson.jl"))
 include(joinpath(@__DIR__, "Schwinger_model_theta_term.jl"))
@@ -78,6 +80,22 @@ function free_staggered_coefficient_tensor(; substitutions=nothing,
     groups = [collect(group) for group in values(model.legs)]
     return _coefficient_array_result(tensor, groups;
         materialize, substitutions, simplify, element_type)
+end
+
+function wilson_majorana_coefficient_tensor(; parameters=(;), substitutions=nothing,
+        materialize::Bool=true, simplify::Bool=false, element_type=Any)
+    model = derive_wilson_majorana_tensor()
+    rules = _substitution_rules(model, parameters, substitutions)
+    return _coefficient_array_result(model.tensor, model.leg_groups;
+        materialize, substitutions=rules, simplify, element_type)
+end
+
+function two_flavor_staggered_gn_coefficient_tensor(; parameters=(;), substitutions=nothing,
+        materialize::Bool=true, simplify::Bool=false, element_type=Any)
+    model = derive_two_flavor_staggered_gn_tensor()
+    rules = _substitution_rules(model, parameters, substitutions)
+    return _coefficient_array_result(model.tensor, model.leg_groups;
+        materialize, substitutions=rules, simplify, element_type)
 end
 
 function simple_quadratic_coefficient_tensor(; parameters=(;), substitutions=nothing,

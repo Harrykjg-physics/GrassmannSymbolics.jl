@@ -150,6 +150,41 @@ $\bar\Psi_\mu=(\bar\zeta_\mu,\bar\eta_\mu)$。
 
 Wilson 的式 (B.4) 已通过双轨审计。前向矩阵 $X_\mu$ 对应组合分解中 $\delta(n+\hat\mu,m)$ 的第二通道，后向矩阵 $Y_\mu$ 对应 $\delta(n-\hat\mu,m)$ 的第一通道；采用文献隐含的时间方向 SVD 相位 $\eta_t,\zeta_t\mapsto-\eta_t,-\zeta_t$ 后，在 256-bit 精度及三个独立 $D$ 值上，最大逐系数误差为 $3.5\times10^{-77}$。
 
+\subsection{Wilson--Majorana 与 two-flavor staggered Gross--Neveu 模型}
+\path{Ref/Wilson_Majorana_Fermion_and_Two_Flavor_Staggered_GN.pdf} 采用与式 (2.8) 相同的拆分结构：
+\begin{equation}
+ Z=\sum_{\{x,t\}}\int\prod_n
+ T_{x_n,t_n,x_{n-\hat1},t_{n-\hat2}}\,
+ G_{n;x_n,t_n,x_{n-\hat1},t_{n-\hat2}} .
+\end{equation}
+Wilson--Majorana 模型的数值张量由文献式 (2.9) 给出：
+\begin{equation}
+ T_{ijkl}=\int \dd\eta_1\dd\eta_2\dd\chi_1\dd\chi_2\,
+ e^{(m_\eta+2)\eta_1\eta_2+(m_\chi+2)\chi_1\chi_2}
+ (-1)^{i_3+i_4}\,{\cal M}_{ijkl},
+\end{equation}
+其中 ${\cal M}_{ijkl}$ 是式 (2.9) 打印顺序中的物理场单项式。
+实现文件 \path{examples/Wilson_Majorana_Fermion.jl} 对每个占据 bit pattern 直接做 Berezin 积分，并把四个 4-bit 超腿
+\((i,j,k,l)\) 物化为 Grassmann 多项式腿；因此对应的系数张量形状为
+\((16,16,16,16)\)。
+
+Two-flavor staggered Gross--Neveu 模型的 onsite 相互作用为
+\begin{equation}
+ e^{U\psi_1\psi_2\psi_3\psi_4}.
+\end{equation}
+文献式 (5.2) 被实现为
+\begin{equation}
+ T_{ijkl}=\int\prod_{a=1}^4\dd\psi_a\,
+ e^{U\psi_1\psi_2\psi_3\psi_4}
+ \prod_{s=1}^4\left(\frac{\eta_{n,1}}2\right)^{x_{n,s}}
+ \prod_{s=1}^4\left(\frac{\eta_{n,2}}2\right)^{t_{n,s}}
+ {\cal N}_{ijkl},
+\end{equation}
+其中 ${\cal N}_{ijkl}$ 是式 (5.2) 中
+\(\psi_4^{l_4}\psi_3^{l_3}\psi_2^{l_2}\psi_1^{l_1}\cdots
+\psi_4^{i_4}\psi_3^{i_3}\psi_2^{i_2}\psi_1^{i_1}\) 的打印顺序。
+实现文件 \path{examples/Two_Flavor_Staggered_Gross_Neveu.jl} 逐项生成所有非零系数，并暴露同样的 \((16,16,16,16)\) 系数张量布局。
+
 \subsection{简单二次模型}
 第二个基准采用二维单分量作用量
 \begin{equation}
@@ -218,6 +253,8 @@ $\theta$ 项并不改变 Grassmann 积分，而是进入普通的规范 plaquett
 模型 & 在统一流程上的新增结构 \\
 \midrule
 Free Wilson and Staggered & 二分量 Wilson hopping 的秩一通道；staggered 相位；作为符号和腿序基准。\\
+Wilson--Majorana & 两个 Majorana 二分量场；文献把数值张量 $T$ 与 Grassmann 张量 $G$ 拆开，四条腿均为 4-bit 超指标。\\
+Two-flavor staggered Gross--Neveu & 四分量 staggered 场与 onsite 四费米项；式 (5.2) 的四个 4-bit 超腿给出 $16^4$ 系数张量。\\
 Simple quadratic model & 最小单分量示例，用于验证逐键展开、收缩测度及小格点精确配分函数。\\
 Single Flavor Gross-Neveu Wilson & Wilson 二分量场、化学势及局域四费米项；需匹配文献的镜像/测度约定。\\
 Schwinger model with $\theta$ term & hopping 中含 $U(1)$ 链变量，另有 plaquette 玻色张量和拓扑项；先积费米子，再处理规范积分。\\

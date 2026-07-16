@@ -8,6 +8,8 @@ used to reproduce published tensor-network formulas.
 
 ```text
 Free_Wilson_and_Staggered.jl
+Wilson_Majorana_Fermion.jl
+Two_Flavor_Staggered_Gross_Neveu.jl
 Simple_quardratic_model.jl
 Single_Flavor_Gross_Neveu_Wilson.jl
 Schwinger_model_theta_term.jl
@@ -18,6 +20,19 @@ NJL.jl
 1D_Hubbard.jl
 coefficient_tensors.jl
 ```
+
+## Wilson-Majorana and two-flavor staggered GN
+
+`Wilson_Majorana_Fermion.jl` reconstructs Eq. (2.9) of
+`Ref/Wilson_Majorana_Fermion_and_Two_Flavor_Staggered_GN.pdf` by direct
+Berezin integration over the two Majorana spinors.  The four tensor legs are
+the 4-bit super-indices `(i, j, k, l)`, so the coefficient array has shape
+`(16, 16, 16, 16)`.
+
+`Two_Flavor_Staggered_Gross_Neveu.jl` reconstructs Eq. (5.2) of the same
+reference by integrating the four staggered components `psi_1,...,psi_4` with
+the onsite interaction `exp(U psi_1 psi_2 psi_3 psi_4)`.  It uses the same
+four 4-bit leg groups and therefore the same coefficient-array shape.
 
 ## Coefficient-tensor helpers
 
