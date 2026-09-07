@@ -1,0 +1,217 @@
+                                                     Phase diagram of a lattice fermion model with symmetric mass generation
+
+                                               Sandip Maiti ,1, 2, ∗ Debasish Banerjee ,1, 3, † Shailesh Chandrasekharan ,4, ‡ and Marina K. Marinkovic                 5, §
+                                                                  1
+                                                                 Saha Institute of Nuclear Physics, HBNI, 1/AF Bidhannagar, Kolkata 700064, India
+                                                              2
+                                                                Key Laboratory of Quark and Lepton Physics (MOE) and Institute of Particle Physics,
+                                                                               Central China Normal University, Wuhan 430079, China
+                                                          3
+                                                            School of Physics and Astronomy, University of Southampton, University Road, SO17 1BJ, UK
+                                                             4
+                                                               Department of Physics, Box 90305, Duke University, Durham, North Carolina 27708, USA
+                                                        5
+                                                          Institut für Theoretische Physik, Wolfgang-Pauli-Straße 27, ETH Zürich, 8093 Zürich, Switzerland
+                                                                                              (Dated: February 23, 2026)
+                                                            We study the phase structure of a model containing two flavors of massless staggered fermions
+                                                          interacting through two independent four-fermion couplings, UI and UB , formulated on a three-
+                                                          dimensional Euclidean space–time lattice. At UB = 0, this model is known to exhibit a direct
+                                                          second-order quantum phase transition between a massless fermion (mf) phase and a phase in
+                                                          which fermions acquire masses through the mechanism commonly referred to as symmetric mass
+arXiv:2602.18360v1 [hep-lat] 20 Feb 2026
+
+
+
+
+                                                          generation (smg). We demonstrate that introducing a small nonzero value of UB qualitatively alters
+                                                          this structure: the single exotic transition at UB = 0 splits into two distinct, conventional transitions,
+                                                          separated by an intermediate phase in which fermion masses arise through the standard mechanism of
+                                                          spontaneous symmetry breaking (ssb). The first of these is a Gross–Neveu transition separating the
+                                                          mf phase from the ssb-induced massive phase, while the second is a three-dimensional XY transition
+                                                          between the ssb phase and the smg phase. Using the fermion-bag Monte Carlo method, we verify
+                                                          that the critical exponents associated with both transitions are consistent with the literature, thereby
+                                                          yielding a quantitative characterization of the resulting phase structure of the model.
+
+
+                                                              I.      INTRODUCTION                               theories. The recent discoveries of a direct second–order
+                                                                                                                 transition between the mf phase and the smg phase [12–
+                                              The origin of fermion masses is a fundamental question             16] have reignited interest in the smg phase itself [17–20],
+                                           in particle physics. In quantum field theories, such masses           as well as renewed efforts to formulate chiral gauge theo-
+                                           typically arise from local fermion bilinear terms in the ac-          ries on the lattice using smg to gap out mirror fermions
+                                           tion. When symmetries forbid these terms, fermion mass                [21–27].
+                                           generation usually proceeds through spontaneous sym-                     The presence of a direct second–order transition in a
+                                           metry breaking (ssb), such that fermion bilinear terms                lattice model between the mf phase and the smg phase
+                                           emerge dynamically as condensates [1]. A similar mecha-               suggests the existence of a new RG fixed point that gov-
+                                           nism is employed in the Standard Model, where the Higgs               erns the long–distance physics at criticality. Such a fixed
+                                           field develops a vacuum expectation value and thereby                 point, featuring two relevant directions, was conjectured
+                                           enables fermion masses to arise through Yukawa couplings              long ago in a class of lattice models [28]. The most con-
+                                           [2, 3]. In Quantum Chromodynamics, ssb of chiral sym-                 vincing evidence for its existence now comes from studies
+                                           metry is driven by strong gauge–field fluctuations, which             in three Euclidean space–time dimensions on a cubic lat-
+                                           induce fermion bilinear condensates; together with con-               tice [12, 13]. Somewhat surprisingly, however, a single
+                                           finement, this mechanism accounts for the large masses                four-fermion interaction parameter—which we label UI —
+                                           of hadrons such as protons and neutrons.                              proved sufficient to tune the model to criticality and reveal
+                                              However, recent studies of lattice models have demon-              the transition [12, 13].
+                                           strated that fermion masses can also emerge dynamically                  Motivated by the possibility that an underlying sym-
+                                           without ssb [4–6]. In such cases, none of the lattice sym-            metry may reduce the number of relevant directions, in
+                                           metries present in the massless phase are spontaneously               this work we extend the lattice model studied previously
+                                           broken in the massive phase, and the masses instead arise             by introducing a new coupling UB that breaks some of
+                                           purely from strong interactions. This unconventional                  the lattice symmetries. To explore the effects of UB on
+                                           mechanism of fermion mass generation is now commonly                  the phase transition, we perform large-scale Monte Carlo
+                                           referred to as smg [5, 7, 8]. Although smg-like phases                calculations, in the absence of explicit fermion mass terms
+                                           were discovered long ago [9–11], they were largely over-              in the lattice action. A key feature of our construction is
+                                           looked for many years, having been assumed to be lattice              that the model admits a formulation within the fermion-
+                                           artifacts without relevance to continuum quantum field                bag approach [29], which enables efficient simulations in
+                                                                                                                 this regime.
+                                                                                                                    Our results show that the presence of UB splits the
+                                           ∗   sandipmaiti73@gmail.com                                           direct transition between the mf phase and the smg phase
+                                           †   D.Banerjee@soton.ac.uk                                            into two distinct transitions by generating an intermediate,
+                                           ‡   sch27@duke.edu                                                    more conventional massive-fermion phase characterized
+                                           §   marinama@ethz.ch                                                  by ssb. The transition between the mf phase and the ssb
+                                                                                                                                                       2
+
+phase belongs to a conventional Gross–Neveu universality                        sion of the XY-transision. We then show a broader study
+class, while the transition between the ssb phase and the                       of the model for various couplings and lattice sizes to
+smg phase belongs to a bosonic universality class in which                      obtain a qualitative understanding of the phase diagram
+fermions are massive and decouple. The symmetries of                            of our model. Each of these discussions are presented as
+our model and the associated symmetry-breaking pattern                          separate subsections of Section V. We finally present our
+suggest that this transition lies in the three-dimensional                      conclusions in Section VI.
+XY universality class. In our work, we are able to study
+the universality classes of both transitions and find critical
+behavior consistent with these expectations.
+   Our paper is organized as follows. In Section II, we
+                                                                                                       II.     LATTICE MODEL
+introduce our lattice model and discuss its relevant lat-
+tice symmetries. In Section III, we show how we can
+formulate the fermionic path integral of our model us-                             Our lattice model is a (2 + 1)-dimensional Euclidean
+ing the fermion bag approach. We introduce the idea                             space–time system consisting of two flavors of massless
+of instanton-dimer configurations and their weights. We                         staggered fermions, denoted u and d, interacting via two
+then construct several Monte Carlo methods to update                            independent four-fermion couplings UI and UB . The ac-
+these instanton-dimer configurations in Section IV. In Sec-                     tion is constructed with four Grassmann-valued staggered
+tion V, we present our results. We first discuss a detailed                     fermion fields at each site i, namely ūi , ui , d¯i , and di , and
+study of the Gross-Neveu transition followed by a discus-                       is given by
+
+
+
+                  X                                                        X                               X                                   
+             S=          ηij ūi uj − ūj ui + d¯i dj − d¯j di       − UI        ūi ui d¯i di       − UB           ūi ui ūj uj + d¯i di d¯j dj .   (1)
+                  ⟨ij⟩                                                      i                                ⟨ij⟩
+
+
+
+
+Here i and j label sites on a cubic lattice with coordinates                    instanton-like effects into the fermionic path integral [30];
+(t, x, y). Each side of the cube has length L in lattice units,                 this interpretation also motivates the notation UI . The
+so that t, x, y = 0, 1, . . . , L−1, and the total lattice volume               third term proportional to UB , represents back–and–forth
+contains L3 sites. The notation ⟨ij⟩ denotes the nearest-                       hopping of quarks along a single bond, motivating the
+neighbor lattice sites. The phase factors ηij implement                         label UB . This interaction has also been interpreted as a
+a π flux through each plaquette of the cubic lattice. A                         Thirring interaction for each flavor in previous studies [31].
+convenient choice is ηij = 1 if j has coordinates (t+1, x, y),                  The term is invariant under two independent SU (2)×U (1)
+ηij = (−1)t if j has coordinates (t, x + 1, y), and ηij =                       transformations, one acting on each flavor, both of which
+(−1)t+x if j has coordinates (t, x, y + 1). Finally, lattice                    are embedded as subgroups of the full SU (4) × U (1)
+sites are classified as even or odd depending on whether                        symmetry of Eq. (2). The transformation acting on the
+t + x + y is even or odd, respectively.                                         u quarks takes the form
+    We can view the action in Eq. (1) as consisting of three                                                                   
+distinct terms, each with its own symmetry properties.                             ui                 ui           ūj                ūj
+                                                                                        → Vu eiθu          ,            → Vu∗ e−iθu        ,
+The first term describes the free hopping of fermions and is                       ūi                ūi          uj                 uj
+invariant under an internal SU (4) × U (1) transformation                                                                                 (3)
+given by
+                                                                                where Vu ∈ SU (2), and as before i is an even site and j is
+                                               
+  ui           ui                     ūj             ūj                       an odd site. The second SU (2) × U (1) symmetry acting
+ ūi     iθ  ūi                 uj     ∗ −iθ  uj                       on the d quarks is identical to Eq. (3), but with Vu → Vd
+ d  → V e d  ,                   d¯  → V e    d¯  ,
+    i             i                     j               j                       and eiθu → eiθd .
+  d¯i           d¯i                   dj              dj                           It is straightforward to verify that the U (1) symmetry
+                                                          (2)                   of Eq. (2) is recovered by setting θ = θu = θd . The
+                                                                                other independent U (1) symmetry of the third term is
+where site i is assumed to be even and j odd. Here V                            obtained by choosing χ = θu = −θd ; this corresponds
+denotes an element of the SU (4) group, while eiθ repre-                        to an additional chiral symmetry of two-flavor staggered
+sents a U (1) phase factor often interpreted as an axial                        fermions, which we denote by Uχ (1). This symmetry is
+symmetry of staggered fermions.                                                 a subgroup of the SU (4) symmetry appearing in Eq. (2).
+   The second term proportional to UI , is invariant under                      When only UI is nonzero, the symmetry of the model
+the SU (4) transformation in Eq. (2), but it explicitly                         in Eq. (1) is the full SU (4). When both UI and UB are
+breaks the axial U (1) symmetry. For this reason, this                          nonzero, this SU (4) symmetry is reduced to SU (2) ×
+interaction can be viewed as a ’t Hooft vertex, introducing                     SU (2) × Uχ (1).
+                                                                                                                                                           3
+
+   Fermion bilinear condensates of the form ⟨ūu⟩ and                                                  instanton                             instanton
+  ¯ spontaneously break the Uχ (1) symmetry. Such
+⟨dd⟩
+                                                                       dimer
+condensates can be detected by measuring susceptibilities
+involving the fermion bilinear fields ūi ui and d¯i di . We
+will define three susceptibilities of this type:
+                          1 X
+                χud =            ūi ui d¯j dj ,         (4)
+                         2L3 i,j
+                                                                                                                           dimer
+                         1 X
+                χuu   =         ūi ui ūj uj ,          (5)                       u-layer                             d-layer
+                        2L3 i,j
+                                                                    instanton                              instanton
+                           1 X ¯ ¯
+                χdd =             di di dj dj ,          (6)
+                          2L3 i,j                               FIG. 1. An illustration of an instanton–dimer configuration
+                                                                [ni , nub , ndb ] on an L = 2 lattice. Instantons are shown as solid
+where ⟨·⟩ denotes the usual path-integral expectation           circles, and dimers are shown as thick bonds. The configuration
+value using the action in Eq. (1). By symmetry of the           on the left depicts the instantons and dimers on the u layer,
+                                                                while the configuration on the right shows the corresponding
+action, it is easy to verify that χuu = χdd . We also find
+                                                                structure on the d layer. Instantons occupy the same lattice
+empirically that χud ≈ χuu on large lattices, except when       sites on both layers, whereas the dimer configurations may
+UI is small.                                                    differ. Sites containing neither instantons nor dimers are also
+  In a phase where the fermion bilinear condensates are         present.
+nonzero, we expect these susceptibilities to diverge as
+χ ∼ L3 , while in both the mf phase and the smg phase
+we expect χ ∼ const. At a critical point, in contrast, we       term as
+expect the finite-size scaling behavior χ ∼ L2−η .                    X                                                          
+                                                                                ηij ūi uj − ūj ui + d¯i dj − d¯j di
+                                                                        ⟨ij⟩
+         III.   FERMION BAG APPROACH
+                                                                                                           = ūi Mij uj + d¯i Mij dj ,                    (9)
+
+   In this work we extend the ideas of the fermion bag          where summation over lattice sites i, j is implicit on the
+approach [29] to construct a Monte Carlo method capable         right hand side. We have introduced the fermion matrix
+of computing the susceptibilities defined in Eqs. (4) to (6).   M , which can be identified as an L3 × L3 antisymmetric
+The path–integral expectation value of any Grassmann-           matrix describing a single flavor of free staggered fermions.
+valued observable O is defined as                               Note that M has nonzero entries only between sites of
+                      Z                                         opposite parity and is anti-symmetric.
+                   1
+           ⟨O⟩ =        [Dd¯Dd Dū Du] O e−S ,           (7)       Using this notation, the partition function may be
+                   Z                                            written as
+                                                                        Z                                              
+where the partition function is                                                                               ¯
+                                                                   Z = [Dd¯Dd Dū Du] e− ūi Mij uj +di Mij dj
+                    Z
+                                                                        Y                   Y
+             Z =      [Dd¯Dd Dū Du] e−S ,               (8)          ×
+                                                                                      ¯
+                                                                           eUI ūi ui di di
+                                                                                                                  ¯     ¯
+                                                                                              eUB (ūi ui ūj uj +di di dj dj ) , (10)
+                                                                           i                       b≡⟨ij⟩
+and the action S is given in Eq. (1).
+   The key idea of the fermion bag approach is to reorga-       where we have substituted the action from Eq. (1) into
+nize the expression in Eq. (7) as a sum over contributions      Eq. (8). For convenience, we denote each nearest–neighbor
+from configurations of fermion bags. Each fermion bag           bond ⟨ij⟩ by b.
+is a set of lattice sites within which fermions are allowed       We now expand the interaction terms using
+to hop. There are two complementary viewpoints for                                    ¯
+                                                                                              X                  ni
+constructing the fermion bag representation: the weak–                     eUI ūi ui di di =   UI ūi ui d¯i di ,    (11)
+coupling viewpoint and the strong–coupling viewpoint [32].                                             ni =0,1
+                                                                                                         X                            nub
+In the weak–coupling viewpoint, fermion bags form nonlo-                   e    UB ūi ui ūj uj
+                                                                                                   =               UB ūi ui ūj uj              ,       (12)
+cal sets of sites and fermion propagation occurs through                                               nu
+                                                                                                        b =0,1
+free–fermion propagators; this formulation is equivalent                                                 X                            ndb
+                                                                                     ¯       ¯
+to the diagrammatic Monte Carlo method [33]. In the                            eUB di di dj dj =                   UB d¯i di d¯j dj          ,           (13)
+strong–coupling viewpoint, by contrast, fermions hop only                                              nd
+                                                                                                        b =0,1
+locally within connected regions of the lattice. In this
+work we adopt the weak–coupling viewpoint.                      where ni denotes the presence of an instanton at site i,
+   To formulate the fermion bag approach we reorganize          and nub , ndb denote the presence of a u-type or d-type
+the expression in Eq. (7), by first rewriting the kinetic       dimer on bond b. The set of all ni , nub and ndb define a
+

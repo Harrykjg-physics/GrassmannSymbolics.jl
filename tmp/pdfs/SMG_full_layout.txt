@@ -1,0 +1,1352 @@
+                                                     Phase diagram of a lattice fermion model with symmetric mass generation
+
+                                               Sandip Maiti ,1, 2, ∗ Debasish Banerjee ,1, 3, † Shailesh Chandrasekharan ,4, ‡ and Marina K. Marinkovic                 5, §
+                                                                  1
+                                                                 Saha Institute of Nuclear Physics, HBNI, 1/AF Bidhannagar, Kolkata 700064, India
+                                                              2
+                                                                Key Laboratory of Quark and Lepton Physics (MOE) and Institute of Particle Physics,
+                                                                               Central China Normal University, Wuhan 430079, China
+                                                          3
+                                                            School of Physics and Astronomy, University of Southampton, University Road, SO17 1BJ, UK
+                                                             4
+                                                               Department of Physics, Box 90305, Duke University, Durham, North Carolina 27708, USA
+                                                        5
+                                                          Institut für Theoretische Physik, Wolfgang-Pauli-Straße 27, ETH Zürich, 8093 Zürich, Switzerland
+                                                                                              (Dated: February 23, 2026)
+                                                            We study the phase structure of a model containing two flavors of massless staggered fermions
+                                                          interacting through two independent four-fermion couplings, UI and UB , formulated on a three-
+                                                          dimensional Euclidean space–time lattice. At UB = 0, this model is known to exhibit a direct
+                                                          second-order quantum phase transition between a massless fermion (mf) phase and a phase in
+                                                          which fermions acquire masses through the mechanism commonly referred to as symmetric mass
+arXiv:2602.18360v1 [hep-lat] 20 Feb 2026
+
+
+
+
+                                                          generation (smg). We demonstrate that introducing a small nonzero value of UB qualitatively alters
+                                                          this structure: the single exotic transition at UB = 0 splits into two distinct, conventional transitions,
+                                                          separated by an intermediate phase in which fermion masses arise through the standard mechanism of
+                                                          spontaneous symmetry breaking (ssb). The first of these is a Gross–Neveu transition separating the
+                                                          mf phase from the ssb-induced massive phase, while the second is a three-dimensional XY transition
+                                                          between the ssb phase and the smg phase. Using the fermion-bag Monte Carlo method, we verify
+                                                          that the critical exponents associated with both transitions are consistent with the literature, thereby
+                                                          yielding a quantitative characterization of the resulting phase structure of the model.
+
+
+                                                              I.      INTRODUCTION                               theories. The recent discoveries of a direct second–order
+                                                                                                                 transition between the mf phase and the smg phase [12–
+                                              The origin of fermion masses is a fundamental question             16] have reignited interest in the smg phase itself [17–20],
+                                           in particle physics. In quantum field theories, such masses           as well as renewed efforts to formulate chiral gauge theo-
+                                           typically arise from local fermion bilinear terms in the ac-          ries on the lattice using smg to gap out mirror fermions
+                                           tion. When symmetries forbid these terms, fermion mass                [21–27].
+                                           generation usually proceeds through spontaneous sym-                     The presence of a direct second–order transition in a
+                                           metry breaking (ssb), such that fermion bilinear terms                lattice model between the mf phase and the smg phase
+                                           emerge dynamically as condensates [1]. A similar mecha-               suggests the existence of a new RG fixed point that gov-
+                                           nism is employed in the Standard Model, where the Higgs               erns the long–distance physics at criticality. Such a fixed
+                                           field develops a vacuum expectation value and thereby                 point, featuring two relevant directions, was conjectured
+                                           enables fermion masses to arise through Yukawa couplings              long ago in a class of lattice models [28]. The most con-
+                                           [2, 3]. In Quantum Chromodynamics, ssb of chiral sym-                 vincing evidence for its existence now comes from studies
+                                           metry is driven by strong gauge–field fluctuations, which             in three Euclidean space–time dimensions on a cubic lat-
+                                           induce fermion bilinear condensates; together with con-               tice [12, 13]. Somewhat surprisingly, however, a single
+                                           finement, this mechanism accounts for the large masses                four-fermion interaction parameter—which we label UI —
+                                           of hadrons such as protons and neutrons.                              proved sufficient to tune the model to criticality and reveal
+                                              However, recent studies of lattice models have demon-              the transition [12, 13].
+                                           strated that fermion masses can also emerge dynamically                  Motivated by the possibility that an underlying sym-
+                                           without ssb [4–6]. In such cases, none of the lattice sym-            metry may reduce the number of relevant directions, in
+                                           metries present in the massless phase are spontaneously               this work we extend the lattice model studied previously
+                                           broken in the massive phase, and the masses instead arise             by introducing a new coupling UB that breaks some of
+                                           purely from strong interactions. This unconventional                  the lattice symmetries. To explore the effects of UB on
+                                           mechanism of fermion mass generation is now commonly                  the phase transition, we perform large-scale Monte Carlo
+                                           referred to as smg [5, 7, 8]. Although smg-like phases                calculations, in the absence of explicit fermion mass terms
+                                           were discovered long ago [9–11], they were largely over-              in the lattice action. A key feature of our construction is
+                                           looked for many years, having been assumed to be lattice              that the model admits a formulation within the fermion-
+                                           artifacts without relevance to continuum quantum field                bag approach [29], which enables efficient simulations in
+                                                                                                                 this regime.
+                                                                                                                    Our results show that the presence of UB splits the
+                                           ∗   sandipmaiti73@gmail.com                                           direct transition between the mf phase and the smg phase
+                                           †   D.Banerjee@soton.ac.uk                                            into two distinct transitions by generating an intermediate,
+                                           ‡   sch27@duke.edu                                                    more conventional massive-fermion phase characterized
+                                           §   marinama@ethz.ch                                                  by ssb. The transition between the mf phase and the ssb
+                                                                                                                                                       2
+
+phase belongs to a conventional Gross–Neveu universality                        sion of the XY-transision. We then show a broader study
+class, while the transition between the ssb phase and the                       of the model for various couplings and lattice sizes to
+smg phase belongs to a bosonic universality class in which                      obtain a qualitative understanding of the phase diagram
+fermions are massive and decouple. The symmetries of                            of our model. Each of these discussions are presented as
+our model and the associated symmetry-breaking pattern                          separate subsections of Section V. We finally present our
+suggest that this transition lies in the three-dimensional                      conclusions in Section VI.
+XY universality class. In our work, we are able to study
+the universality classes of both transitions and find critical
+behavior consistent with these expectations.
+   Our paper is organized as follows. In Section II, we
+                                                                                                       II.     LATTICE MODEL
+introduce our lattice model and discuss its relevant lat-
+tice symmetries. In Section III, we show how we can
+formulate the fermionic path integral of our model us-                             Our lattice model is a (2 + 1)-dimensional Euclidean
+ing the fermion bag approach. We introduce the idea                             space–time system consisting of two flavors of massless
+of instanton-dimer configurations and their weights. We                         staggered fermions, denoted u and d, interacting via two
+then construct several Monte Carlo methods to update                            independent four-fermion couplings UI and UB . The ac-
+these instanton-dimer configurations in Section IV. In Sec-                     tion is constructed with four Grassmann-valued staggered
+tion V, we present our results. We first discuss a detailed                     fermion fields at each site i, namely ūi , ui , d¯i , and di , and
+study of the Gross-Neveu transition followed by a discus-                       is given by
+
+
+
+                  X                                                        X                               X                                   
+             S=          ηij ūi uj − ūj ui + d¯i dj − d¯j di       − UI        ūi ui d¯i di       − UB           ūi ui ūj uj + d¯i di d¯j dj .   (1)
+                  ⟨ij⟩                                                      i                                ⟨ij⟩
+
+
+
+
+Here i and j label sites on a cubic lattice with coordinates                    instanton-like effects into the fermionic path integral [30];
+(t, x, y). Each side of the cube has length L in lattice units,                 this interpretation also motivates the notation UI . The
+so that t, x, y = 0, 1, . . . , L−1, and the total lattice volume               third term proportional to UB , represents back–and–forth
+contains L3 sites. The notation ⟨ij⟩ denotes the nearest-                       hopping of quarks along a single bond, motivating the
+neighbor lattice sites. The phase factors ηij implement                         label UB . This interaction has also been interpreted as a
+a π flux through each plaquette of the cubic lattice. A                         Thirring interaction for each flavor in previous studies [31].
+convenient choice is ηij = 1 if j has coordinates (t+1, x, y),                  The term is invariant under two independent SU (2)×U (1)
+ηij = (−1)t if j has coordinates (t, x + 1, y), and ηij =                       transformations, one acting on each flavor, both of which
+(−1)t+x if j has coordinates (t, x, y + 1). Finally, lattice                    are embedded as subgroups of the full SU (4) × U (1)
+sites are classified as even or odd depending on whether                        symmetry of Eq. (2). The transformation acting on the
+t + x + y is even or odd, respectively.                                         u quarks takes the form
+    We can view the action in Eq. (1) as consisting of three                                                                   
+distinct terms, each with its own symmetry properties.                             ui                 ui           ūj                ūj
+                                                                                        → Vu eiθu          ,            → Vu∗ e−iθu        ,
+The first term describes the free hopping of fermions and is                       ūi                ūi          uj                 uj
+invariant under an internal SU (4) × U (1) transformation                                                                                 (3)
+given by
+                                                                                where Vu ∈ SU (2), and as before i is an even site and j is
+                                               
+  ui           ui                     ūj             ūj                       an odd site. The second SU (2) × U (1) symmetry acting
+ ūi     iθ  ūi                 uj     ∗ −iθ  uj                       on the d quarks is identical to Eq. (3), but with Vu → Vd
+ d  → V e d  ,                   d¯  → V e    d¯  ,
+    i             i                     j               j                       and eiθu → eiθd .
+  d¯i           d¯i                   dj              dj                           It is straightforward to verify that the U (1) symmetry
+                                                          (2)                   of Eq. (2) is recovered by setting θ = θu = θd . The
+                                                                                other independent U (1) symmetry of the third term is
+where site i is assumed to be even and j odd. Here V                            obtained by choosing χ = θu = −θd ; this corresponds
+denotes an element of the SU (4) group, while eiθ repre-                        to an additional chiral symmetry of two-flavor staggered
+sents a U (1) phase factor often interpreted as an axial                        fermions, which we denote by Uχ (1). This symmetry is
+symmetry of staggered fermions.                                                 a subgroup of the SU (4) symmetry appearing in Eq. (2).
+   The second term proportional to UI , is invariant under                      When only UI is nonzero, the symmetry of the model
+the SU (4) transformation in Eq. (2), but it explicitly                         in Eq. (1) is the full SU (4). When both UI and UB are
+breaks the axial U (1) symmetry. For this reason, this                          nonzero, this SU (4) symmetry is reduced to SU (2) ×
+interaction can be viewed as a ’t Hooft vertex, introducing                     SU (2) × Uχ (1).
+                                                                                                                                                           3
+
+   Fermion bilinear condensates of the form ⟨ūu⟩ and                                                  instanton                             instanton
+  ¯ spontaneously break the Uχ (1) symmetry. Such
+⟨dd⟩
+                                                                       dimer
+condensates can be detected by measuring susceptibilities
+involving the fermion bilinear fields ūi ui and d¯i di . We
+will define three susceptibilities of this type:
+                          1 X
+                χud =            ūi ui d¯j dj ,         (4)
+                         2L3 i,j
+                                                                                                                           dimer
+                         1 X
+                χuu   =         ūi ui ūj uj ,          (5)                       u-layer                             d-layer
+                        2L3 i,j
+                                                                    instanton                              instanton
+                           1 X ¯ ¯
+                χdd =             di di dj dj ,          (6)
+                          2L3 i,j                               FIG. 1. An illustration of an instanton–dimer configuration
+                                                                [ni , nub , ndb ] on an L = 2 lattice. Instantons are shown as solid
+where ⟨·⟩ denotes the usual path-integral expectation           circles, and dimers are shown as thick bonds. The configuration
+value using the action in Eq. (1). By symmetry of the           on the left depicts the instantons and dimers on the u layer,
+                                                                while the configuration on the right shows the corresponding
+action, it is easy to verify that χuu = χdd . We also find
+                                                                structure on the d layer. Instantons occupy the same lattice
+empirically that χud ≈ χuu on large lattices, except when       sites on both layers, whereas the dimer configurations may
+UI is small.                                                    differ. Sites containing neither instantons nor dimers are also
+  In a phase where the fermion bilinear condensates are         present.
+nonzero, we expect these susceptibilities to diverge as
+χ ∼ L3 , while in both the mf phase and the smg phase
+we expect χ ∼ const. At a critical point, in contrast, we       term as
+expect the finite-size scaling behavior χ ∼ L2−η .                    X                                                          
+                                                                                ηij ūi uj − ūj ui + d¯i dj − d¯j di
+                                                                        ⟨ij⟩
+         III.   FERMION BAG APPROACH
+                                                                                                           = ūi Mij uj + d¯i Mij dj ,                    (9)
+
+   In this work we extend the ideas of the fermion bag          where summation over lattice sites i, j is implicit on the
+approach [29] to construct a Monte Carlo method capable         right hand side. We have introduced the fermion matrix
+of computing the susceptibilities defined in Eqs. (4) to (6).   M , which can be identified as an L3 × L3 antisymmetric
+The path–integral expectation value of any Grassmann-           matrix describing a single flavor of free staggered fermions.
+valued observable O is defined as                               Note that M has nonzero entries only between sites of
+                      Z                                         opposite parity and is anti-symmetric.
+                   1
+           ⟨O⟩ =        [Dd¯Dd Dū Du] O e−S ,           (7)       Using this notation, the partition function may be
+                   Z                                            written as
+                                                                        Z                                              
+where the partition function is                                                                               ¯
+                                                                   Z = [Dd¯Dd Dū Du] e− ūi Mij uj +di Mij dj
+                    Z
+                                                                        Y                   Y
+             Z =      [Dd¯Dd Dū Du] e−S ,               (8)          ×
+                                                                                      ¯
+                                                                           eUI ūi ui di di
+                                                                                                                  ¯     ¯
+                                                                                              eUB (ūi ui ūj uj +di di dj dj ) , (10)
+                                                                           i                       b≡⟨ij⟩
+and the action S is given in Eq. (1).
+   The key idea of the fermion bag approach is to reorga-       where we have substituted the action from Eq. (1) into
+nize the expression in Eq. (7) as a sum over contributions      Eq. (8). For convenience, we denote each nearest–neighbor
+from configurations of fermion bags. Each fermion bag           bond ⟨ij⟩ by b.
+is a set of lattice sites within which fermions are allowed       We now expand the interaction terms using
+to hop. There are two complementary viewpoints for                                    ¯
+                                                                                              X                  ni
+constructing the fermion bag representation: the weak–                     eUI ūi ui di di =   UI ūi ui d¯i di ,    (11)
+coupling viewpoint and the strong–coupling viewpoint [32].                                             ni =0,1
+                                                                                                         X                            nub
+In the weak–coupling viewpoint, fermion bags form nonlo-                   e    UB ūi ui ūj uj
+                                                                                                   =               UB ūi ui ūj uj              ,       (12)
+cal sets of sites and fermion propagation occurs through                                               nu
+                                                                                                        b =0,1
+free–fermion propagators; this formulation is equivalent                                                 X                            ndb
+                                                                                     ¯       ¯
+to the diagrammatic Monte Carlo method [33]. In the                            eUB di di dj dj =                   UB d¯i di d¯j dj          ,           (13)
+strong–coupling viewpoint, by contrast, fermions hop only                                              nd
+                                                                                                        b =0,1
+locally within connected regions of the lattice. In this
+work we adopt the weak–coupling viewpoint.                      where ni denotes the presence of an instanton at site i,
+   To formulate the fermion bag approach we reorganize          and nub , ndb denote the presence of a u-type or d-type
+the expression in Eq. (7), by first rewriting the kinetic       dimer on bond b. The set of all ni , nub and ndb define a
+                                                                                                                                                           4
+
+instanton-dimer configuration. An illustration of such a                                Using these expansions, Eq. (10) can be reorganized as
+configuration on a L = 2 lattice is shown in Fig. 1.                                  a sum over instanton-dimer configurations [ni , nub , ndb ]:
+
+
+
+                        X         Z                                                   Y                   Y
+                                                             ūi Mij uj +d¯i Mij dj                                          u                  d
+           Z=                         [Dd¯Dd Dū Du] e−                                 (ūi ui d¯i di )ni  (ūi ui ūj uj )nb (d¯i di d¯j dj )nb
+                  [ni ,nu   d                                                            i                   b
+                        b ,nb ]
+                        X                     nZ                               Y            Y                 u
+                                                                                                                o
+              =                   UInI UBnB           [Dū Du] e−ūi Mij uj     (ūi ui )ni  (ūi ui ūj uj )nb
+                  [ni ,nu   d                                                   i                 b
+                        b ,nb ]
+                                                                    nZ                                 Y            Y                   o
+                                                                                             ¯                                        d
+                                                              ×           [Dd¯Dd] e−di Mij dj           (d¯i di )ni  (d¯i di d¯j dj )nb ,              (14)
+                                                                                                        i                 b
+
+
+
+
+where we have separated the Grassmann integrals over                                     For example, in the computation of χud using Eq. (4),
+the u and d fields, and defined                                                       we consider the observable O = ūk uk d¯ℓ dℓ . We refer to
+                X                X                                                    factors such as ūk uk as a u-type monomer at site k, and
+         nI =       ni ,    nB =  (nub + ndb ). (15)                                  similarly d¯ℓ dℓ as a d-type monomer at site ℓ. In this
+                    i                         b                                       case, the matrices G̃u and G̃d are constructed from an
+                                                                                      extended instanton–dimer–monomer configuration, de-
+  Each Grassmann integral can be evaluated using Wick’s                               noted by [ni , nub , ndb ; k, ℓ], in which the u layer contains
+theorem. In both cases, the result is a determinant of a                              an additional monomer at site k and the d layer contains
+matrix G whose elements are entries of M −1 connecting                                an additional monomer at site ℓ. Specifically, the u-field
+the sites where either ni = 1 or where the site is attached                           integral takes the form
+to a bond b with nb = 1. Further details may be found in                                Z
+Ref. [32]. Using this result, we can show that the integral                                                       Y                Y                 u
+                                                                                          [Dū Du] e−ūi Mij uj        (ūi ui )ni  (ūi ui ūj uj )nb ūk uk
+over the u fields is given by
+                                                                                                                      i           b
+    Z                        Y            Y                 u                                                         = det(M ) det(G̃u ),             (19)
+       [Dū Du] e−ūi Mij uj  (ūi ui )ni  (ūi ui ūj uj )nb
+                                      i           b                                   and similarly G̃d is defined by inserting d¯ℓ dℓ into the
+                                    = det(M ) det(Gu ),                (16)           corresponding d-field integral. The full computation of
+                                                                                      χud therefore involves summing over configurations with
+where Gu is a square matrix of dimension nI + 2nub . Simi-                            one u-type monomer and one d-type monomer inserted
+larly, the integral over the d fields yields det(M ) det(Gd ),                        at all possible lattice sites, followed by division by the
+where Gd has dimension nI + 2ndb . The final expression                               factor L3 as specified in Eq. (4). Similarly, χuu involves
+for the partition function is therefore                                               summing over configurations with two u-type monomers
+                     X                                                                inserted at all possible lattice sites and dividing by the
+  Z = (det M )2             UInI UBnB det(Gu ) det(Gd ). (17)                         factor 2L3 , in accordance with Eq. (5).
+                    [ni ,nu   d
+                          b ,nb ]                                                       Using Eqs. (17) and (18), we can now write the expec-
+                                                                                      tation value of an observable O as
+Since both matrices are antisymmetric, their determinants                                        P                      nI nB
+are nonnegative. Consequently, the partition function                                               [ni ,nu ,nd ;nO ] UI UB det(G̃u ) det(G̃d )
+is expressed as a sum of positive terms, which can be                                   ⟨O⟩ = P b b                   nI nB                     . (20)
+                                                                                                      [ni ,nu ,nd ] UI UB det(Gu ) det(Gd )
+efficiently sampled using a Monte Carlo method.                                                               b   b
+
+   We can repeat the above derivation for the observable                              Here the numerator includes configurations with addi-
+defined in Eq. (7), obtaining                                                         tional monomer insertions associated with the observable
+                        X                                                             O, collectively denoted by nO , while the denominator cor-
+⟨O⟩ Z = (det M )2              UInI UBnB det(G̃u ) det(G̃d ),                         responds to the partition function. In the next section, we
+                        [ni ,nu   d
+                              b ,nb ;nO ]                                             describe the Monte Carlo algorithm developed to evaluate
+                                                                       (18)           χud and χuu using this representation.
+
+where G̃u and G̃d are modified matrices that incorpo-
+rate the Grassmann fields appearing in the observable O.                                         IV.    MONTE CARLO ALGORITHM
+These fields also modify the instanton-dimer configura-
+tions to a new class of configurations which we label as                                Our Monte Carlo algorithm employs three distinct up-
+[ni , nub , ndb ; nO ].                                                               date types that modify the instanton–dimer configura-
+                                                                                                                               5
+
+tions [ni , nub , ndb ] contributing to the partition function   The above procedure generalizes straightforwardly to the
+in Eq. (17). Each update satisfies detailed balance, but         addition and removal of d-dimers.
+not all are ergodic individually; ergodicity is obtained
+by combining the three updates. The updates are: (i)
+the dimer update, (ii) the instanton update, and (iii) the                         B.     Instanton Update
+worm update. The dimer and instanton updates add or
+remove dimers and instantons, respectively, and are not             The purpose of the instanton update is to add or remove
+ergodic on their own. The worm update is ergodic but is          instantons from a given instanton–dimer configuration.
+qualitatively different: it samples extended configurations      To ensure that all proposed configurations have nonzero
+of the form [ni , nub , ndb ; nO ] that contribute to the two    weights, instantons are always added or removed in pairs,
+susceptibilities. We also introduce a tunable reweighting        with one instanton located on an even site and the other
+factor Ω for configurations in the worm sector in order          on an odd site. The update begins by choosing, with
+to optimize the efficiency of the algorithm. This factor is      equal probability, whether to add or remove an instanton
+divided out when computing physical observables. When            pair.
+all the three updates are used together the overall al-             Consider first the case in which an instanton pair is
+gorithm is both ergodic and efficient. As a consistency          added. For a given configuration, we count NFe and NFo ,
+check, we compare the results of our algorithm with exact        the numbers of even and odd lattice sites, respectively,
+calculations on an L = 2 lattice in the final subsection.        at which an instanton can be added. One can show
+                                                                 that NFe = NFo . We then randomly select one even site
+                                                                 from the NFe possibilities and one odd site from the NFo
+                   A.    Dimer Update
+                                                                 possibilities, and propose to add an instanton at each of
+                                                                 these sites. If the proposal is accepted, we obtain a new
+   The purpose of the dimer update is to add or re-              configuration in which the total numbers of instantons on
+move dimers from a given instanton–dimer configuration.          even and odd sites are denoted by ÑIe and ÑIo , respectively.
+The update begins by choosing, with equal probability,           These quantities also satisfy ÑIe = ÑIo .
+whether to add or remove a u-dimer or a d-dimer.                    Let det(Giu ) det(Gid ) denote the determinant fac-
+   Consider the case in which a u-dimer is proposed to           tor in Eq. (17) for the initial configuration, and let
+be added. For a given configuration, we count NFu , the
+                                                                 det(Gfu ) det(Gfd ) denote the corresponding factor for the
+number of free bonds in the u layer at which a dimer can
+                                                                 final configuration after the instanton pair is added. The
+be added. This is done by scanning all even sites that do
+                                                                 proposal to add the instanton pair is accepted with prob-
+not have a dimer or an instanton attached to them and,
+                                                                 ability
+for each such site, examining its six neighboring sites that
+also do not have a dimer or an instanton attached. Each                           "                                      #
+                                                                                             e     o      f         f
+such nearest-neighbor pair contributes one free bond to                acc              2 NF NF det(Gu ) det(Gd )
+                                                                     Pi→f = min 1, UI                                      . (23)
+NFu . We then randomly select one of these NFu bonds and                                   ÑIe ÑIo det(Giu ) det(Gid )
+propose to add a u-dimer on that bond. If the proposal
+is accepted, we obtain a new configuration in which the            The reverse process corresponds to removing an instan-
+total number of u-dimers is denoted by ÑD   u
+                                               .                 ton pair from the configuration containing the additional
+              i
+   Let det(Gu ) denote the determinant factor associated         instantons. In this case, the proposal to remove the in-
+with the u fermions in Eq. (17) for the initial configu-         stanton pair is accepted with probability
+ration, and let det(Gfu ) denote the corresponding factor                        "                                    #
+for the final configuration after the additional u-dimer is           acc             1 ÑIe ÑIo det(Giu ) det(Gid )
+                                                                    Pf →i = min 1, 2 e o                                . (24)
+added. The proposal to add the u-dimer is accepted with                              UI NF NF det(Gfu ) det(Gfd )
+probability
+                         "                    #                  It is straightforward to verify that the acceptance proba-
+                                  NFu det Gfu
+               acc
+            Pi→f = min 1, UB u                   .      (21)     bilities in Eq. (23) and Eq. (24) satisfy detailed balance.
+                                  ÑD det Giu
+which follows the standard Metropolis rule, with accep-
+                                                                                     C.    Worm Update
+tance probabilities greater than unity set equal to one.
+   The reverse process corresponds to removing a u-dimer
+from a configuration containing an additional dimer. In            The worm update creates and annihilates pairs of
+this case, the proposal is accepted with probability             monomers; each monomer may be either u-type or d-
+                        "                    #                   type. It consists of three steps: Begin, Move, and End.
+                                  u
+              acc             1 ÑD  det Giu                     In the Begin step two monomers are inserted, one at
+            Pf →i = min 1,                     .      (22)       the tail and one at the head of the worm. During the
+                             UB NFu det Gfu
+                                                                 Move step the head monomer is displaced while the tail
+It is straightforward to verify that the acceptance proba-       remains fixed. The End step annihilates the head and
+bilities in Eq. (21) and Eq. (22) satisfy detailed balance.      tail monomers.
+                                                                                                                                  6
+
+   During the update we sample extended configurations of                     A                          C
+the form [ni , nub , ndb ; nO ], which contribute directly to the
+observables defined in Eq. (20). The algorithm starts in                                                     Tail   Head
+the partition-function sector, transitions to the worm sec-
+tor containing the two extra monomers at the Begin step,
+and remains in that sector during the Move steps. The
+End step returns the algorithm to the partition-function
+sector. Thus the Begin and End steps are mutually re-                                       B
+verse operations and together satisfy detailed balance.
+The Move step is composed of reversible local moves that                                         Dimer
+satisfy their own detailed-balance conditions.
+   The weight of each worm-sector configuration is deter-
+mined by the observable it samples up to the reweighting            FIG. 2. Begin–End step of the worm algorithm restricted to a
+factor Ω. Hence, averaging the number of worm steps that            single layer. During the Begin step, the initially chosen site
+contribute to a given observable yields its expectation             may be either a free site (configuration A) or a site occupied
+value up to the same reweighting factor. For example,               by a dimer (configuration B). The solid arrow indicates the
+worm configurations with a u-type monomer at the head               site selected at the start of the Begin step. Configurations A
+                                                                    and B belong to the partition-function sector. From either
+and a d-type monomer at the tail contribute to χud , while
+                                                                    configuration, a proposal is made to transition to configuration
+configurations with two u-type monomers at those loca-              C in the worm sector, with the Tail located at the initially
+tions contribute to χuu . We describe each step in detail           chosen site and the Head placed on a neighboring site. For
+below.                                                              configuration A, the Head is chosen at random from the Ds
+                                                                    nearest-neighbor sites on the same layer, while for configura-
+                                                                    tion B it is placed on the fixed neighboring site shown in the
+                     1.   Begin–End Step                            figure. The worm update may also terminate immediately,
+                                                                    transitioning directly from configuration A to B or from B
+   The Begin step initiates the worm update by selecting            to A. If the Begin step produces configuration C, the End
+a lattice site i at random. With equal probability, this            step removes the worm by transforming configuration C back
+                                                                    into either configuration A or B. The same configurations
+site lies on either the u layer or the d layer. During
+                                                                    appear in the End step as in the Begin step, but with the
+the Begin step, the configuration transitions from the              arrow indicating the reverse direction of the update. In this
+partition-function sector to the worm sector through the            figure, both the Tail and the Head are created on the same
+creation of two monomers, identified as the Tail and the            fermion layer, either the u layer or the d layer.
+Head. The Tail is fixed at the original site i, while the
+Head is placed on a neighboring site j.
+   We first consider the case in which the initial site i is        In both expressions, det GA denotes the fermion determi-
+either free (i.e., contains neither an instanton nor a dimer)       nant factor for configuration A, while det GB denotes the
+or occupied by a dimer. This situation is illustrated in            corresponding factor for the proposed configuration B,
+Fig. 2, where the arrow indicates the initially selected site       which includes the additional monomers at the Head and
+i. Configuration A corresponds to the case in which the             Tail sites. Similarly, det GC is the determinant factor
+site is free, while configuration B corresponds to the case         with an additional dimer between i and j. The factor Ω
+in which the site contains a dimer.                                 is the reweighting factor of the worm sector.
+   Starting from configuration A, one of the Ds = 6 neigh-             If instead the Begin step starts from configuration B,
+boring sites of site i on the same layer is chosen at random        we propose, with equal probability, a transition either
+and denoted by j. If site j contains either a dimer or an           to configuration A or to configuration C. The proposal
+instanton, the worm update terminates. Otherwise, with              to transition from configuration B to configuration A is
+equal probability, one of two proposals is made: either a           accepted with probability
+dimer is created between sites i and j, leading to configu-                                                    
+ration B, or a worm configuration is created with a Tail                                            1    det GA
+                                                                                PB→A = min 1,                     ,      (27)
+monomer at site i and a Head monomer at site j, leading                                           UB Ds det GB
+to configuration C shown in Fig. 2.
+   The proposal to transition from configuration A to               while the proposal to transition from configuration B to
+configuration B is accepted with probability                        configuration C is accepted with probability
+                                                                                                           
+                                        det GB                                                          Ω
+              PA→B = min 1, UB Ds                ,       (25)                   PB→C = min 1,                   .       (28)
+                                        det GA                                                    UB (Ds + 1)
+while the proposal to transition from configuration A to
+                                                                      The End step corresponds to transitions from configu-
+configuration C is accepted with probability
+                                                                  ration C back to either configuration A or configuration B.
+                              Ω Ds det GC                           At the start of this step, it is not known a priori whether
+           PA→C = min 1,                     .      (26)
+                             Ds + 1 det GA                          the update will result in a Move step or an End step. One
+                                                                                                                                          7
+
+                        C                                                                                                    j
+                                                                               A             j                    C
+
+
+
+
+                                                                                                                                 Dimer
+                            Tail   Head
+                                                                                             k
+                                                                                   Head                               Head        k
+
+
+
+                        B                                                      B          Head                    D          Head
+
+                            Instanton
+                                                                                    j       k                         j Dimer k
+
+
+
+FIG. 3. Begin–End step of the worm algorithm involving
+                                                                    FIG. 4. First class of configurations among which the Move
+opposite layers. During this Begin step, the initially selected
+                                                                    step transitions. In this class, the chosen neighboring site k
+site contains an instanton (configuration B). The solid ar-
+                                                                    of the Head lies on the same layer and is either a free site or
+row indicates the site chosen at the start of the Begin step.
+                                                                    a site occupied by a dimer. If k is free, the site j is chosen
+Configuration B belongs to the partition-function sector. A
+                                                                    at random from the remaining nearest-neighbor sites on the
+proposal is then made to transition to configuration C in the
+                                                                    same layer, excluding the Head site.
+worm sector, with the Tail located at the initially selected site
+and the Head placed on the site with the same space–time
+coordinates on the opposite layer. If the proposal is accepted,                                                              j
+                                                                               A             j                C
+
+
+
+
+                                                                                                                                  dimer
+the instanton is broken into two monomers. The End step is
+the reverse process, in which the two monomers on the two
+layers are fused to form an instanton.                                                      k
+                                                                                   Head                               Head         k
+
+
+of the Ds + 1 neighboring sites of the Head is chosen at
+random; these include the Ds nearest-neighbor sites on                                                     Head
+                                                                                            B
+the same layer, as well as the site on the opposite layer
+with the same space–time coordinates. If the selected                                             j               k
+neighboring site coincides with the Tail site on the same                                             Instanton
+layer, the step is identified as an End step, and a pro-
+posal is made to transition to either configuration A or            FIG. 5. Second class of configurations among which the Move
+configuration B.                                                    step transitions. In this class, the chosen neighboring site k of
+   The proposal to transition from configuration C to               the Head lies on the opposite layer and is either a free site or a
+configuration A is accepted with probability                        site occupied by a dimer. The site k may also lie on the same
+                                                                  layer as the Head if it is occupied by an instanton. If k is free,
+                              Ds + 1 det GA                         the site j is chosen at random from the nearest-neighbor sites
+           PC→A = min 1,                       ,      (29)
+                               Ω Ds det GC                          on the same layer.
+
+while the proposal to transition from configuration C to
+configuration B is accepted with probability                        while the reverse proposal to transition from configura-
+                                                                  tion C back to configuration B is accepted with probability
+                              UB (Ds + 1)
+            PC→B = min 1,                   .       (30)                                                       
+                                    Ω                                                              UI (Ds + 1)
+                                                                                 PC→B = min 1,                    .       (32)
+According to the standard Metropolis prescription, if a                                                  Ω
+proposed update is rejected, the original configuration is
+retained as the new configuration.
+   The Begin step can also occur when the initially selected
+                                                                                             2.        Move Step
+site i is connected to an instanton, as illustrated in Fig. 3.
+In this case, the transition to the worm sector proceeds by
+breaking the instanton into two monomers, with the Head               During the Move step, the Head monomer is displaced
+placed on the site with the same space–time coordinates             to a next-to-nearest-neighbor site. Specifically, one of
+as i but on the opposite layer. The resulting worm-sector           the (Ds + 1) neighboring sites of the Head is chosen at
+configuration is denoted as configuration C in Fig. 3.              random and labeled as site k. These neighboring sites
+   For this process, the proposal to transition from config-        consist of the Ds nearest neighbors on the same layer,
+uration B to configuration C is accepted with probability           together with the site on the opposite layer that has the
+                                                                  same space–time coordinates.
+                                      Ω                               Depending on the configuration at site k, the Move
+              PB→C = min 1,                    ,         (31)
+                                 UI (Ds + 1)                        step is divided into two classes of updates, illustrated in
+                                                                                                                              8
+
+Fig. 4 and Fig. 5. The first class consists of configurations      acceptance probabilities are
+in which site k lies on the same layer as the Head and                                                         
+is either a free site (i.e., not connected to an instanton                                        1      det GA
+                                                                              PC→A = min 1,                       ,        (36)
+or a dimer) or a site occupied by a dimer. If k is a free                                       UB Ds    det GC
+site, we select one of its Ds neighboring sites on the same                                                    
+                                                                                                  1      det GB
+layer, including the current Head site, and label it as site                 PC→B = min 1,                        ,        (37)
+                                                                                                UB Ds    det GC
+j. If k contains a dimer, the site connected to k by that
+dimer is uniquely identified as site j and lies on the same                  PC→D = 1.                                     (38)
+layer. This class contains the four configurations shown
+in Fig. 4.                                                            If site k lies on the opposite layer and is a free site,
+                                                                   the initial configuration may be identified with configu-
+   The second class consists of configurations in which site
+                                                                   ration A in the second class of configurations shown in
+k either lies on the opposite layer and is a free site, or lies
+                                                                   Fig. 5. In this case, a proposal is made, with equal proba-
+on the same layer as the Head and contains an instanton.
+                                                                   bility, to transition to configuration B or configuration C.
+If k is a free site on the opposite layer, we choose one of
+                                                                   These proposals are accepted with probabilities
+its Ds neighboring sites on that layer and label it as site
+j. If k is on the same layer and contains an instanton, the                                                     
+                                                                                                         det GB
+site connected to k through the instanton, which lies on                         PA→B = min 1, UI Ds               ,       (39)
+                                                                                                         det GA
+the opposite layer, is uniquely identified as site j. In this                                                   
+case, the Head and site j reside on opposite layers. This                                                 det GC
+                                                                                 PA→C = min 1, UB Ds                .      (40)
+class contains the three configurations shown in Fig. 5.                                                  det GA
+   In both classes of configurations, if site k is free but site
+j contains either a dimer or an instanton, or is the same          Here, as before, det GA denotes the fermion determinant
+as the Head site, the Head does not move and remains at            factor for configuration A, which contains a monomer
+its current location. Such configurations are not shown in         at the Head site. The factor det GB denotes the corre-
+the figures. Otherwise, the Head is displaced according            sponding determinant for the configuration B in which
+to the Metropolis acceptance probabilities discussed be-           two additional monomers are added at sites k and j on
+low, which depend on whether the current configuration             the opposite layer. The determinant factor det GC for the
+belongs to the first or the second class.                          configuration C is the same as det GB .
+                                                                      If site k lies on the opposite layer and is connected to a
+   Within the first class of configurations, consider the          dimer, the initial configuration may be identified with con-
+case in which site k is free. The initial configuration            figuration C in the second class of configurations shown in
+may then be identified with configuration A in Fig. 4. A           Fig. 5. In this case, a proposal is made, with equal proba-
+proposal is made to transition, with equal probability, to         bility, to transition to configuration A or configuration B.
+one of the remaining three configurations shown in Fig. 4.         These proposals are accepted with probabilities
+These proposals are accepted according to the Metropolis
+probabilities                                                                                                     
+                                                                                                      1    det GA
+                                                                                 PC→A = min 1,                       ,      (41)
+                                                                                                 UB Ds det GC
+                             det GB                                                                   
+             PA→B   = min 1,          ,                    (33)                                    UI
+                             det GA                                              PC→B = min 1,           .                  (42)
+                                                                                                 UB
+                                   det GC
+             PA→C   = min 1, UB Ds          ,              (34)       If instead site k lies on the same layer as the Head
+                                   det GA
+                                                                   and is connected to an instanton, the initial configuration
+            PA→D    = PA→C .                               (35)    may be identified with configuration B in the second
+                                                                   class of configurations shown in Fig. 5. In this case, a
+Here, det GA denotes the fermion determinant factor in             proposal is made, with equal probability, to transition to
+the initial configuration, which contains a monomer at the         configuration A or configuration C. These proposals are
+Head site. The factor det GB denotes the corresponding             accepted with probabilities
+determinant when the Head monomer is moved to site                                                             
+j, while det GC denotes the determinant factor for the                                             1 det GA
+                                                                               PB→A = min 1,                      ,       (43)
+configuration containing two additional monomers at sites                                        UI Ds det GB
+k and j, in addition to the monomer at the Head site. It                                           
+                                                                                                 UB
+is useful to recognize that the determimant factor det GD                      PB→C = min 1,          .                   (44)
+                                                                                                 UI
+for confguration D is the same as det GC .
+   Within the first class of configurations, if site k contains      The worm update is ergodic by itself and also provides
+a dimer, the initial configuration may be identified with          an efficient way to compute the susceptibilities χud and
+configuration C in Fig. 4. In this case, with equal proba-         χuu . For example, the susceptibility χud is obtained by
+bility, a proposal is made to transition to configuration A,       averaging the number of worm configurations encountered
+configuration B, or configuration D. The corresponding             during a worm update in which the Head and Tail reside
+                                                                                                                             9
+
+on opposite layers, and then dividing by the reweighting         step in this procedure is precisely this resetting of the
+factor Ω. Similarly, χuu is obtained by averaging the            base matrix; however, it occurs infrequently and does not
+number of worm configurations encountered during a               affect the overall efficiency of the algorithm.
+worm update for which the Head and Tail are on the                  We have validated our algorithm by comparing results
+same layer, again divided by the reweighting factor Ω.           obtained from Monte Carlo simulations with exact results
+                                                                 on an L = 2 lattice. In the appendix we discuss the
+                                                                 comparison of our Monte Carlo data with exact results.
+           D.   Idea of Fluctuation Matrices
+
+   One of the most time-consuming steps in the fermion-                     V.   MONTE CARLO RESULTS
+bag Monte Carlo algorithm, as in other fermion Monte
+Carlo methods [34], is the calculation of ratios of determi-        In this section, we present and analyze Monte Carlo
+nants that appear in many of the Metropolis accept/reject        data generated with the algorithm introduced in Sec-
+probabilities discussed above. It is well known in the           tion IV to determine the critical behavior and phase
+fermion-algorithm literature that computing individual           diagram of the model. Simulations were performed on
+determinants and then taking their ratio is both numer-          cubic lattices with linear sizes in the range L = 8 − 56.
+ically unstable and computationally inefficient. A more          For each parameter set, simulations were preceded by typ-
+robust approach is to compute the ratio of determinants          ically 105 Monte Carlo steps for thermalization. During
+directly. This is particularly advantageous when the two         thermalization, we employed a reweighting factor Ω = 5
+determinants differ only by small, local changes in the          for lattices with L < 40 and Ω = 20 for larger lattices
+fermion configuration.                                           (L = 40 − 56). This choice was motivated by explicit
+   In the fermion-bag approach, such ratios of determi-          tests with Ω = 1, 5, and 20, which showed that Ω = 20
+nants naturally arise from local fluctuations of fermion         improved equilibration for larger systems by effectively
+bags about a chosen background configuration. These              reducing the Monte Carlo step size.
+ratios can be reformulated as the determinant of a much             After thermalization, measurements were accumulated
+smaller matrix, referred to as a fluctuation matrix. This        over multiple statistically independent replicas. In the
+idea was explained in detail in [35] and is closely related      vicinity of the Gross-Neveu transition, lattice sizes L =
+to standard results from linear algebra. Consider two            28 − 56 were studied using between 10 and 50 replicas,
+large square matrices G and GB , where G is obtained             depending on L. For lattices L = 28–36, a total statis-
+from a base matrix GB by deleting kd rows and adding             tics of approximately 4 × 106 Monte Carlo steps was
+ka rows. One can then show that                                  accumulated from 10 replicas for each lattice size. For
+                                                                 larger lattices (L = 40–56), total statistics ranged from
+                       det G
+                             = det F,                    (45)    approximately 2.5 × 106 to 8 × 106 Monte Carlo steps,
+                      det GB                                     accumulated using between 20 and 50 replicas, depending
+where F is a square matrix of dimension k = kd + ka .            on the lattice size and coupling. Integrated autocorrela-
+The matrix F is constructed from the matrix elements             tion times were monitored for representative couplings.
+corresponding to the added and removed rows, together            For example, at L = 52, autocorrelation time τ ≈ 4000
+with the appropriate elements of G−1                             for couplings UI = 0.6–0.615. For these parameter values,
+                                      B . In this formulation,
+the effect of the local fluctuation is entirely encoded in the   total statistics of approximately 8 × 106 Monte Carlo
+small matrix F , whose elements depend on the large-scale        steps were accumulated, ensuring a sufficient number of
+structure of the fermion bag through the inverse of the          statistically independent measurements.
+base matrix G−1                                                     For the three-dimensional XY transition, simulations
+                B .
+   This perspective allows all ratios of the form                were performed for lattice sizes L = 12–32 using 10–30
+                                                                 replicas, with total statistics ranging from approximately
+                      det G1   det F1                            2 × 106 to 4 × 106 Monte Carlo steps. For lattice sizes
+                             =                           (46)    close to the critical region, autocorrelation times grow
+                      det G2   det F2
+                                                                 substantially. In particular, for L = 16 near the critical
+to be computed efficiently, where F1 and F2 are fluctu-          point, we find τ ≈ 400 when measurements are recorded
+ation matrices constructed with respect to a common              after every 10 Monte Carlo steps, whereas for larger lat-
+base matrix GB . Since the dimensions of the fluctuation         tices such as L = 32, where measurements are recorded
+matrices depend only on the size of the local updates,           every 2 Monte Carlo steps, autocorrelation times increase
+their determinants can be evaluated rapidly, leading to a        to values as large as τ ≈ 1500. For the largest lattice
+significant reduction in computational cost.                     sizes and couplings closest to the transition, this results in
+   In our algorithm, we ensure that the size of the fluctu-      increased statistical fluctuations, reflecting the combined
+ation matrices remains bounded during the Monte Carlo            effects of critical slowing down and the finite statistics
+evolution. When the size grows beyond a prescribed               available.
+threshold, we reset the base matrix GB by recomputing it            The statistical uncertainties quoted throughout this
+from the current configuration. The most time-consuming          section were estimated using the jackknife method and
+                                                                                                                          10
+
+were cross-checked using both bootstrap resampling and            Such a multicritical interpretation is further supported
+autocorrelation-corrected error analyses to ensure consis-     by symmetry considerations. At UB = 0, the symmetry of
+tency. The discussion is organized into several subsections,   the lattice model is enhanced from SU(2) × SU(2) × Uχ (1)
+each focusing on a specific aspect of the numerical results.   to SU(4) (see Section II), which allows the two transitions
+                                                               that are distinct for UB ≠ 0 to merge into a single critical
+                                                               point.
+       A.    Dimers, Instantons, and Free Sites                   To explore the presence of the ssb phase, we examine
+                                                               the susceptibilities χud and χuu , which are expected to
+   The average numbers of dimers, instantons, and free         scale proportionally to the spacetime volume, L3 , when
+sites in the Monte Carlo configurations are conveniently       the continuous Uχ (1) symmetry of the model is sponta-
+characterized by their corresponding densities. The            neously broken. In Fig. 7, we show these susceptibilities
+dimer density ρD and the instanton density ρI , defined        as functions of UI for UB = 0, 0.1, and 0.2, and for lattice
+in Eqs. (52) and (53), provide useful measures of the          sizes L = 8, 12, 16, and 20. For both small and large values
+strengths of the interactions UB and UI . By construction,     of UI , the susceptibilities saturate as L increases, which
+these densities are normalized to lie between 0 and 1. We      is consistent with symmetric phases. In contrast, within
+also define the free-site density,                             an intermediate range of UI , both susceptibilities grow
+                                                               rapidly with system size, signaling spontaneous symmetry
+                    ρF = 1 − ρ D − ρ I ,               (47)    breaking.
+                                                                  To verify that this growth is consistent with the ex-
+which represents the fraction of lattice sites that are not
+                                                               pected volume scaling, we plot χud as a function of L at
+connected to either a dimer or an instanton. In Fig. 6, we
+                                                               UI = 1 for UB = 0.1 and 0.01 in Fig. 8. We find that the
+plot ρD , ρI , and ρF as functions of UI at fixed UB = 0.1.
+                                                               data for L ≥ 12 are well described by the functional form
+   As UI increases, the instanton density ρI rises mono-
+tonically, as expected. In contrast, the dimer density ρD                         χud = aL3 + bL2 + cL,                 (48)
+exhibits a nontrivial structure: it increases rapidly at
+small UI , reaches a maximum around UI ≈ 1.1, and then         which corresponds to the expected finite-size behavior in
+decreases at larger values of UI . The behavior of ρF is di-   the spontaneously broken phase as predicted by chiral
+rectly relevant for the computational cost at large UI . In    perturbation theory [37]. These results provide compelling
+our simulations we employ the weak-coupling viewpoint          evidence that a symmetry-broken massive-fermion phase
+of the fermion-bag formulation, in which the sizes of the      emerges for arbitrarily small nonzero UB .
+fermion matrices Du and Dd , whose determinants must              The existence of this phase implies that, for UB ̸= 0,
+be evaluated, scale with the combined density (ρI + ρD )       the system undergoes two separate continuous phase tran-
+(see Eq. (10)). Consequently, when ρF ≲ 0.5, simulations       sitions: a transition between the mf and ssb phases
+on large lattice volumes become increasingly demanding.        belonging to the three-dimensional Gross–Neveu-XY uni-
+   For example, at UI ≈ 1.8 we find ρF ≈ 0.2, indicating       versality class, and a second transition between the ssb
+that nearly 80% of lattice sites are occupied by either        and smg phases in the three-dimensional XY universality
+dimers or instantons. In this regime it would be more          class. The single critical point observed at UB = 0 can
+efficient to adopt the strong-coupling viewpoint of the        therefore be interpreted as a multicritical point at which
+fermion-bag formulation [32]. Since the physics at such        these two critical lines merge due to the enhanced SU(4)
+large couplings is not the focus of the present work, we       symmetry. Based on these observations, our conjectured
+restrict ourselves to the weak-coupling viewpoint, which       phase diagram for the lattice model defined in Eq. (1) is
+is better suited for the parameter regime of interest.         shown in Fig. 9. In the following subsections, we analyze
+                                                               each of these transitions in detail.
+
+                  B.   Phase Diagram
+                                                                             C.   Gross–Neveu Transition
+   One of the main motivations for our study is to under-
+stand how a nonzero UB modifies the direct transition            If the phase transition from the mf phase to the ssb
+between the mf phase at small UI and the smg phase             phase in our lattice model is continuous, the long-distance
+at large UI that was found in earlier studies at UB = 0        physics near criticality should be governed by the three-
+[12, 13]. Based on earlier work [9, 11, 28, 36], we antic-     dimensional Gross–Neveu universality class. This uni-
+ipate the appearance of a conventional massive-fermion         versality class has been studied extensively using a wide
+phase characterized by ssb, as discussed in Section I.         range of analytical and numerical approaches [38–42]. De-
+A central question is whether this phase emerges only          termining its universal properties, in particular the critical
+beyond a finite threshold in UB , or whether it appears        exponents, remains an active area of research [43]. These
+already for arbitrarily small nonzero UB . In the latter       universal properties depend on several factors, including
+case, the direct mf–smg transition at UB = 0 would corre-      the number of fermion flavors, the pattern of symmetry
+spond to a multicritical point at which two distinct phase     breaking, and lattice-specific features such as fermion
+boundaries merge.                                              doubling. As a result, when staggered fermions are used,
+                                                                                                                                                                                                                             11
+
+
+
+                                  L=8                                                                     L=8                                                                                                         L=8
+               0.10                                                                     0.7                                                                       0.9
+                                  L=12                                                                    L=12                                                                                                        L=12
+                                  L=16                                                                    L=16                                                                                                        L=16
+                                                                                        0.6                                                                       0.8
+                                  L=20                                                                    L=20                                                                                                        L=20
+               0.09
+                                                                                        0.5                                                                       0.7
+
+
+
+
+                                                                                                                                                          1 − (ρI + ρD)
+                                                                                        0.4                                                                       0.6
+               0.08
+         ρD
+
+
+
+
+                                                                                  ρI
+                                                                                        0.3                                                                       0.5
+
+               0.07
+                                                                                        0.2                                                                       0.4
+
+                                                                                        0.1                                                                       0.3
+               0.06
+                                                                                        0.0                                                                       0.2
+                      0.0            0.5           1.0         1.5                            0.0            0.5           1.0         1.5                                0.0         0.5           1.0         1.5
+                                                  UI                                                                      UI                                                                       UI
+
+
+FIG. 6. The variation of the average dimer density (ρD ) (left panel), the average instanton density (ρI ) (central panel) and the
+density of free sites (1 − ρI − ρD ) (right panel) as a function of UI at a fixed values of UB = 0.1.
+
+
+
+
+    6                  L=8                                                                     L=8                                             200                         L=8
+                                                                       120
+                       L=12                                                                    L=12                                                                        L=12
+    5
+                       L=16                                                                    L=16                                                                        L=16
+                                                                       100
+                       L=20                                                                    L=20                                            150                         L=20
+    4                                                                      80
+  χud
+
+
+
+
+                                                                     χud
+
+
+
+
+                                                                                                                                             χud
+    3                                                                      60                                                                  100
+
+              UB = 0.0                                                                UB = 0.1                                                           UB = 0.2
+    2                                                                      40
+                                                                                                                                                   50
+    1                                                                      20
+
+
+    0                                                                       0                                                                       0
+        0.0                 0.5             1.0          1.5                    0.0                 0.5             1.0          1.5                    0.0                     0.5          1.0          1.5
+                                           UI                                                                      UI                                                                       UI
+
+
+
+                       L=8                                                                     L=8                                             200                         L=8
+    6                                                                  120
+                       L=12                                                                    L=12                                                                        L=12
+                       L=16                                                                    L=16                                                                        L=16
+    5                                                                  100
+                       L=20                                                                    L=20                                            150
+                                                                                                                                                                           L=20
+
+                                                                           80
+    4
+  χuu
+
+
+
+
+                                                                     χuu
+
+
+
+
+                                                                                                                                             χuu
+
+
+
+
+                                                                           60                                                                  100
+    3
+              UB = 0.0                                                                UB = 0.1                                                           UB = 0.2
+                                                                           40
+    2
+                                                                                                                                                   50
+                                                                           20
+    1
+
+                                                                            0                                                                       0
+        0.0                 0.5             1.0          1.5                    0.0                 0.5             1.0          1.5                    0.0                     0.5          1.0          1.5
+                                           UI                                                                      UI                                                                       UI
+
+
+  FIG. 7. Plots of χud (top row) and χuu (bottom row) as a function of UI for UB = 0.0 (left), 0.1(center) and 0.2 (right).
+
+
+the mapping between lattice symmetries and continuum                                                                           the full SU(2) × SU(2) × Uχ (1) symmetry of the lattice
+symmetries must be handled with care.                                                                                          model, the transition between the mf and ssb phases is
+                                                                                                                               expected to be in the Gross–Neveu–XY universality class
+   A single flavor of staggered fermions on a three-                                                                           with four Dirac fermion flavors.
+dimensional cubic lattice is expected to describe two                                                                            A characteristic prediction of this universality class is
+flavors of four-component Dirac fermions in the contin-                                                                        that the fermion bilinear susceptibilities χud and χuu obey
+uum limit. Since the lattice model defined in Eq. (1)                                                                          the finite-size scaling relation
+contains two flavors of staggered fermions, the mf phase                                                                                                                   
+is therefore expected to correspond to four flavors of four-                                                                                 χ /L2−η = f (UI − UIc ) L1/ν ,            (49)
+component Dirac fermions at long distances. Moreover,
+because the ssb phase breaks only the Uχ (1) subgroup of                                                                       in the vicinity of the critical point. The universal scaling
+                                                                                                                                 12
+
+
+               f0         f1          f2         f3         f4      L-range    UI GN        ν        η      χ2 /d.o.f fit-type
+
+     χuu     0.19(1)    0.10(1)    0.055(4)   0.032(4)   0.011(2)
+                                                                     24-56    0.610(1)    1.04(1) 1.00(2)     1.57      (a)
+     χud     0.17(1)    0.10(1)    0.055(4)   0.033(4)   0.011(4)
+
+     χuu     0.15(1)    0.08(1)    0.041(4)   0.020(3)   0.005(1)
+                                                                     24-56    0.614(1)    1.01(1) 0.92(2)     8.2       (b)
+     χud     0.15(1)    0.08(1)    0.041(4)   0.020(3)   0.005(1)
+
+     χuu 0.1883(5) 0.0911(6) 0.0438(7) 0.0218(3) 0.0060(3)
+                                                                     24-56    0.6102(1)    1.0      1.0       1.7       (c)
+     χud 0.1770(5) 0.0901(6) 0.0433(7) 0.0226(3) 0.0060(3)
+
+     χuu     0.19(1)    0.11(1)    0.06(1)     0.04(1)   0.015(4)
+                                                                     28-56    0.610(1)    1.06(2) 1.00(3)     1.46      (a)
+     χud     0.18(2)    0.11(2)    0.06(1)     0.04(1)   0.014(4)
+
+     χuu     0.15(2)    0.09(1)    0.05(1)     0.03(1)   0.007(4)
+                                                                     28-56    0.613(1)    1.02(2) 0.94(3)     7.4       (b)
+     χud     0.15(2)    0.09(1)    0.05(1)     0.03(1)   0.007(4)
+
+     χuu 0.1891(6) 0.0906(6) 0.0429(7) 0.0230(3) 0.0067(2)
+                                                                     28-56    0.6105(1)    1.0      1.0       1.6       (c)
+     χud 0.1781(5) 0.0895(6) 0.0440(7) 0.0237(3) 0.0062(2)
+
+     χuu     0.17(2)    0.10(2)    0.05(1)     0.03(1)   0.009(5)
+                                                                     32-56    0.612(2)    1.03(3) 0.97(4)     1.36      (a)
+     χud     0.17(2)    0.10(2)    0.05(1)     0.03(1)   0.008(4)
+
+     χuu     0.14(2)    0.07(1)    0.04(1)     0.02(1)   0.003(2)
+                                                                     32-56    0.615(2)    0.99(3) 0.90(5)     6.2       (b)
+     χud     0.14(2)    0.07(1)    0.04(1)     0.02(1)   0.003(2)
+
+     χuu 0.1902(7) 0.0920(8) 0.0439(9) 0.0224(4) 0.0063(3)
+                                                                     32-56    0.6108(2)    1.0      1.0       1.4       (c)
+     χud 0.1797(7) 0.0913(8) 0.0459(9) 0.0226(4) 0.0054(3)
+
+     χuu     0.17(3)    0.09(2)    0.05(2)     0.03(2)   0.008(7)
+                                                                     36-56    0.612(3)    1.03(4) 0.96(7)     1.39      (a)
+     χud     0.16(3)    0.09(2)    0.05(2)     0.03(2)   0.007(6)
+
+     χuu    0.190(1)   0.092(1)    0.044(1)   0.023(1)   0.006(0)
+                                                                     36-56    0.611(0)     1.0      1.0       1.4       (c)
+     χud    0.181(1)   0.091(1)    0.045(1)   0.023(1)   0.006(0)
+
+TABLE I. Combined fit results for χuu and χud in the critical region for various lattice ranges. We perform three types of fits:
+(a) all parameters UI GN , ν, η, and polynomial coefficients treated as independent; (b) all parameters constrained to be identical
+for both observables; (c) fits with the constraint ν = η = 1. In all cases we assume a quartic universal scaling function of the
+form given in Eq. (50).
+
+
+function f (x), where x = (UI − UIc ) L1/ν , may differ             and study the stability of the fits under variations of the
+for the two susceptibilities, although in our fits they are         fitting range in lattice size. The resulting fit parameters
+almost identical. At the Gross–Neveu transition we denote           are summarized in Table I. The data for χud together
+UIc = UIGN and determine this critical coupling, along              with a representative scaling fit are shown in Fig. 10.
+with the critical exponents η and ν, by performing a
+combined fit of both χud and χuu data to the scaling form              From this analysis, we obtain the estimates UIGN =
+in Eq. (49). For each susceptibility, we approximate the            0.610(1), ν = 1.06(2), and η = 1.00(3). These values are
+scaling function by a polynomial expansion,                         in reasonable agreement with critical exponents reported
+                                                                    in previous analytical and numerical studies of the U (1)
+           f (x) = f0 + f1 x + f2 x2 + f3 x3 + f4 x4 ,    (50)      Gross–Neveu universality class with four Dirac fermion
+                                                                                                                                                            13
+
+
+
+
+                                                                                     UB
+                                                                                                                 Spontaneous Symmetry
+   350                                                                                                           Breaking (SSB) phase
+                 0.00032(3)L3 + 0.006(1)L2 + 0.08(1)L, χ2 /d.o.f. = 1.56
+                 0.0131(3)L3 + 0.041(1)L2 − 0.04(7)L, χ2 /d.o.f. = 0.10
+                 UB = 0.01, UI = 1.0
+   300           UB = 0.1, UI = 1.0
+
+
+                                                                                                       Gross-Neveu                  3D XY
+   250                                                                                                  transition                 transition
+
+
+   200
+χud
+
+
+
+
+                                                                                                        UIGN                              UIXY
+   150
+                                                                                                                                         Symmetric Mass
+   100                                                                                       Massless fermion                            Generation (SMG)
+                                                                                             (MF) phase                                  phase
+
+       50
+                                                                                                           Multicritical
+        0                                                                                                  point
+
+             8           12           16          20          24           28   32                                         UISMG
+                                                  L                                                                                                   UI
+
+                                                                                     FIG. 9. Schematic phase diagram of the model defined in
+FIG. 8. Plot of χud as a function of L at UI = 1.0 for
+                                                                                     Eq. (1). For nonzero values of both UB and UI , the model
+UB = 0.1 and UB = 0.01. The solid lines show fits to the form
+                                                                                     possesses a SU(2)×SU(2)×Uχ (1) symmetry, which is enhanced
+χud = aL3 + bL2 + cL, as motivated by chiral perturbation
+                                                                                     to SU(4) along the UB = 0 axis. Our results suggest that
+theory. The observed scaling is consistent with the existence
+                                                                                     the direct second-order transition on this axis between the mf
+of an intermediate ssb phase for nonzero UB .
+                                                                                     and smg phases corresponds to a multicritical point where
+                                                                                     the three-dimensional Gross–Neveu and three-dimensional XY
+   ν              η                                          Citation                critical lines meet. In the ssb phase, the Uχ (1) symmetry is
+                                                                                     spontaneously broken.
+   1.06(2)        1.00(3)                                   This work
+   1.13           0.93(09)            MC study (bilayer graphene) [44]
+   1.06(9)        0.99(5)                     ε-expansion (4-loop) [45]                 Nevertheless, it is not a priori guaranteed that all effects
+   1.092(6) 0.926(13)                   ε-expansion (interpolation) [46]             of the underlying fermionic degrees of freedom are irrele-
+                                                                                     vant at the transition. In particular, one may ask whether
+TABLE II. Critical exponents reported in various studies for                         remnants of the microscopic fermionic structure, such as
+the Gross–Neveu phase transition in three Euclidean dimen-                           topological effects, could modify the universality class.
+sions with four flavors of four-component Dirac fermions. At                         To address this possibility, we analyze the second transi-
+this transition, massless fermions acquire a mass through the                        tion using the fermion-bag Monte Carlo approach. Near
+formation of a fermion–bilinear condensate that spontaneously                        this transition, the fermion bilinear susceptibility is again
+breaks a U (1) symmetry of the theory. The results from earlier                      expected to satisfy the finite-size scaling form in Eq. (49),
+studies are summarized in Table I of Ref. [46].                                      with the critical coupling identified as UIc = UIXY .
+                                                                                        From a computational perspective, this transition is
+                                                                                     more challenging to study than the Gross–Neveu transi-
+flavors, as summarized in Table II.                                                  tion, since it occurs within a microscopic fermionic model
+                                                                                     rather than a purely bosonic one. In certain limits, the
+                                                                                     problem can be simplified by taking both UI and UB to
+                         D.        3D-XY Transition                                  be large while keeping the ratio λ = UI /UB finite. Such
+                                                                                     a limit was recently studied in two spacetime dimensions,
+   If the phase transition from the ssb phase to the smg                             where a Berezinskii–Kosterlitz–Thouless transition was
+phase is continuous, a natural expectation is that it                                observed as λ → 0 [48]. A similar simplification can in
+belongs to the three-dimensional XY universality class,                              principle be considered in three dimensions by taking
+which has been extensively studied [47]. This expectation                            both couplings large at fixed λ, in which case the system
+is based on the observation that fermionic excitations                               falls into the three-dimensional XY universality class, as
+are massive throughout the ssb phase, so that the long-                              demonstrated by the results shown in Fig. 12. In this
+distance critical behavior should be governed by bosonic                             work, however, we do not explore that limit and instead
+modes associated with the spontaneous breaking of the                                focus on the more generic parameter regime accessible to
+Uχ (1) symmetry.                                                                     our simulations. As a result, our Monte Carlo study of
+                                                                                                                                                  14
+
+
+                                           f0               f1         L-range    UI XY         ν        η     χ2 /d.o.f fit-type
+
+                                  χuu 0.113(2) -0.0179(7)
+                                                                        12-32    1.2953(3) 0.644(6) -0.02(1)      1.0      (a)
+                                  χud 0.112(2) -0.0178(7)
+
+                                  χuu 0.112(2)         -0.018(1)
+                                                                        12-32    1.2953(3) 0.644(6) -0.02(1)      3.8      (b)
+                                  χud 0.112(2)         -0.018(1)
+
+                                  χuu 0.1270(1) -0.0241(1)
+                                                                        12-32    1.2979(1)    0.672    0.038     1.46      (c)
+                                  χud 0.1270(1) -0.0241(1)
+
+                                  χuu 0.113(5)         -0.020(2)
+                                                                        16-32    1.2952(7) 0.65(1) -0.02(2)       1.2      (a)
+                                  χud 0.112(5)         -0.020(2)
+
+                                  χuu 0.112(5)         -0.020(2)
+                                                                        16-32    1.2952(7) 0.65(1) -0.02(2)       1.4      (b)
+                                  χud 0.112(5)         -0.020(2)
+
+                                  χuu 0.1287(2) -0.0257(1)
+                                                                        16-32    1.2972(1)    0.672    0.038     1.35      (c)
+                                  χud 0.1280(2) -0.0258(1)
+
+TABLE III. Combined fit results for χuu and χud in the critical region for various lattice ranges. We perform three types of fit:
+(a) all parameters UI XY , ν, η, and polynomial coefficients treated as independent; (b) all parameters constrained to be identical
+for both observables; (c) fits performed with the three-dimensional XY critical exponents fixed to ν = 0.672 and η = 0.038. In
+all cases we assume a linear universal scaling function of the form given in Eq. (51).
+
+
+                                                                                          critical region where the universal scaling function f (x)
+                                                                                          can be approximated by its leading linear form,
+                          L=28                                                                                 f (x) = f0 + f1 x,               (51)
+                          L=32              UB = 0.1
+            0.7
+                          L=36                                                            which is sufficient for the lattice sizes accessible in our
+                          L=40                                                            simulations.
+            0.6           L=44                                                               We perform two complementary analyses: one in which
+                          L=48                                                            the critical exponents are treated as free fitting parame-
+            0.5           L=52                                                            ters, and another in which they are fixed to their three-
+ χud/L2−η
+
+
+
+
+                          L=56                                                            dimensional XY values. A summary of the resulting fits,
+            0.4    η = 1.00(3), ν = 1.06(2)                                               together with additional fitting strategies, is provided in
+                  UIGN = 0.610(1), χ2/d.o.f. = 1.46                                       Table III. The corresponding scaling plots for the two
+            0.3
+                                                                                          analyses are shown in Fig. 11. Since the exponents ob-
+                                                                                          tained from fits with free parameters are close to the
+                                                                                          known three-dimensional XY values within uncertainties,
+            0.2
+                                                                                          a conservative interpretation of our results is that the
+                                                                                          ssb–smg transition lies in the standard three-dimensional
+            0.1                                                                           XY universality class.
+                   −1.5    −1.0    −0.5    0.0        0.5        1.0    1.5                  In summary, our finite-size scaling analysis of the ssb–
+                                                                                          smg transition yields results consistent with a continu-
+                                   (UI − UIc)L1/ν
+                                                                                          ous transition in the three-dimensional XY universality
+                                                                                          class. While the microscopic fermionic nature of the model
+FIG. 10. Plot of the critical finite-size scaling function defined                        and the accessible lattice sizes limit the precision of the
+in Eq. (49) at the Gross–Neveu transition for UB = 0.1. The                               analysis, the observed scaling behavior of the fermion
+solid line represents a fourth-order polynomial fit.                                      bilinear susceptibilities and the proximity of the fitted
+                                                                                          critical exponents to their known three-dimensional XY
+                                                                                          values support this interpretation. Nevertheless, as UB
+this transition is restricted to lattice sizes up to L = 32.                              is reduced and fermionic degrees of freedom become in-
+  Given these limitations, we focus on a relatively narrow                                creasingly important, additional effects may influence the
+                                                                                                                                                                             15
+
+
+
+
+                                                                                                         0.18
+             0.15                     η = −0.02(2), ν = 0.65(1)                                                                          η = 0.038, ν = 0.672
+                                     UIXY = 1.2952(7), χ2/d.o.f. = 1.2                                                                  UIXY = 1.2972(1), χ2/d.o.f. = 1.35
+             0.14
+                                                                                                         0.16
+
+             0.13
+
+                                                                                                         0.14
+  χud/L2−η
+
+
+
+
+                                                                                              χud/L2−η
+             0.12
+
+             0.11
+                                                                                                         0.12
+             0.10    UB = 0.1                                                                                        UB = 0.1
+
+                         L=16                                                                                            L=16
+             0.09                                                                                        0.10
+                         L=20                                                                                            L=20
+                         L=24                                                                                            L=24
+             0.08        L=28                                                                                            L=28
+                         L=32                                                                            0.08            L=32
+             0.07
+                    −2          −1          0                 1                2                                −2              −1            0            1             2
+                                 (UI − UIc)L1/ν                                                                                      (UI − UIc)L1/ν
+
+FIG. 11. Finite-size scaling analysis of the critical scaling function defined in Eq. (51) at the XY transition for UB = 0.1. Two
+different scaling analyses are shown. In the left panel, the critical coupling UIc and the critical exponents are treated as fit
+parameters, and the data are fitted using a linear approximation Eq. (51). In the right panel, the critical exponents are fixed
+to their three-dimensional XY values [47], and the data are fitted with respect to UIc and the coefficients of the linear scaling
+function. The solid lines show representative scaling fits, both of which yield χ2 /DOF ≈ 1.4.
+
+
+
+                                                      0.16
+
+                                                      0.14                              η = 0.036(9), ν = 0.667(4)
+                                                                                       λc = 3.25420(4), χ2/d.o.f. = 1.2
+                                                      0.12
+                                           χud/L2−η
+
+
+
+
+                                                      0.10
+
+                                                                  L=60
+                                                      0.08
+                                                                  L=80
+                                                      0.06        L=120
+                                                                  L=160
+                                                      0.04        L=200
+                                                                  L=240
+                                                      0.02        L=300
+
+                                                             −4           −2
+                                                                                            0
+                                                                                                                2              4
+                                                                                       λ
+                                                                                       λc   − 1 L1/ν
+
+FIG. 12. Finite-size scaling analysis of the 3D XY transition in the regime of large UB and UI , with λ = UI /UB . The scaling
+variable is x = (λ/λc − 1)L1/ν . The solid lines show fits to the scaling function defined in Eq. (49), including terms up to order
+x3 . The extracted critical exponents are in good agreement with those of the three-dimensional XY universality class. The
+fitted coefficients are f0 = 0.006(2), f1 = −0.019(1), f2 = 0.0012(1), and f3 = 0.00017(2).
+
+
+critical behavior. More detailed studies—particularly in                                                                        VI.     CONCLUSIONS
+the regime of small UB —would therefore be valuable to
+further elucidate the multicritical behavior that emerges
+at UB = 0.                                                                                          In this work, we have investigated the phase structure
+                                                                                                 and critical behavior of a three-dimensional lattice model
+                                                                                                 of two flavors of massless staggered fermions interacting
+                                                                                                                              16
+
+through two independent four-fermion couplings, UI and             In particular, more detailed studies in the regime of small
+UB , using the fermion-bag Monte Carlo approach. At                UB , where fermionic degrees of freedom play an increas-
+UB = 0, this model is known to exhibit a direct continuous         ingly important role, would provide additional insight
+transition between a massless fermion (mf) phase and a             into the nature of the multicritical point. Extending the
+symmetric massive fermion (smg) phase, where fermions              simulations to larger lattice sizes, exploring alternative pa-
+acquire mass without the formation of a fermion bilinear           rameter regimes, or complementary analytical approaches
+condensate. Our primary goal has been to understand                may further shed light on the interplay between enhanced
+how this unconventional transition is modified when a              symmetry, fermionic dynamics, and critical behavior in
+second interaction channel, UB , is introduced.                    this class of models.
+   Our results show that an intermediate phase with spon-
+taneous symmetry breaking (ssb) emerges as soon as UB
+becomes nonzero. This phase is characterized by a nonva-
+nishing fermion bilinear condensate that breaks the Uχ (1)
+                                                                                  ACKNOWLEDGMENTS
+symmetry of the lattice model. The appearance of this
+phase splits the single transition observed at UB = 0 into
+two distinct continuous transitions: a transition between             We are grateful to Subhro Bhattacharjee, Simon Catter-
+the mf and ssb phases, and a second transition between             all, Asit De and Cenke Xu for insightful discussions. SC
+the ssb and smg phases.                                            is supported in part by the U.S. Department of Energy,
+   We have analyzed the critical behavior of the mf–ssb            Office of Science, Nuclear Physics program under Award
+transition using finite-size scaling of fermion bilinear sus-      No. DE-FG02-05ER41368. This research was supported
+ceptibilities. Our results are consistent with this transition     in part by the National Science Foundation under Grant
+belonging to the three-dimensional U (1) Gross–Neveu uni-          No. NSF PHY-1748958. DB would like to acknowledge
+versality class with four flavors of four-component Dirac          continued support from the Alexander von Humboldt
+fermions, in agreement with expectations based on sym-             Foundation (Germany) in the context of the research fel-
+metry considerations and earlier studies. For the ssb–smg          lowship for experienced researchers. MKM is grateful for
+transition, we performed a complementary finite-size scal-         the hospitality of Perimeter Institute where part of this
+ing analysis and found behavior consistent with the three-         work was carried out. Research at Perimeter Institute is
+dimensional XY universality class. While the microscopic           supported in part by the Government of Canada through
+fermionic nature of the model and the accessible lattice           the Department of Innovation, Science and Economic De-
+sizes limit the precision of this analysis, the extracted crit-    velopment and by the Province of Ontario through the
+ical exponents are close to their known three-dimensional          Ministry of Colleges and Universities. This research was
+XY values.                                                         also supported in part by the Simons Foundation through
+   Taken together, these results suggest that the direct           the Simons Foundation Emmy Noether Fellows Program
+mf–smg transition observed at UB = 0 can be interpreted            at Perimeter Institute. SM would like to thank the In-
+as a multicritical point at which the Gross–Neveu and XY           stitute for Theoretical Physics at ETHZ for hospitality
+critical lines merge. This interpretation is further sup-          during his visit, where part of this work was carried out.
+ported by the enhancement of the lattice symmetry from             DB, SM and MKM also acknowledge the use of computing
+SU(2) × SU(2) × Uχ (1) to SU(4) along the UB = 0 axis.             clusters at SINP, Kolkata, and access to the Piz Daint
+Our findings thus provide a unified picture of how conven-         and Eiger supercomputers at the Swiss National Super-
+tional symmetry-breaking transitions and unconventional            computing Centre, Switzerland, under ETHZ’s allocation
+symmetric mass generation phenomena are connected                  with project IDs c21 and eth8. We acknowledge the use
+within a single lattice framework.                                 of AI assistance, specifically ChatGPT [49], in refining
+   Several interesting directions remain for future work.          the language and clarity of this manuscript
+
+
+
+
+ [1] D. J. Gross and A. Neveu, Dynamical Symmetry Breaking              mat.str-el].
+     in Asymptotically Free Field Theories, Phys. Rev. D 10,        [5] Y.-Z. You, Y.-C. He, C. Xu, and A. Vishwanath, Sym-
+     3235 (1974).                                                       metric fermion mass generation as deconfined quantum
+ [2] H. E. Logan, TASI 2013 lectures on Higgs physics within            criticality, Phys. Rev. X 8, 011026 (2018).
+     and beyond the Standard Model, unpublished lecture             [6] S. S. Razamat and D. Tong, Gapped chiral fermions, Phys.
+     notes (2014), arXiv:1406.1786 [hep-ph].                            Rev. X 11, 011063 (2021).
+ [3] A. Pich, The Standard Model of Electroweak Interactions,       [7] D. Tong, Comments on symmetric mass generation in 2d
+     in 2010 European School of High Energy Physics (2012)              and 4d, JHEP 07, 001, arXiv:2104.03997 [hep-th].
+     pp. 1–50, arXiv:1201.0537 [hep-ph].                            [8] J. Wang and Y.-Z. You, Symmetric Mass Generation, Sym-
+ [4] K. Slagle, Y.-Z. You, and C. Xu, Exotic quantum phase              metry 14, 1475 (2022), arXiv:2204.14271 [cond-mat.str-
+     transitions of strongly interacting topological insulators,        el].
+     Phys. Rev. B 91, 115121 (2015), arXiv:1409.7401 [cond-
+                                                                                                                            17
+
+ [9] I.-H. Lee, J. Shigemitsu, and R. E. Shrock, Study of       [29] S. Chandrasekharan, The Fermion bag approach to lat-
+     Different Lattice Formulations of a Yukawa Model With           tice field theories, Phys. Rev. D 82, 025007 (2010),
+     a Real Scalar Field, Nucl. Phys. B 334, 265 (1990).             arXiv:0910.5736 [hep-lat].
+[10] I.-H. Lee, J. Shigemitsu, and R. E. Shrock, Study of       [30] S. Chandrasekharan, Fermion bags, topology and index
+     different lattice formulations of a Yukawa model with a         theorems, PoS LATTICE2016, 326 (2016).
+     real scalar field, Nuclear Physics B 334, 265 (1990).      [31] S. Chandrasekharan and A. Li, Fermion bags, duality,
+[11] W. Bock, A. K. De, K. Jansen, J. Jersak, T. Neuhaus,            and the three dimensional massless lattice thirring model,
+     and J. Smit, Phase Diagram of a Lattice SU(2) X SU(2)           Phys. Rev. Lett. 108, 140404 (2012).
+     Scalar Fermion Model With Naive and Wilson Fermions,       [32] S. Chandrasekharan, Fermion Bag Approach to Fermion
+     Nucl. Phys. B 344, 207 (1990).                                  Sign Problems, Eur. Phys. J. A 49, 90 (2013),
+[12] V. Ayyar and S. Chandrasekharan, Massive fermions               arXiv:1304.4900 [hep-lat].
+     without fermion bilinear condensates, Phys. Rev. D 91,     [33] E. Kozik, K. Van Houcke, E. Gull, L. Pollet, N. Prokofev,
+     065035 (2015), arXiv:1410.6474 [hep-lat].                       B. Svistunov, and M. Troyer, Diagrammatic Monte
+[13] V. Ayyar and S. Chandrasekharan, Origin of fermion              Carlo for correlated fermions, EPL 90, 10004 (2010),
+     masses without spontaneous symmetry breaking, Phys.             arXiv:0907.0863 [cond-mat.str-el].
+     Rev. D 93, 081701 (2016), arXiv:1511.09071 [hep-lat].      [34] F. F. Assaad, M. Bercx, F. Goth, A. Götz, J. S. Hofmann,
+[14] V. Ayyar and S. Chandrasekharan, Fermion masses                 E. Huffman, Z. Liu, F. Parisen Toldin, J. S. E. Portela,
+     through four-fermion condensates, JHEP 10, 058,                 and J. Schwab (ALF), The ALF (Algorithms for Lattice
+     arXiv:1606.06312 [hep-lat].                                     Fermions) project release 2.4. Documentation for the
+[15] S. Catterall, Fermion mass without symmetry breaking,           auxiliary-field quantum Monte Carlo code, SciPost Phys.
+     JHEP 01, 121, arXiv:1510.04153 [hep-lat].                       Codeb. 2022, 1 (2022), arXiv:2012.11914 [cond-mat.str-
+[16] Y.-Y. He, H.-Q. Wu, Y.-Z. You, C. Xu, Z. Y. Meng,               el].
+     and Z.-Y. Lu, Quantum critical point of Dirac fermion      [35] V. P. Ayyar, Fermion Mass Generation without Sponta-
+     mass generation without spontaneous symmetry breaking,          neous Symmetry Breaking, Ph.D. thesis, Duke U. (main)
+     Phys. Rev. B 94, 241111 (2016), arXiv:1603.08376 [cond-         (2016).
+     mat.str-el].                                               [36] A. Hasenfratz, W.-q. Liu, and T. Neuhaus, Phase Struc-
+[17] N. Butt, S. Catterall, and D. Schaich, SO(4) invariant          ture and Critical Points in a Scalar Fermion Model, Phys.
+     Higgs-Yukawa model with reduced staggered fermions,             Lett. B 236, 339 (1990).
+     Phys. Rev. D 98, 114514 (2018), arXiv:1810.06117 [hep-     [37] P. Hasenfratz and H. Leutwyler, Goldstone Boson Re-
+     lat].                                                           lated Finite Size Effects in Field Theory and Critical
+[18] N. Butt, S. Catterall, and G. C. Toga, Symmetric Mass           Phenomena With O(N ) Symmetry, Nucl. Phys. B 343,
+     Generation in Lattice Gauge Theory, Symmetry 13, 2276           241 (1990).
+     (2021), arXiv:2111.01001 [hep-lat].                        [38] B. Rosenstein, B. Warr, and S. H. Park, Dynamical sym-
+[19] N. Butt, S. Catterall, and A. Hasenfratz, Symmetric Mass        metry breaking in four Fermi interaction models, Phys.
+     Generation with Four SU(2) Doublet Fermions, Phys. Rev.         Rept. 205, 59 (1991).
+     Lett. 134, 031602 (2025), arXiv:2409.02062 [hep-lat].      [39] S. Hands, A. Kocic, and J. B. Kogut, Four Fermi theo-
+[20] A. Hasenfratz and O. Witzel (Lattice Strong Dynamics),          ries in fewer than four-dimensions, Annals Phys. 224, 29
+     Symmetric Mass Generation, in 2025 European Physi-              (1993), arXiv:hep-lat/9208022.
+     cal Society Conference on High Energy Physics (2025)       [40] B. Rosenstein, H.-L. Yu, and A. Kovner, Critical expo-
+     arXiv:2511.22678 [hep-lat].                                     nents of new universality classes, Phys. Lett. B 314, 381
+[21] E. Eichten and J. Preskill, Chiral Gauge Theories on the        (1993).
+     Lattice, Nucl. Phys. B 268, 179 (1986).                    [41] F. Hofling, C. Nowak, and C. Wetterich, Phase transition
+[22] J. Wang and X.-G. Wen, A Solution to the 1+1D Gauged            and critical behavior of the D = 3 Gross-Neveu model,
+     Chiral Fermion Problem, Phys. Rev. D 99, 111501 (2018),         Phys. Rev. B 66, 205111 (2002), arXiv:cond-mat/0203588.
+     arXiv:1807.05998 [hep-lat].                                [42] I. F. Herbut, Interactions and phase transitions on
+[23] Y. Xu and C. Xu, Green’s function Zero and Symmet-              graphene’s honeycomb lattice, Phys. Rev. Lett. 97, 146401
+     ric Mass Generation, preprint (2021), arXiv:2103.15865          (2006), arXiv:cond-mat/0606195.
+     [cond-mat.str-el].                                         [43] J. A. Gracey, A. Maier, P. Marquard, and Y. Schröder,
+[24] S. Catterall, ’t Hooft anomalies for staggered fermions,        Anomalous dimensions and critical exponents for the
+     Phys. Rev. D 107, 014501 (2023), arXiv:2209.03828 [hep-         gross-neveu-yukawa model at five loops, Phys. Rev. D
+     lat].                                                           112, 085029 (2025).
+[25] M. Zeng, Z. Zhu, J. Wang, and Y.-Z. You, Symmetric         [44] C. Huang, N. Parthenios, M. Ulybyshev, X. Zhang, F. F.
+     Mass Generation in the 1+1 Dimensional Chiral Fermion           Assaad, L. Classen, and Z. Y. Meng, Angle-tuned gross-
+     3-4-5-0 Model, Phys. Rev. Lett. 128, 185301 (2022),             neveu quantum criticality in twisted bilayer graphene,
+     arXiv:2202.12355 [cond-mat.str-el].                             Nature Communications 16, 7176 (2025).
+[26] M. Golterman and Y. Shamir, Propagator Zeros and           [45] N. Zerf, L. N. Mihaila, P. Marquard, I. F. Herbut, and
+     Lattice Chiral Gauge Theories, Phys. Rev. Lett. 132,            M. M. Scherer, Four-loop critical exponents for the gross-
+     081903 (2024), arXiv:2311.12790 [hep-lat].                      neveu-yukawa models, Phys. Rev. D 96, 096010 (2017).
+[27] M. Golterman and Y. Shamir, Constraints on the sym-        [46] B. Hawashin, M. M. Scherer, and L. Janssen, Gross-neveu-
+     metric mass generation paradigm for lattice chiral gauge        XY quantum criticality in moiré dirac materials, Phys.
+     theories, preprint (2025), arXiv:2505.20436 [hep-lat].          Rev. B 111, 205129 (2025).
+[28] A. Hasenfratz and T. Neuhaus, Nonperturbative Study of     [47] M. Campostrini, M. Hasenbusch, A. Pelissetto, P. Rossi,
+     the Strongly Coupled Scalar Fermion Model, Phys. Lett.          and E. Vicari, Critical behavior of the three-dimensional
+     B 220, 435 (1989).                                              XY universality class, Phys. Rev. B 63, 214503 (2001).
+                                                                                                                           18
+
+[48] S. Maiti, D. Banerjee, S. Chandrasekharan, and M. K.         and the instanton density,
+     Marinkovic, Asymptotic freedom at the berezinskii-
+     kosterlitz-thouless transition without fine-tuning using a
+     qubit regularization, Phys. Rev. Lett. 132, 041601 (2024).
+[49] OpenAI, Chatgpt 5.2 (2026).
+                                                                                          1 X
+                                                                                   ρI =        ⟨ūi ui d¯i di ⟩.         (53)
+                                                                                          L3 i
+          1.   Comparison with Exact Results
+
+  In this appendix we validate our algorithm by compar-
+ing results obtained from Monte Carlo simulations with            These densities are normalized such that they take values
+exact results on an L = 2 lattice. In addition to the two         between 0 and 1. These densities also help us monitor
+independent fermion bilinear susceptibilities defined in          when our Monte Carlo algorithm has roughly thermalized.
+Eq. (4) and Eq. (5), we also introduce two additional
+observables for the comparison: the dimer density,                  The exact results for the partition function Z (see
+                        2 X                                       Eq. (8)), the two susceptibilities χud and χuu , and the two
+                 ρD =      ⟨ūi ui ūj uj ⟩,              (52)    densities ρD and ρI are given by the following expressions:
+                        L3
+                            ⟨ij⟩
+
+
+
+
+   Z = 6561 + 34992 UB + 97200 UB2 + 181440 UB3 + 245088 UB4 + 241920 UB5 + 172800 UB6 + 82944 UB7 + 20736 UB8
+      + UI2 (972 + 5616 UB + 16464 UB2 + 29952 UB3 + 34368 UB4 + 23808 UB5 + 7936 UB6 )
+      + UI4 (126 + 624 UB + 1488 UB2 + 1728 UB3 + 864 UB4 ) + UI6 (12 + 48 UB + 48 UB2 ) + UI8 ,                         (54)
+         1
+   ρI =      U 2 (1944 + 11232 UB + 32928 UB2 + 59904 UB3 + 68736 UB4 + 47616 UB5 + 15872 UB6 )
+        8Z I                                                                                                 
+               + UI4 (504 + 2496 UB + 5952 UB2 + 6912 UB3 + 3456 UB4 ) + UI6 (72 + 288 UB + 288 UB2 ) + 8 UI8 ,          (55)
+         1
+  ρD =       UB (34992 + 5616 UI2 + 624 UI4 + 48 UI6 ) + UB2 (194400 + 32928 UI2 + 2976 UI4 + 96 UI6 )
+        8Z
+               + UB3 (544320 + 89856 UI2 + 5184 UI4 ) + UB4 (980352 + 137472 UI2 + 3456 UI4 )
+                                                                                                     
+               + UB5 (1209600 + 119040 UI2 ) + UB6 (1036800 + 47616 UI2 ) + 580608 UB7 + 165888 UB8 ,                    (56)
+         1
+ χuu =       (12672 UB7 + 44352 UB6 + 78432 UB5 + 90000 UB4 + 71496 UB3 + 38556 UB2 + 13122 UB + 2187)
+        2Z
+               + UI2 (3744UB5 + 9360 UB4 + 10704 UB3 + 6888 UB2 + 2466 UB + 405)
+                                                                        
+               + UI4 (264 UB3 + 396 UB2 + 222 UB + 45) + UI6 (6 UB + 3) ,                                                (57)
+         1
+ χud =       UI (5760 UB6 + 17280 UB5 + 24672 UB4 + 21024 UB3 + 11112 UB2 + 3456 UB + 486)
+        2Z                                                                                       
+               + UI3 (768 UB4 + 1536 UB3 + 1248 UB2 + 480 UB + 72) + UI5 (24 UB2 + 24 UB + 6) .                          (58)
+
+
+
+In Table IV we compare the exact values for the above             four observables with our Monte Carlo results at UB = 0.1
+                                                                  at five different values of UI .
+                                                                                               19
+
+                 UI            ρI                  χuu              χud
+                       Exact        Worm   Exact     Worm   Exact     Worm
+                 0.05 0.0001 0.0001(0) 0.1764 0.1768(2) 0.0021 0.0021(0)
+                 0.1   0.0004 0.0004(0) 0.1765 0.1761(2) 0.0043 0.0043(0)
+                 0.5   0.0098 0.0099(0) 0.1777 0.1777(3) 0.0214 0.0213(1)
+                 0.6   0.0143 0.0142(0) 0.1782 0.1783(2) 0.0256 0.0256(1)
+                 1.0   0.0416 0.0418(1) 0.1809 0.1808(2) 0.0420 0.0420(1)
+
+TABLE IV. Comparison between exact and Monte Carlo results on a L = 2 lattice when UB = 0.1.
+

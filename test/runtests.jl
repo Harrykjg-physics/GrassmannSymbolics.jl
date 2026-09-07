@@ -451,3 +451,72 @@ coeff(e::GrassmannExpr) = scalar_part(e)   # scalar part
         @test width_array[2, 2] == 4
     end
 end # @testset "GrassmannSymbolics"
+
+@testset "3D staggered fermion SMG example" begin
+    example_path = joinpath(@__DIR__, "..", "examples", "3d_staggered_fermion_SMG.jl")
+    @test isfile(example_path)
+
+    if isfile(example_path)
+        include(example_path)
+        model = derive_3d_staggered_fermion_smg_tensor()
+        p = model.parameters
+
+        empty_bits = smg_bits(ntuple(_ -> 0, 36))
+        @test symbolically_equal(
+            GrassmannExpr(smg_local_integral(empty_bits, model)),
+            GrassmannExpr(p.UI),
+        )
+        @test is_even(smg_tensor_entry(empty_bits, model))
+
+        onsite_u_dimer = smg_bits((0, 0, 1, 0, 0, 0, ntuple(_ -> 0, 30)...))
+        @test smg_local_integral(onsite_u_dimer, model) == 0
+
+        single_u_hop = smg_bits((1, 0, 0, 0, 0, 0, ntuple(_ -> 0, 30)...))
+        @test smg_local_integral(single_u_hop, model) == 0
+
+        complementary_dimers = smg_bits((0, 0, 1, 0, 0, 1, ntuple(_ -> 0, 30)...))
+        @test symbolically_equal(
+            GrassmannExpr(smg_local_integral(complementary_dimers, model)),
+            GrassmannExpr(p.sqrt_UB^2),
+        )
+
+        repeated_u_dimer = smg_bits((0, 0, 1, 0, 0, 0,
+                                     0, 0, 0, 0, 0, 0,
+                                     0, 0, 0, 0, 0, 0,
+                                     0, 0, 1, 0, 0, 0,
+                                     0, 0, 0, 0, 0, 0,
+                                     0, 0, 0, 0, 0, 0))
+        @test symbolically_equal(
+            GrassmannExpr(smg_local_integral(repeated_u_dimer, model)),
+            GrassmannExpr(0),
+        )
+    end
+end
+
+@testset "3D staggered fermion SMG no-UB example" begin
+    example_path = joinpath(@__DIR__, "..", "examples", "3d_staggered_fermion_SMG_no_UB.jl")
+    @test isfile(example_path)
+
+    if isfile(example_path)
+        include(example_path)
+        model = derive_3d_staggered_fermion_smg_no_ub_tensor()
+        p = model.parameters
+
+        empty_bits = smg_no_ub_bits(ntuple(_ -> 0, 24))
+        @test symbolically_equal(
+            GrassmannExpr(smg_no_ub_local_integral(empty_bits, model)),
+            GrassmannExpr(p.UI),
+        )
+        @test is_even(smg_no_ub_tensor_entry(empty_bits, model))
+        @test coefficient_array_shape(model.leg_groups) == (16, 16, 16, 16, 16, 16)
+
+        single_u_hop = smg_no_ub_bits((1, 0, 0, 0, ntuple(_ -> 0, 20)...))
+        @test smg_no_ub_local_integral(single_u_hop, model) == 0
+
+        saturated_hops = smg_no_ub_bits((1, 1, 1, 1, ntuple(_ -> 0, 20)...))
+        @test symbolically_equal(
+            GrassmannExpr(smg_no_ub_local_integral(saturated_hops, model)),
+            GrassmannExpr(p.p_t^4),
+        )
+    end
+end

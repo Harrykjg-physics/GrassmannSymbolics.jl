@@ -220,25 +220,27 @@ function contract_grassmann(tensors, pairs; simplify::Bool=true)
 end
 
 """
-    local_grassmann_tensor(onsite_action, bond_exponents, measure_order; simplify=true) -> GrassmannExpr
+    local_grassmann_tensor(onsite_action, bond_exponents, measure_order;
+                           simplify=true) -> GrassmannExpr
 
-Construct the fundamental tensor at a single lattice site,
+Construct the fundamental tensor at one lattice site,
 
     ∫ Dψ exp(-S_onsite) ∏ₖ exp(Bₖ),
 
-where `bond_exponents` are the local Grassmann factors produced by decomposing hopping terms with auxiliary 
-Grassmann fields. The original site fields are integrated in `measure_order`; auxiliary fields remain as the tensor legs.
+where `bond_exponents` are the local factors produced by decomposing hopping
+terms with auxiliary Grassmann fields. The original site fields are integrated
+in `measure_order`; auxiliary fields remain as the tensor legs.
 
-This is the common symbolic kernel for nearest-neighbor fermion models. A model-specific compiler 
-only has to turn its hopping matrices or interaction terms into the local exponents `Bₖ`.
+This is the common symbolic kernel for nearest-neighbor fermion models. A
+model-specific compiler only has to turn its hopping matrices or interaction
+terms into the local exponents `Bₖ`.
 """
-
 function local_grassmann_tensor(
     onsite_action,
     bond_exponents,
     measure_order::AbstractVector{GrassmannGenerator};
-    simplify::Bool=true)
-    
+    simplify::Bool=true,
+)
     integrand = exp(-_as_grassmann_expr(onsite_action))
     for bond_exponent in bond_exponents
         integrand = integrand * exp(_as_grassmann_expr(bond_exponent))

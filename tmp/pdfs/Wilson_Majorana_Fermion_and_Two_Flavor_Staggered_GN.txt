@@ -1,0 +1,1351 @@
+                                                      Published for SISSA by        Springer
+                                                                   Received: October 11, 2022
+                                                                  Accepted: December 12, 2022
+                                                                   Published: January 9, 2023
+
+
+
+
+Improved coarse-graining methods for two dimensional
+
+
+
+
+                                                                                                  JHEP01(2023)024
+tensor networks including fermions
+
+
+
+Muhammad Asaduzzaman,a,b Simon Catterall,a Yannick Meurice,b Ryo Sakaia
+and Goksu Can Togaa
+a
+  Department of Physics, Syracuse University,
+  Syracuse, NY 13244, U.S.A.
+b
+  Department of Physics and Astronomy, The University of Iowa,
+ Iowa City, Iowa 52242, U.S.A.
+    E-mail: muhammad-asaduzzaman@uiowa.edu, smcatter@syr.edu,
+    yannick-meurice@uiowa.edu, rsakai@syr.edu, gctoga@syr.edu
+
+Abstract: We show how to apply renormalization group algorithms incorporating en-
+tanglement filtering methods and a loop optimization to a tensor network which includes
+Grassmann variables which represent fermions in an underlying lattice field theory. As a
+numerical test a variety of quantities are calculated for two dimensional Wilson-Majorana
+fermions and for the two flavor Gross-Neveu model. The improved algorithms show much
+better accuracy for quantities such as the free energy and the determination of Fisher’s zeros.
+
+Keywords: Algorithms and Theoretical Developments, Field Theories in Lower Dimensions,
+Phase Transitions
+
+ArXiv ePrint: 2210.03834
+
+
+
+
+Open Access, c The Authors.
+                                                     https://doi.org/10.1007/JHEP01(2023)024
+Article funded by SCOAP3 .
+Contents
+
+1 Introduction                                                                                          1
+
+2 TN representation for Wilson-Majorana fermions                                                        2
+
+3 Tensor renormalization group and entanglement filtering                                               3
+  3.1 TRG and CDL structure                                                                             4
+  3.2 Removal of CDL loops                                                                              5
+
+
+
+
+                                                                                                             JHEP01(2023)024
+      3.2.1 Loop-TNR (entanglement filtering and loop optimization)                                     5
+      3.2.2 Gilt-TNR (graph independent local truncations)                                              7
+  3.3 Coarse-graining methods for fermion systems                                                       8
+
+4 Numerical results                                                                                   10
+
+5 Results for staggered Nf = 2 Gross-Neveu model                                                      15
+
+6 Conclusion                                                                                          17
+
+
+
+
+1       Introduction
+
+The tensor renormalization group (TRG) [1] has been very successfully applied to spin and
+gauge models in low dimensions.1 It allows for high precision calculations of quantities
+including the free energy using very modest resources — see the recent review and references
+therein ref. [3]. The algorithm incorporates a parameter —the bond dimension— which
+controls convergence. Close to a critical point, however, the required bond dimension
+grows large, and the algorithm becomes less efficient. This has been traced to the fact that
+the standard TRG procedure can drive the coarsened tensor network to an artificial fixed
+point that is referred to as the corner double line (CDL) tensor [4].2 To maintain a proper
+renormalization group flow improved algorithms have been developed, such as the tensor
+network renormalization (TNR) [6], the loop-TNR [7], and the gilt-TNR [8] algorithm.
+In such algorithms, entanglement filtering methods and further optimization steps are
+incorporated into the network coarsening procedure to eliminate the CDL fixed point. 3
+     In this paper, we show how such algorithms can be adapted to the case of a tensor
+network involving Grassmann variables. Grassmann tensor networks arise in generic lattice
+    1
+     The higher order TRG [2] can be used for higher dimensional systems, albeit numerical costs strongly
+depend on the dimensionality.
+   2
+     The fixed point structure of the higher order TRG is also discussed in ref. [5].
+   3
+     Besides the removal of the CDL structure, there are other improved schemes such as the (higher order)
+second renormalization group [2, 9] and the bond weighted tensor renormalization group [10], where effects
+of environments are taken into account for coarse-graining steps.
+
+
+
+
+                                                 –1–
+fermionic field theories and are needed to avoid sign problems. In particular, in this paper,
+we test the combined Grassmann loop-TNR and Grassmann gilt-TNR algorithms in the
+case of two dimensional Wilson-Majorana fermions, which are known to be equivalent to
+the two dimensional Ising model.
+
+2     TN representation for Wilson-Majorana fermions
+
+An equivalence between the Ising model and a lattice action for Wilson-Majorana fermions
+has been shown for two dimensional honeycomb and square lattices [11]. Here we construct a
+tensor network representation of the Wilson-Majorana partition function on a square lattice.
+
+
+
+
+                                                                                                                                                JHEP01(2023)024
+While the equivalence has been shown in any choice of boundary conditions, throughout
+this paper, we assume the periodic and the antiperiodic boundary conditions for the spatial
+and the temporal directions, respectively.
+     The action of the Wilson-Majorana fermion model is given by
+                                                                                                                                     
+                     2              2                              2              2
+       1X                       1X                  1X                       1X
+                                       ∂µ ∂µ∗  ηn +                                 ∂µ ∂µ∗  χn
+                    X                                             X
+    S=     η̄n mη +     γµ ∂µS −                         χ̄n mχ +     γµ ∂µS −
+       2 n          µ=1
+                                 2 µ=1
+                                                     2 n          µ=1
+                                                                               2 µ=1
+                                          1        1
+                                                                  
+                          γ1 ∂1S −γ2 ∂2S − ∂1 ∂1∗ + ∂2 ∂2∗
+            X
+        +       η̄n                                                    χn                                                               (2.1)
+            n                              2               2
+with two component Majorana spinors η ≡ (η1 , η2 )T and χ ≡ (χ1 , χ2 )T . The forward, the
+backward, and the symmetric difference operators are defined by ∂, ∂ ∗ , and ∂ S = (∂ + ∂ ∗ )/2,
+respectively. The masses of the fermions are functions of the reverse temperature κ:
+                         2 √                         2 √             
+                   mη =       2−1−κ ,          mχ = −       2+1+κ .                      (2.2)
+                         κ                             κ
+                                                                                 √
+The critical point of the system occurs for vanishing mη , is given by κc = 2 − 1, and
+corresponds to the critical point of the two dimensional Ising model on a square lattice
+βc = tanh−1 κc . Hereafter we use a representation of γ matrices given by
+                                  !                                         !                                             !
+                              01                                   1 0                                             0 −1
+        γ 1 = σ1 =               ,              γ 2 = σ3 =              ,                 C = −iσ2 =                    .               (2.3)
+                              10                                   0 −1                                            1 0
+With this explicit representation, the Majorana condition turns out to be
+                                                     η̄ = η T C = (η2 , −η1 )                                                           (2.4)
+together with the same condition on χ. Also, for simplicity, we employ linear combinations
+of the spinor components. For example for the field η we employ
+                                                                                     !
+                                                           1   η1 + η2
+                                                     η̃ = √            .                                                                (2.5)
+                                                            2 −η1 + η2
+Then the Boltzmann factor can be expanded using integers that are placed on each link
+     e−S =                 e(mη +2)ηn,1 ηn,2 +(mχ +2)χn,1 χn,2 (−1)xn,3 +xn,4
+                XY
+
+             {x,t} n
+                                              xn,1                     xn,2                     xn,3                     xn,4
+                            · η̃n+1̂,2 η̃n,1             χ̃n+1̂,2 χ̃n,1             χ̃n+1̂,2 η̃n,1             η̃n+1̂,2 χ̃n,1
+                                              tn,1                   tn,2                   tn,3                    tn,4
+                            · ηn+2̂,2 ηn,1               χn+2̂,2 χn,1             χn+2̂,2 ηn,1             ηn+2̂,2 χn,1             .   (2.6)
+
+
+
+
+                                                                  –2–
+    To derive a tensor network representation we introduce dummy Grassmann variables
+(Θ and Θ̄ in the following example) to split the hopping factors (Ψn+µ̂ Φn in the following
+example) into products of commuting pairs by exploiting an identity
+                                              Z                                                             
+                            Ψn+µ̂ Φn =               Ψn+µ̂ dΘ̄n+µ               Φn dΘn               Θ̄n+µ̂ Θn .                           (2.7)
+
+In this way the partition function can be expressed as4
+                                        Z                                                  !
+                                                     dηn,1 dηn,2 dχn,1 dχn,2 e−S
+                                                Y
+                                  Z=
+
+
+
+
+                                                                                                                                                   JHEP01(2023)024
+                                                 n
+                                        XZ Y
+                                   =                      Txn tn xn−1̂ tn−2̂ Gn,xn tn xn−1̂ tn−2̂ ,                                        (2.8)
+                                        {x,t}         n
+
+
+where the bosonic tensor T , whose elements are numerical values, and the Grassmann
+valued tensor G are defined by
+                  Z
+        Tijkl =       dη1 dη2 dχ1 dχ2 e(mη +2)η1 η2 +(mχ +2)χ1 χ2 (−1)i3 +i4
+
+                                            · η2l4 χl23 χl22 η2l1 η̃2k4 χ̃k23 χ̃k22 η̃2k1 χj14 η1j3 χj12 η1j1 χ̃i14 η̃1i3 χ̃i12 η̃1i1 ,    (2.9)
+
+and
+                              i1          i4    j1          j4     k1           k4     l1           l4
+                  Gn,ijkl = dαn,1 · · · dαn,4 dβn,1 · · · dβn,4 dᾱn,1 · · · dᾱn,4 dβ̄n,1 · · · dβ̄n,4
+                                  " 4                                                        #
+                                   Y                       i s                     j s
+                              ·         ᾱn+1̂,s αn,s                β̄n+2̂,s βn,s               .                                        (2.10)
+                                  s=1
+
+Notice that the tensor indices have four components; e.g. i = (i1 , i2 , i3 , i4 ), where each
+component takes one of the values 0 or 1 and expresses the fermion occupation. Notice
+also that T is very sparse due to the nilpotency of the Grassmann variables in eq. (2.9).
+It is important to recognize that all Grassmann variables are distinct, and e.g. η and η̄
+are not related by complex conjugation. To contract this tensor network one will need to
+generalize the usual coarse-graining algorithms to allow for blocking of both bosonic and
+Grassmann tensors. While the ordering of the Grassmann variables matters in defining
+the tensor elements and in performing a coarse-graining procedure, the final value of the
+contracted tensor network is invariant.
+
+
+3       Tensor renormalization group and entanglement filtering
+
+In this section we describe the usual TRG and explain its limitations before reviewing the
+improved algorithms that circumvent these problems. Initially we will focus on models with-
+out fermions before explaining our current work to generalize these methods to Grassmann
+tensor networks. As shown in the original papers, the loop-TNR and the gilt-TNR can be
+    4
+    The expectation value of an observable can also be expressed as a tensor network in the presence of a
+so-called impurity tensor.
+
+
+
+
+                                                                  –3–
+implemented at the same order of computational complexity with the normal TRG, namely,
+the sixth power of the bond dimension of a unit tensor.5,6
+
+3.1    TRG and CDL structure
+Here we omit the Grassmann variables for simplicity and assume that a general partition
+function Z is expressed as a tensor network
+                                               XY
+                                        Z=                    Txn tn xn−1̂ tn−2̂ .                              (3.1)
+                                               {x,t} n
+
+The four rank tensor T can be decomposed by singular values in two ways:
+
+
+
+
+                                                                                                                        JHEP01(2023)024
+                              D2                                              D    2
+                              X      [1] [13] [3]†                            X              [2]
+                                                                                              [24]       [4]†
+                    Tijkl =         Uijm σm  Vmkl ,               Tijkl =               Ulim σm    Vmjk ,       (3.2)
+                              m=1                                             m=1
+
+where each index of T is assumed to run from 1 to a certain bond dimension D and
+where σ, U , V are the singular values and unitary matrices arising from a singular value
+decomposition (SVD). By truncating the summations of the above decompositions according
+to the magnitude of the singular values, the tensor is approximately decomposed into two
+rank three tensors:
+                                    D                                         D
+                                    X      [1]  [3]                           X              [2]   [4]
+                         Tijkl ≈          Sijm Smkl ,             Tijkl ≈               Slim Smjk ,             (3.3)
+                                    m=1                                       m=1
+                   √                      √                √                           √
+where S [1] = U [1] σ [13] , S [2] = U [2] σ [24] , S [3] = σ [13] V [3]† , and S [4] = σ [24] V [4] . Here
+the range of summation is truncated to D. Of course the order of truncation is a tunable
+parameter, and the larger it is, the more accurate the approximation is. It is known that
+the SVD minimizes the cost functions
+
+                                    T − S [1] S [3]       ,           T − S [2] S [4]                           (3.4)
+                                                      F                                      F
+
+for a given truncation order [15]. Throughout this paper | · |F means the Frobenius norm.
+     By taking the SVDs for all tensors on the square lattice, the tensor network is approxi-
+mately decomposed into a network of rank three tensors, and then, by tracing out the old
+tensor indices, one can define a new rank four tensor
+                                                 D
+                                       ?
+                                                 X              [3]    [4]   [1]       [2]
+                                     Tijkl =                  Sicd Sjda Sabk Sbcl                               (3.5)
+                                               a,b,c,d=1
+
+and obtain a coarse-grained square tensor network again. Iterating this procedure many
+times yields a small network, where one can exactly take the trace of all tensor indices and
+can obtain an approximate value of Z. This is the basic strategy of the TRG.
+   5
+     Both methods involve iterative optimization steps, so that the computational time has a constant factor
+that depends on how many times the iterations are repeated.
+   6
+     Generically there is room for reduction of the computational complexities. Indeed, the computational
+cost of the normal TRG can be reduced to the fifth power of the bond dimension [12, 13] without a loss of
+accuracy. As for the TNR methods, modification of cost functions can be used as shown in ref. [14].
+
+
+
+
+                                                          –4–
+                          Figure 1. CDL tensor and its decompositions.
+
+
+
+
+                                                                                                   JHEP01(2023)024
+      Figure 2. Coarse-graining of the CDL tensor network yields a CDL tensor network again.
+
+     The SVD that is used above gives the optimal local approximation for each tensor, but
+it is not optimal for the total tensor network. Improved algorithms such as (loop-)TNR
+attempt to minimize a more global cost function as will be shown in the following section.
+     In addition to the problem of finding a better cost function, the TRG has a known
+failure related to its fixed point structure. As a typical example, one can easily show that a
+toy tensor network that consists of the CDL tensor
+                                    CDL
+                                  Tijkl = Λ i 1 l2 Λ j 1 i 2 Λ k1 j 2 Λ l1 k2 ,           (3.6)
+where Λ is a general matrix, which is often simply set to be a diagonal matrix, is a fixed
+point of the TRG [4] (See figures 1–2.). This fact means that the vanilla TRG leaves short
+range correlations in the network under a blocking step which, at a minimum, introduces
+a loss of accuracy into the coarse-graining procedure and can even lead renormalization
+group flows into artificial fixed points. Any improved algorithm must have as its goal a
+procedure which eliminates this unphysical fixed point.
+
+3.2     Removal of CDL loops
+To remove the CDL structure from tensor networks, several improved coarse-graining
+methods have been developed so far. In this section we review the loop-TNR [7] and the
+gilt-TNR [8].
+
+3.2.1     Loop-TNR (entanglement filtering and loop optimization)
+The loop-TNR algorithm consists of an entanglement filtering step and a loop optimization
+step. In the entanglement filtering step, projectors are inserted into each link (See figures 3–
+4.). Given a link the projectors are defined by
+                                        1                       1
+                                P = RY √ ,                 Q = √ X † L,                   (3.7)
+                                         τ                       τ
+
+
+
+
+                                                    –5–
+Figure 3. Insertion of projectors on a link. Here we assume that the tensor network has a
+checkerboard pattern, where T1 and T2 are placed at even sites and odd sites, respectively. The
+resulting tensor network after the loop optimization also has a checkerboard pattern.
+
+
+
+
+                                                                                                     JHEP01(2023)024
+Figure 4. Gauge transformation of tensors on a plaquette. Tensors within lines are considered to
+be gauged tensors. This transformation removes the CDL loop from the plaquette.
+
+
+where the matrices L and R are constructed in an iterative procedure on a matrix product
+state with a periodic boundary condition and where τ , X, and Y are defined by the SVD
+of a matrix:
+
+                                         (LR) = Xτ Y † .                                    (3.8)
+
+The details of the construction of the matrices L and R are discussed in ref. [7]. In the
+reference there is also a proof of the fact that the given construction removes the CDL loop
+from a plaquette. One can easily show that P Q = L−1 LRR−1 = 1; thus the insertion of
+the projectors does not change the value of the partition function, and this step only takes
+place to ensure numerical stability. In practice smaller values of τ are discarded, so that
+the SVD of (LR) introduces a slight approximation with a truncation of the link; however,
+this step is considered to be just a gauge transformation of each tensor.
+     In the loop optimization step, a set of rank three tensors S1 , S2 , S3 , S4 , S5 , S6 , S7 ,
+and S8 is tuned to approximate the original plaquette. Namely, the cost function
+
+                              |T1 T2 T1 T2 − S1 S2 S3 S4 S5 S6 S7 S8 |F                     (3.9)
+
+is minimized (See figure 5). In this step the set {S} is minimized one by one while keeping
+all the other tensors fixed. Under this situation, the tensor that is of interest is optimized
+through solving a set of simultaneous linear equations.
+     As for the initial condition of {S}, it can be chosen from the truncated SVDs of the
+original rank four tensors as in the case of the usual TRG. Indeed, as emphasized in the
+
+
+
+
+                                               –6–
+                     Figure 5. Cost function of the loop optimization step.
+
+
+original paper [7], the choice of the initial condition affects the convergence behavior of
+
+
+
+
+                                                                                                   JHEP01(2023)024
+the loop optimization step. In ref. [16], where the classical XY model is analyzed, the
+octagonal tensor ring is prepared by the full SVDs without any approximation, and the bond
+dimensions are truncated by entanglement filtering projectors after that; it has numerically
+shown that this choice improves the speed of convergence significantly. In the numerical
+works in our current paper, we adopt their choice for the initial condition of the loop
+optimization step.
+     In practice, one can easily find convergence up to the machine precision in making the
+entanglement filtering projectors. By contrast, it is hard to make the loop optimization
+step fully converge. Then, in an actual implementation, one will set a maximum number of
+iterations or a sufficient condition for the cost function. Of course these properties depend
+on the model and physical parameters. In our current work, we quit the loop optimization
+step if the residual difference of the cost function gets as small as 10−4 .
+
+3.2.2   Gilt-TNR (graph independent local truncations)
+The entanglement filtering scheme is not unique, and indeed several algorithms have been
+proposed. An example that may be graphically easy to understand is called the graph
+independent local truncation (gilt), which was proposed in ref. [8].
+    In this method one considers a plaquette as an environment of a link. By taking the
+SVD of the environment, the CDL loop is captured by a unitary matrix U (See figure 6).
+To remove the CDL loop from the plaquette, U is replaced by another matrix according to
+a certain criterion with a hyperparameter gilt . In their method, a partial trace of Ui that is
+associated with i-th environment spectrum Si is defined by
+
+                                           ti = tr Ui                                    (3.10)
+
+and is replaced by
+                                                      Si2
+                                       t0i = ti                .                         (3.11)
+                                                  Si2 + 2gilt
+
+After this replacement, t0 is pushed back to the link, and this procedure is repeated until
+a convergence condition is satisfied. The parameter gilt determines how drastically the
+bond dimension of the link is truncated. A detailed discussion is given in refs. [8, 17]. In
+particular, ref. [17] gives a hint of how best to tune gilt . In the following section we show
+numerical results with some representational choices of gilt .
+
+
+
+
+                                              –7–
+                                                                                                                                          JHEP01(2023)024
+Figure 6. SVD of the environment of an open link on a plaquette. CDL loop is captured by the
+unitary matrix U .
+
+
+3.3     Coarse-graining methods for fermion systems
+In fermion systems the tensor network factorizes into the product of a bosonic and a
+Grassmann valued tensor as discussed earlier. To coarse grain such networks, one has
+to take care of the Grassmann variables. Conceptually there are two ways to deal with
+Grassmann variables; one is to coarse grain the Grassmann part separately from the bosonic
+tensors, while the other introduces the Grassmann algebra directly into the tensor operations
+such as transpositions, multiplications, and decompositions [18, 19]. An important point is
+that the treatment of the Grassmann variables can be done without any approximation,
+so that one yields the same numerical results whichever way is chosen. In this paper we
+discuss the former approach.
+    The Grassmann part can be coarse grained in a way that goes along with the TRG.
+First, G is decomposed as
+                                  Z                                                                  m f
+                                          [1]                      [3]
+                      Gn,ijkl =         Θn,ij dᾱnm?f            Θn,kl dαnm?f−1̂?        ᾱn? αn? −1̂?            ,              (3.12)
+
+where
+                                                              " 4                                                        #
+                                                               Y                        i s                    j s
+         [1]          i1          i4    j1          j4
+        Θn,ij   =   dαn,1 · · · dαn,4 dβn,1 · · · dβn,4                  ᾱn+1̂,s αn,s            β̄n+2̂,s βn,s              ,   (3.13)
+                                                                  s=1
+          [3]      k1           k4     l1           l4
+        Θn,kl = dᾱn,1 · · · dᾱn,4 dβ̄n,1 · · · dβ̄n,4                                                                          (3.14)
+
+with
+                                4            4                              4            4
+                                                        !                                           !
+                                X            X                              X            X
+                       mf =           is +         js       mod 2 =               ks +         ls       mod 2.                   (3.15)
+                                s=1          s=1                            s=1          s=1
+
+The new symbol n? denotes a site on the coarse-grained lattice, and the unit vectors on
+the coarse-grained lattice are defined by 1̂? = 1̂ + 2̂ and 2̂? = 2̂ − 1̂ here.7 The graphical
+definition of the coarse-grained lattice is given in figure 7. αn? , ᾱn? , βn? , and β̄n? are
+dummy Grassmann variables that are placed on the coarse-grained network.
+   7
+    Of course the definition of new unit vectors are one’s option. Another option would be a (anti)clockwise ori-
+entation.
+
+
+
+
+                                                              –8–
+                                                                                                                                                                                     JHEP01(2023)024
+                                                   Figure 7. Coarse-grained lattice.
+
+
+       G is decomposed in a similar way as
+                                  P4               Z                                                                                    m f
+                                                           [2]                              [4]
+             Gn,ijkl = (−1)                 l
+                                         s=1 s           Θn,li dβ̄nm?f                Θn,jk dβnm?f−2̂?                   β̄n? βn? −2̂?                  ,            (3.16)
+
+where
+                                                                                                    " 4                                     #
+                                                                                                     Y                              i s
+                          [2]               l1           l4    i1          i4
+                         Θn,li    =      dβ̄n,1 · · · dβ̄n,4 dαn,1 · · · dαn,4                                    ᾱn+1̂,s αn,s                  ,                   (3.17)
+                                                                                                     s=1
+                                                                                                     " 4                                     #
+                                                                                                                                     j s
+                          [4]              j1          j4     k1           k4
+                                                                                                      Y
+                         Θn,jk      =    dβn,1 · · · dβn,4 dᾱn,1 · · · dᾱn,4                                        β̄n+2̂,s βn,s                                  (3.18)
+                                                                                                        s=1
+
+with
+                                         4             4                                          4                4
+                                                                    !                                                           !
+                                         X             X                                          X                X
+                         mf =                  ls +            is        mod 2 =                        js +               ks       mod 2.                           (3.19)
+                                         s=1           s=1                                        s=1              s=1
+
+       Using the components above one can define a coarse-grained Grassmann tensor G? :
+         
+                 [3]          x   ? ,f
+                                         
+                                                 [4]                t   ? ,f
+                                                                               
+                                                                                       [1]          x   ? −1̂? ,f
+                                                                                                                      
+                                                                                                                            [2]              t       ? −2̂? ,f
+                                                                                                                                                                 
+             Θn+1̂+2̂,cd dαnn?                Θn+1̂,da dβnn?                       Θn,ab dᾱnn?                           Θn+2̂,bc dβ̄nn?                            (3.20)
+                            xn? ,f                          tn? ,f
+         · ᾱn? +1̂? αn?                   β̄n? +2̂? βn?
+             [2]       [1]    [4]              [3]
+       =Θn+2̂,bc Θn,ab Θn+1̂,da Θn+1̂+2̂,cd G?n,xn? tn? xn? −1̂? tn? −2̂? ,                                                                                          (3.21)
+
+where Θ[2] Θ[1] Θ[4] Θ[3] turns out to be a phase factor by integrating out the old Grassmann
+variables and where8
+                                           x   ?       t   ?            x      ? −1̂? ,f      t   ? −2̂? ,f
+                                                                                                                                    xn? ,f                          tn? ,f
+G?n,xn? tn? xn? −1̂? tn? −2̂? = dαnn? ,f dβnn? ,f dᾱnn?                                   dβ̄nn?                 ᾱn? +1̂? αn?                        β̄n? +2̂? βn?             .
+                                                                                                                                                                     (3.22)
+   8
+    Note that the coarse-grained tensor has less content than the original one. This shape is kept after this
+coarse-graining step.
+
+
+
+
+                                                                                –9–
+Note that there is no approximation in the treatment of the Grassmann part, and, after
+this step, one just obtains exact phase factors and constraints act on the bosonic tensors.
+Given the ordering of the variables in the Grassmann part, the explicit form of the phase
+factor is shown to be
+    Z
+          [2]                 [1]     [4]                  [3]
+        Θn+2̂,t             Θn,xn tn Θn+1̂,t             Θn+1̂+2̂,x
+                  n xn+2̂                      n+1̂ xn                 n+2̂ tn+1̂
+
+                P4                 P4                 P4                  P4              
+                          xn,s +         t
+                                      s=1 n,s
+                                                    +            xn+2̂,s +         t                                  
+    = (−1)          s=1                                   s=1                   s=1 n+1̂,s       f xn f tn f xn+2̂ f tn+1̂ ,
+                                                                                                                        (3.23)
+
+
+
+
+                                                                                                                                 JHEP01(2023)024
+where the function f is defined by f (i) = dζ1i1 dζ2i2 dζ3i3 dζ4i4 ζ1i1 ζ2i2 ζ3i3 ζ4i4 with a four compo-
+                                                                   R
+
+nent index i = (i1 , i2 , i3 , i4 ) and four distinct Grassmann variables ζ1 , ζ2 , ζ3 , ζ4 . These phase
+factors generated from the Grassmann integrals are incorporated into the bosonic tensor
+T , and then the coarse-graining step of T s takes place as usual via a suitable algorithm.
+Notice that improved algorithms such as the loop-TNR and the gilt-TNR can be applied to
+the bosonic part of the tensor network at this stage.
+
+
+4       Numerical results
+
+To demonstrate the equivalence to the Ising model, figure 8 shows the specific heat of
+the Wilson-Majorana fermion system. Here the specific heat is calculated by taking the
+second numerical derivative of the free energy. One can clearly observe a logarithmic growth
+                                                                        √
+of the peak height of the specific heat at the critical point κc = 2 − 1. The regions
+κ < κc and κ > κc correspond to the Z2 symmetric (high temperature) and the broken (low
+temperature) phases, respectively.
+     Figure 9 shows the relative errors of the free energy obtained by the plain Grassmann
+TRG and the improved ones. The linear system size is set to L = 1024 for this comparison.
+Clearly the Grassmann loop-TNR result shows an exponential improvement of accuracy
+as compared to the plain Grassmann TRG, and the accuracy reaches better than single
+precision at a relatively small bond dimension like 10. The Grassmann gilt-TNR shows a
+similar accuracy to the vanilla Grassmann TRG at lower bond dimensions. At larger bond
+dimensions, the accuracy of the Grassmann gilt-TNR depends on the hyperparameter gilt .
+Optimal gilt depends on the model, physical parameters, and even on the bond dimension.
+In our experiments, gilt = 10−6 seems like a good choice near the criticality in this model
+for large bond dimensions.
+     To explore a finite size scaling behavior one can examine the Fisher zeros, the zeroes
+of the partition function in the plane of complex κ [20]. As an example, figure 10 shows
+the zeros on an L = 8 lattice. In the figure, the red and the blue lines show the zeros of
+the real and the imaginary part of the partition function, respectively, so that the crossing
+points of them can be considered to be the positions of Fisher zeros. In the following we
+define the position of the first Fisher zero κ0 as the coordinate of the Fisher zero which is
+the closest to the real axis. In figure 11 the first Fisher zeros are located in the complex
+κ plane for several L, where one can see that the numerical data lie on the theoretical
+
+
+
+
+                                                                   – 10 –
+                                      24
+                                            L=4
+                                      22    L=8
+                                            L=16
+                                      20    L=32
+                                            L=64
+                                      18    L=128
+                                            L=256
+                                            L=512
+          specific heat
+
+                                      16
+                                            L=1024
+                                      14
+
+                                      12
+
+                                      10
+
+                                       8
+
+
+
+
+                                                                                                                                     JHEP01(2023)024
+                                       6
+
+                                       4
+
+                                       2
+                                        0.35           0.36   0.37   0.38   0.39         0.4   0.41    0.42    0.43    0.44   0.45
+                                                                                         κ
+
+Figure 8. Specific heats of the Wilson-Majorana fermion system. This figure is obtained by the
+Grassmann loop-TNR, where the bond dimension is set to 16, although one cannot observe the
+difference among the vanilla and improved algorithms in this resolution.
+
+
+                                               1
+                                                                                    Grassmann TRG
+                                                                                    Grassmann loop-TNR
+                                            0.1                                     Grassmann gilt-TNR, εgilt=1e-05
+                                                                                    Grassmann gilt-TNR, εgilt=1e-06
+                                                                                    Grassmann gilt-TNR, εgilt=1e-07
+          rel. error of free energy
+
+
+
+
+                                           0.01
+
+                                       0.001
+
+                                      0.0001
+
+                                       1e-05
+
+                                       1e-06
+
+                                       1e-07
+
+                                       1e-08
+
+                                       1e-09
+                                                   0          10       20           30         40         50          60      70
+                                                                              bond dimension
+
+                                      Figure 9. Relative errors of the free energy at the criticality. L = 1024.
+
+              q      √
+curve Im(κ) = (2 + 2)(κc − Re(κ)) in larger volumes. Figures 12–13 show the volume
+dependence of κ0 in detail. The bond dimension is set to 64 for the Grassmann TRG
+and up to 16 for the Grassmann loop-TNR. In figure 12 we see that the Grassmann
+                                         √
+loop-TNR locates the critical point κc = 2 − 1 quite well while the Grassmann TRG
+fails as L → ∞. As for the imaginary part in figure 13, one cannot observe the difference
+between the Grassmann TRG results and the Grassmann loop-TNR ones at this resolution.
+The behavior of the imaginary part is such that the first zero approaches the real axis
+
+
+
+
+                                                                                   – 11 –
+               0.12
+                                      red: ReZ = 0, blue: ImZ = 0
+
+               0.10
+
+               0.08
+
+               0.06
+          Im
+
+
+
+
+                                                                                                                 JHEP01(2023)024
+               0.04
+
+               0.02
+
+               0.00
+                  0.390 0.395 0.400 0.405 0.410 0.415 0.420 0.425 0.430
+                                           Re
+
+Figure 10. Partition function zeros on an L = 8 lattice. Intersections of the red and the blue lines
+are the positions of Z = 0 (Fisher zeros). This figure is obtained by the Grassmann loop-TNR,
+where the bond dimension is set to 16, although one cannot observe the difference among the vanilla
+and improved algorithms in this resolution.
+
+
+according to L−1/ν where the observed critical exponent ν = 1 is consistent with the known
+behavior of the two dimensional Ising model.
+     The renormalization group flow of singular values obtained by the plain Grassmann
+TRG and the improved algorithms are shown in figures 14–16. In the figures the singular
+values are normalized by the largest one at each iteration step, and the horizontal axis
+is the number of iterations. Notice that the number of iterations i and the number of
+lattice sites V , which have been compressed to a single tensor, are related by V = 2i .9
+Clearly the fixed point structure as evidenced by the behavior of the singular values is
+not reproduced both on and off critical point for the vanilla Grassmann TRG algorithm.
+This is due to a contamination by short range information that is not properly removed by
+this algorithm.10 By contrast, the improved methods show trivial fixed point structures
+off critical κ = 0.9999κc and 1.0001κc ; in the high temperature (symmetric) phase the
+number of significant singular values is one while in the low temperature (broken) phase
+there are two degenerate singular values. The fixed point structure is nontrivial only at
+the criticality, where one can find a scale invariance of the hierarchical structure of the
+singular values that remains the same against the increasing iteration number. This fact
+   9
+    Note that the number of lattice sites is reduced by 1/2 through a single iteration step.
+  10
+    On account of contamination by short range information, the critical point will shift to a pseudo critical
+point when we use the normal Grassmann TRG. From figure 12 one can assume that the difference between
+the true critical point and the pseudo critical point would be 10−5 or so.
+
+
+
+
+                                                   – 12 –
+                          0.045
+                                                                          sqrt((2+sqrt(2))(κc-Re(κ)))
+                           0.04
+
+                          0.035
+
+                           0.03
+
+                          0.025
+          Im(κ)
+
+
+
+
+                           0.02
+
+                          0.015
+
+
+
+
+                                                                                                                            JHEP01(2023)024
+                           0.01
+
+                          0.005
+
+                              0
+                             0.4136     0.4137    0.4138         0.4139         0.414     0.4141        0.4142   0.4143
+                                                                     Re(κ)
+
+Figure 11. Fisher zeros in the complex κ plane for L = 16 (top),. . . , L = 1024 (bottom). This
+figure is obtained by the Grassmann loop-TNR, where the bond dimension is set to 16, although
+one cannot observe the difference among the vanilla and improved algorithms in this resolution.
+
+                           0.001
+                                   Grassmann TRG
+                                   Grassmann loop-TNR
+
+
+                          0.0001
+          |κc - Re(κ0)|
+
+
+
+
+                          1e-05
+
+
+
+
+                          1e-06
+
+
+
+
+                          1e-07
+                              0.0001                     0.001                          0.01                      0.1
+                                                                          1/L
+                                                    √
+Figure 12. Difference between κc =                      2 − 1 and the real part of the position of the first Fisher zero.
+
+
+shows that only the improved algorithms are capable of being interpreted as implementing
+a true renormalization group transformation.
+     The volume dependence of the entanglement entropy (EE) is shown for several tem-
+peratures in figures 17–19. To calculate the entanglement entropy, we take the eigenvalue
+decomposition of a reduced density matrix and use its spectra just as in the case of
+ref. [21]. The prediction associated with the Calabrese-Cardy formula is also shown, where
+(EE) = (c/3) ln L + const. with the central charge c = 1/2. The bond dimension is 64 for
+the plain Grassmann TRG and the Grassmann gilt-TNR while it is 16 for the Grassmann
+
+
+
+
+                                                                 – 13 –
+                                                      0.1
+                                                            Grassmann TRG
+                                                            Grassmann loop-TNR
+
+
+
+
+                                                     0.01
+                                          Im(κ0)
+
+
+
+
+                                                    0.001
+
+
+
+
+                                                                                                                                                                                                          JHEP01(2023)024
+                                                   0.0001
+                                                        0.0001                                              0.001                    0.01                                                    0.1
+                                                                                                                          1/L
+
+                                                     Figure 13. Imaginary part of the position of the first Fisher zero.
+
+
+
+
+                             1                                                                         1                                                                 1
+normalized singular value
+
+
+
+
+                                                                          normalized singular value
+
+
+
+
+                                                                                                                                            normalized singular value
+                            0.8                                                                       0.8                                                               0.8
+
+
+
+                            0.6                                                                       0.6                                                               0.6
+
+
+
+                            0.4                                                                       0.4                                                               0.4
+
+
+
+                            0.2                                                                       0.2                                                               0.2
+
+
+
+                             0                                                                         0                                                                 0
+
+
+                                  0   5     10 15 20 25 30 35                                               0   5   10 15 20 25 30 35                                         0   5   10 15 20 25 30 35
+                                            # of iteration                                                          # of iteration                                                    # of iteration
+
+Figure 14. Singular values obtained by Grassmann TRG at κ = 0.9999κc (left), κ = κc (middle),
+and κ = 1.0001κc (right). The bond dimension is 64.
+
+
+
+loop-TNR. The Grassmann TRG goes to a nontrivial fixed point regardless of the tempera-
+ture. By contrast, the Grassmann loop-TNR and the Grassmann gilt-TNR reproduce the
+trivial fixed points with (EE) = 0 at the high temperature phase and (EE) = ln 2 at the
+low temperature phase. This is consistent with theoretical expectations — the improved
+methods subtract out the short range entanglement that provides a part of the entanglement
+entropy at the criticality. Thus, one can expect that the more effective the disentangling
+process is the lower the entropy is.
+
+
+
+
+                                                                                                                    – 14 –
+                             1                                                                 1                                                                           1
+normalized singular value
+
+
+
+
+                                                                  normalized singular value
+
+
+
+
+                                                                                                                                              normalized singular value
+                            0.8                                                               0.8                                                                         0.8
+
+
+
+                            0.6                                                               0.6                                                                         0.6
+
+
+
+                            0.4                                                               0.4                                                                         0.4
+
+
+
+                            0.2                                                               0.2                                                                         0.2
+
+
+
+
+                                                                                                                                                                                                                  JHEP01(2023)024
+                             0                                                                 0                                                                           0
+
+
+                                  0   5   10 15 20 25 30 35                                         0   5   10 15 20 25 30 35                                                   0   5       10 15 20 25 30 35
+                                          # of iteration                                                    # of iteration                                                              # of iteration
+
+Figure 15. Singular values obtained by Grassmann loop-TNR at κ = 0.9999κc (left), κ = κc
+(middle), and κ = 1.0001κc (right). The bond dimension is 16.
+
+
+
+                             1                                                                 1                                                                           1
+normalized singular value
+
+
+
+
+                                                                  normalized singular value
+
+
+
+
+                                                                                                                                              normalized singular value
+                            0.8                                                               0.8                                                                         0.8
+
+
+
+                            0.6                                                               0.6                                                                         0.6
+
+
+
+                            0.4                                                               0.4                                                                         0.4
+
+
+
+                            0.2                                                               0.2                                                                         0.2
+
+
+
+                             0                                                                 0                                                                           0
+
+
+                                  0   5   10 15 20 25 30 35                                         0   5   10 15 20 25 30 35                                                   0   5       10 15 20 25 30 35
+                                          # of iteration                                                    # of iteration                                                              # of iteration
+
+Figure 16. Singular values obtained by Grassmann gilt-TNR at κ = 0.9999κc (left), κ = κc
+(middle), and κ = 1.0001κc (right). The bond dimension is 64, and gilt = 10−6 .
+
+
+5                            Results for staggered Nf = 2 Gross-Neveu model
+
+The Wilson-Majorana fermion system is a free theory, so this fact motivates us to assess
+how well the improved algorithm does in interacting fermion models. To this end we have
+also applied it to the staggered Nf = 2 Gross-Neveu model whose action is given by
+                                                                                                                                                                                   
+                                                                2
+                                                           X 1 X                                                                                                                 
+                                                                                                        T
+                                                   S=               ηn,µ ψ                                      ∂µS ψ           − U ψn,1 ψn,2 ψn,3 ψn,4                                 ,                 (5.1)
+                                                           n
+                                                             2                                                             n                                                       
+                                                                µ=1
+
+
+
+
+                                                                                                            – 15 –
+                                 6
+                                         Grassmann TRG
+                                         Grassmann loop-TNR
+                                         Grassmann gilt-TNR w/ εgilt=1e-06
+                                 5       (c/3)*ln(L)+0.4 w/ c=0.5
+          entanglement entropy
+                                 4
+
+
+                                 3
+
+
+                                 2
+
+
+
+
+                                                                                                                                  JHEP01(2023)024
+                                 1
+
+
+                                 0
+                                     1               100         10000           1x106       1x108   1x1010     1x1012
+                                                                                     L
+
+                                                  Figure 17. Entanglement entropies at κ = 0.9999κc .
+
+
+                                     4
+                                             Grassmann TRG
+                                             Grassmann loop-TNR
+                                 3.5         Grassmann gilt-TNR w/ εgilt=1e-06
+                                             (c/3)*ln(L)+0.4 w/ c=0.5
+          entanglement entropy
+
+
+
+
+                                     3
+
+
+                                 2.5
+
+
+                                     2
+
+
+                                 1.5
+
+
+                                     1
+
+
+                                 0.5
+                                         1                 100             10000             1x106      1x108            1x1010
+                                                                                         L
+
+                                                      Figure 18. Entanglement entropies at κ = κc .
+
+
+
+where ψ is a four component
+                   Pµ−1           staggered field and where η is the usual staggered fermion sign
+                          n i
+factor ηn,µ = (−1) i          . In dimensions that are the same or greater than three, this model
+is capable of generating mass without spontaneous symmetry breaking, a phenomenon
+which has been addressed in several recent theoretical and numerical works [22–29]. It is
+believed that such symmetric mass generation may also be important for construction of
+certain lattice chiral fermion theories in four dimensions [30, 31]. Recently a Hamiltonian
+formulation of this model (and for other values of Nf ) has been investigated using quantum
+simulation and methods based on matrix product states by the authors [32].
+
+
+
+
+                                                                                 – 16 –
+                                 5.5
+                                           Grassmann TRG
+                                  5        Grassmann loop-TNR
+                                           Grassmann gilt-TNR w/ εgilt=1e-06
+                                           (c/3)*ln(L)+0.4 w/ c=0.5
+                                 4.5       ln(2)
+          entanglement entropy
+                                  4
+
+                                 3.5
+
+                                  3
+
+                                 2.5
+
+                                  2
+
+
+
+
+                                                                                                                                                      JHEP01(2023)024
+                                 1.5
+
+                                  1
+
+                                 0.5
+                                       1             100            10000          1x106          1x108           1x1010       1x1012
+                                                                                         L
+
+                                                Figure 19. Entanglement entropies at κ = 1.0001κc .
+
+
+     The tensor network representation of the partition function in this model has the same
+shape with (2.8) where the (ijkl)-element of the bosonic tensor at a site n = (n1 , n2 ) is
+defined by
+                                                                        " 4          #" 4          #
+      Z                                                                  Y ηn,1 xn,s   Y ηn,2 tn,s
+                                                       U ψ 1 ψ2 ψ3 ψ4
+          dψ1 dψ2 dψ3 dψ4 e
+                                                                          s=1
+                                                                                    2              s=1
+                                                                                                              2
+                                                      ·   ψ4l4 ψ3l3 ψ2l2 ψ1l1 ψ4k4 ψ3k3 ψ2k2 ψ1k1 ψ4j4 ψ3j3 ψ2j2 ψ1j1 ψ4i4 ψ3i3 ψ2i2 ψ1i1 .   (5.2)
+
+Note that, owing to the staggered sign factor ηn,2 , the tensor network has a stripe pattern
+at this initial stage. One can easily show that this pattern becomes a checkerboard and an
+uniform after the first and the second coarse-graining step, respectively.
+    Figure 20 shows the relative errors of the free energy calculated by the Grassmann
+TRG and the Grassmann loop-TNR on an L = 4 lattice. The analytical solutions of the
+model on some small lattices are shown in ref. [28]. With a fixed bond dimension 64, the
+Grassmann loop-TNR clearly outperforms the Grassmann TRG in the whole range of the
+coupling constant U . This result again shows the superiority of the improved Grassmann
+tensor network algorithm over the vanilla Grassmann TRG method in an interacting
+fermion system.
+    Figure 21 shows the four fermion condensate U hψ1 ψ2 ψ3 ψ4 i = (U/V )(∂ ln Z/∂U ) on
+an L = 4 lattice obtained using the three point numerical differentiation with ∆U = 0.02.
+It can be seen that the Grassmann loop-TNR lies much closer to the exact solution as
+compared to the vanilla Grassmann TRG.
+
+6   Conclusion
+
+In this paper we have studied improved coarse-graining methods adapted to the case of
+Grassmann valued tensor networks describing fermionic lattice quantum field theories. Both
+the Grassmann versions of loop-TNR and gilt-TNR show improved accuracy for quantities
+such as the free energy in comparison to the normal Grassmann TRG.
+
+
+                                                                                  – 17 –
+                                         0.1
+          rel. error of free energy
+
+                                        0.01
+
+
+
+
+                                       0.001
+
+
+
+
+                                                                                                                JHEP01(2023)024
+                                      0.0001
+
+
+                                                     Grassmann TRG
+                                                     Grassmann loop-TNR
+                                      1e-05
+                                                 0                  0.5            1           1.5          2
+                                                                               U
+
+Figure 20. Relative errors of the free energy. The bond dimension is set to 64 for both coarse-
+graining methods. The lattice volume is L = 4, and the antiperiodic boundary conditions are
+imposed for both directions.
+
+
+
+
+                                        1
+
+                                       0.9
+
+                                       0.8
+
+                                       0.7
+
+                                       0.6
+          U<ψψψψ>
+
+
+
+
+                                       0.5
+
+                                       0.4
+
+                                       0.3
+
+                                       0.2
+
+                                       0.1
+                                                                                       Exact solution
+                                        0                                              Grassmann TRG
+                                                                                       Grassmann loop-TNR
+                                      -0.1
+                                             0                    0.5          1              1.5           2
+                                                                              U
+
+Figure 21. Four fermion condensate U hψ1 ψ2 ψ3 ψ4 i compared with the exact solution. The bond
+dimension is set to 64 for both coarse-graining methods. The lattice volume is L = 4, and the
+antiperiodic boundary conditions are imposed for both directions.
+
+
+
+
+                                                                          – 18 –
+     Our results also exhibit quite clearly the equivalence between Wilson-Majorana fermions
+and the Ising model — the critical exponents that are obtained by finite size scaling or
+Fisher zero analysis match closely with those of the Ising model. Also, the fixed point
+structure and the entanglement entropy of the Wilson-Majorana model obtained by the
+improved algorithms reproduce the known results for the Ising model. (See refs. [6–8] for
+the analyses on the Ising model.)
+     Of course, the performance of the improved coarse-graining methods depend on the
+details of the model. To check the performance in an interacting system we have also
+applied the Grassmann loop-TNR to the staggered Nf = 2 Gross-Neveu model, and also
+in this case the improved algorithm outperforms the normal Grassmann TRG. Another
+
+
+
+
+                                                                                                     JHEP01(2023)024
+interesting target would be the staggered Thirring model which was studied using fermion
+bag methods in ref. [33]. This model has a critical phase and is similar to the classical XY
+model. Such cases have large numbers of internal d.o.f. and will show more complicated
+fixed point structure. Indeed, precise investigations on the classical XY model have been
+reported with the use of the loop-TNR [16, 34]. Thus applying the improved methods to
+the staggered Thirring model would be a legitimate direction to gain some new insights.
+     With QCD as an eventual goal it is also important to study gauge theories. So far
+this has only been done for fermions in the case of the Schwinger model [35, 36]. Although
+one can extract discrete d.o.f. from gauge theories with a help of e.g. character expansions,
+many of them require drastic truncation at the initial stages of construction, so that tensor
+network representations for gauge theories contain large errors [37]. Then checking how the
+improved methods work in such cases will not be a trivial task.
+
+Acknowledgments
+
+We thank the members of the QuLAT Collaboration for valuable discussions. RS and SC
+are grateful to Shailesh Chandrasekharan for sharing their Monte Carlo results for the
+Gross-Neveu model. This work was supported in part by the U.S. Department of Energy
+(DOE) under Award Number DE-SC0019139. This research used resources of the Syracuse
+University HTC Campus Grid and NSF award ACI-1341006 and the National Energy
+Research Scientific Computing Center (NERSC), a U.S. Department of Energy Office of
+Science User Facility located at Lawrence Berkeley National Laboratory, operated under
+Contract No. DE-AC02-05CH11231 using NERSC award HEP-ERCAP0020659.
+
+Open Access. This article is distributed under the terms of the Creative Commons
+Attribution License (CC-BY 4.0), which permits any use, distribution and reproduction in
+any medium, provided the original author(s) and source are credited. SCOAP 3 supports
+the goals of the International Year of Basic Sciences for Sustainable Development.
+
+References
+ [1] M. Levin and C.P. Nave, Tensor renormalization group approach to 2D classical lattice models,
+     Phys. Rev. Lett. 99 (2007) 120601 [cond-mat/0611687] [INSPIRE].
+ [2] Z.Y. Xie, J. Chen, M.P. Qin, J.W. Zhu, L.P. Yang and T. Xiang, Coarse-graining
+     renormalization by higher-order singular value decomposition, Physical Review B 86 (2012).
+
+
+
+                                             – 19 –
+ [3] Y. Meurice, R. Sakai and J. Unmuth-Yockey, Tensor lattice field theory for renormalization
+     and quantum computing, Rev. Mod. Phys. 94 (2022) 025005 [arXiv:2010.06539] [INSPIRE].
+ [4] Z.-C. Gu and X.-G. Wen, Tensor-Entanglement-Filtering Renormalization Approach and
+     Symmetry Protected Topological Order, Phys. Rev. B 80 (2009) 155131 [arXiv:0903.1069]
+     [INSPIRE].
+ [5] H. Ueda, K. Okunishi and T. Nishino, Doubling of entanglement spectrum in tensor
+     renormalization group, Physical Review B 89 (2014).
+ [6] G. Evenbly and G. Vidal, Tensor network renormalization, Physical Review Letters 115 (2015).
+ [7] S. Yang, Z.-C. Gu and X.-G. Wen, Loop optimization for tensor network renormalization,
+
+
+
+
+                                                                                                    JHEP01(2023)024
+     arXiv:1512.04938.
+ [8] M. Hauru, C. Delcamp and S. Mizera, Renormalization of tensor networks using graph
+     independent local truncations, Phys. Rev. B 97 (2018) 045111 [arXiv:1709.07460] [INSPIRE].
+ [9] Z.Y. Xie, H.C. Jiang, Q.N. Chen, Z.Y. Weng and T. Xiang, Second Renormalization of
+     Tensor-Network States, Phys. Rev. Lett. 103 (2009) 160601 [arXiv:0809.0182] [INSPIRE].
+[10] D. Adachi, T. Okubo and S. Todo, Bond-weighted Tensor Renormalization Group,
+     arXiv:2011.01679 [INSPIRE].
+[11] U. Wolff, Ising model as Wilson-Majorana Fermions, Nucl. Phys. B 955 (2020) 115061
+     [arXiv:2003.01579] [INSPIRE].
+[12] S. Morita, R. Igarashi, H.-H. Zhao and N. Kawashima, Tensor renormalization group with
+     randomized singular value decomposition, Physical Review E 97 (2018).
+[13] Y. Nakamura, H. Oba and S. Takeda, Tensor Renormalization Group Algorithms with a
+     Projective Truncation Method, Phys. Rev. B 99 (2019) 155101 [arXiv:1809.08030] [INSPIRE].
+[14] G. Evenbly, Algorithms for tensor network renormalization, arXiv:1509.07484.
+[15] C. Eckart and G. Young, The approximation of one matrix by another of lower rank,
+     Psychometrika 1 (1936) 211.
+[16] S. Hong and D.-H. Kim, Tensor network calculation of the logarithmic correction exponent in
+     the XY model, J. Phys. Soc. Jap. 91 (2022) 084003 [arXiv:2205.02773] [INSPIRE].
+[17] C. Delcamp and A. Tilloy, Computing the renormalization group flow of two-dimensional φ4
+     theory with tensor networks, Phys. Rev. Res. 2 (2020) 033278 [arXiv:2003.12993] [INSPIRE].
+[18] Z.-C. Gu, F. Verstraete and X.-G. Wen, Grassmann tensor network states and its
+     renormalization for strongly correlated fermionic and bosonic states, arXiv:1004.2563
+     [INSPIRE].
+[19] Z.-C. Gu, Efficient simulation of Grassmann tensor product states, Phys. Rev. B 88 (2013)
+     115139 [arXiv:1109.4470] [INSPIRE].
+[20] M.E. Fischer, The nature of critical points, Lect. Theor. Phys. c 7 (1965) 1 [INSPIRE].
+[21] L.-P. Yang, Y. Liu, H. Zou, Z.Y. Xie and Y. Meurice, Fine structure of the entanglement
+     entropy in the O(2) model, Phys. Rev. E 93 (2016) 012138 [arXiv:1507.01471] [INSPIRE].
+[22] Y. BenTov, Fermion masses without symmetry breaking in two spacetime dimensions, JHEP
+     07 (2015) 034 [arXiv:1412.0154] [INSPIRE].
+[23] V. Ayyar and S. Chandrasekharan, Massive fermions without fermion bilinear condensates,
+     Phys. Rev. D 91 (2015) 065035 [arXiv:1410.6474] [INSPIRE].
+
+
+
+
+                                              – 20 –
+[24] V. Ayyar and S. Chandrasekharan, Origin of fermion masses without spontaneous symmetry
+     breaking, Phys. Rev. D 93 (2016) 081701 [arXiv:1511.09071] [INSPIRE].
+[25] V. Ayyar and S. Chandrasekharan, Fermion masses through four-fermion condensates, JHEP
+     10 (2016) 058 [arXiv:1606.06312] [INSPIRE].
+[26] S. Catterall, Fermion mass without symmetry breaking, JHEP 01 (2016) 121
+     [arXiv:1510.04153] [INSPIRE].
+[27] S. Catterall and D. Schaich, Novel phases in strongly coupled four-fermion theories, Phys. Rev.
+     D 96 (2017) 034506 [arXiv:1609.08541] [INSPIRE].
+[28] V. Ayyar and S. Chandrasekharan, Generating a nonperturbative mass gap using Feynman
+
+
+
+
+                                                                                                       JHEP01(2023)024
+     diagrams in an asymptotically free theory, Phys. Rev. D 96 (2017) 114506
+     [arXiv:1709.06048] [INSPIRE].
+[29] D. Schaich and S. Catterall, Phases of a strongly coupled four-fermion theory, EPJ Web Conf.
+     175 (2018) 03004 [arXiv:1710.08137] [INSPIRE].
+[30] S. Catterall, Chiral lattice fermions from staggered fields, Phys. Rev. D 104 (2021) 014503
+     [arXiv:2010.02290] [INSPIRE].
+[31] S. Catterall, ’t Hooft anomalies for staggered fermions, arXiv:2209.03828 [INSPIRE].
+[32] M. Asaduzzaman, S. Catterall, G.C. Toga, Y. Meurice and R. Sakai, Quantum Simulation of
+     the N flavor Gross-Neveu Model, arXiv:2208.05906 [INSPIRE].
+[33] V. Ayyar, S. Chandrasekharan and J. Rantaharju, Benchmark results in the 2D lattice
+     Thirring model with a chemical potential, Phys. Rev. D 97 (2018) 054501 [arXiv:1711.07898]
+     [INSPIRE].
+[34] A. Ueda and M. Oshikawa, Resolving the Berezinskii-Kosterlitz-Thouless transition in the
+     two-dimensional XY model with tensor-network-based level spectroscopy, Phys. Rev. B 104
+     (2021) 165132 [arXiv:2105.11460] [INSPIRE].
+[35] Y. Shimizu and Y. Kuramashi, Grassmann tensor renormalization group approach to
+     one-flavor lattice Schwinger model, Phys. Rev. D 90 (2014) 014508 [arXiv:1403.0642]
+     [INSPIRE].
+[36] N. Butt, S. Catterall, Y. Meurice, R. Sakai and J. Unmuth-Yockey, Tensor network
+     formulation of the massless Schwinger model with staggered fermions, Phys. Rev. D 101 (2020)
+     094509 [arXiv:1911.01285] [INSPIRE].
+[37] A. Bazavov, S. Catterall, R.G. Jha and J. Unmuth-Yockey, Tensor renormalization group
+     study of the non-Abelian Higgs model in two dimensions, Phys. Rev. D 99 (2019) 114507
+     [arXiv:1901.11443] [INSPIRE].
+
+
+
+
+                                              – 21 –
+
